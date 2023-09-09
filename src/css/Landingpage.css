@@ -1,0 +1,318 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+.txtoverlay {
+  position: absolute;
+  background-image: url("../assets/images/landingpage_asset3.png");
+  background-size: contain;
+  width: 280px;
+  height: 100px;
+  top: 0;
+  right: 30%;
+  z-index: -1;
+  background-repeat: no-repeat;
+}
+.left_Title {
+  position: relative;
+  color: #000;
+  font-family: Sofia;
+}
+
+.landing_paragraph {
+  color: #000;
+  font-family: "Sunflower";
+  font-size: 30px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+.landingall {
+  position: relative;
+}
+
+.landingbg {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: -1;
+  width: 65%;
+}
+
+.landingbgmobile {
+  position: absolute;
+  z-index: -1;
+  width: 65%;
+  rotate: 180deg;
+}
+
+.rightasset {
+  width: 90%;
+}
+
+.cardcontainer {
+  height: 530px;
+  background-size: cover;
+  background-image: url("../assets/images/cardbg.png");
+  background-repeat: no-repeat;
+}
+
+.cardtxt {
+  rotate: 40deg;
+  color: #000;
+  text-align: center;
+  font-family: Sofia;
+  font-size: 22px;
+}
+
+/* Small screens (sm) */
+@media (min-width: 640px) {
+  .cardtxt {
+    top: 0rem;
+    right: 0rem;
+  }
+  .cardasset {
+    top: -3.5rem;
+    right: -3.5rem;
+  }
+}
+
+/* Medium screens (md) */
+@media (min-width: 768px) {
+  .cardtxt {
+    top: 0.8rem;
+    right: 1rem;
+  }
+  .cardasset {
+    top: -4rem;
+    right: -4rem;
+  }
+}
+
+/* Large screens (lg) */
+@media (min-width: 1024px) {
+  .cardtxt {
+    top: 1.8rem;
+    right: 1rem;
+  }
+}
+
+@media (max-width: 639px) {
+  .cardtxt {
+    top: 1rem;
+    right: 0.75rem;
+    font-size: 12px;
+  }
+  .cardasset {
+    top: -2rem;
+    right: -2rem;
+  }
+}
+
+.item_title {
+  color: #7d5c3a;
+  font-family: "Sunflower";
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.sale_price {
+  color: rgba(0, 0, 0, 0.35);
+  font-family: "Sunflower";
+
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  text-decoration: line-through;
+}
+
+.base_price {
+  color: #f1979a;
+  font-family: Sunflower;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.heart {
+  color: rgba(255, 148, 148, 1);
+}
+
+.shopheart {
+  color: #7d5c3a;
+}
+
+.new_price {
+  color: #f1979a;
+  font-family: Sunflower;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  text-decoration-line: underline;
+}
+
+.seller_txt {
+  color: #ff9494;
+  font-family: Sunflower;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  text-decoration-line: underline;
+}
+
+.primary_txt {
+  color: #000;
+  font-family: Sofia;
+  font-size: 42px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+.secondary_txt {
+  color: rgba(0, 0, 0, 0.35);
+  font-family: Sunflower;
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: normal;
+}
+
+.sellerimg {
+  border-radius: 50%;
+}
+
+.shopcardcontainer {
+  width: 216px;
+  height: 330px;
+  background-color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.shopimg {
+  height: 80%;
+  width: 100%;
+  object-fit: cover;
+  transition: height 0.3s ease-in-out;
+}
+
+.shopcardcontainer:hover .shopimg {
+  height: 40%;
+}
+
+.shopname {
+  color: #744638;
+  text-align: center;
+  font-family: "Sunflower";
+  font-style: normal;
+  font-weight: 900;
+  line-height: normal;
+  text-decoration-line: underline;
+}
+
+.shoplikes {
+  color: #000;
+  text-align: center;
+  font-family: "Sunflower";
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.shopinfo {
+  width: 100%;
+  height: 20%;
+  background-color: white;
+  transition: height 0.3s ease-in-out;
+}
+.shopcardcontainer:hover .shopinfo {
+  /* Height after parent hover */
+  height: 60%;
+  z-index: 1000;
+}
+
+.additional-text {
+  opacity: 0;
+}
+
+.shopcardcontainer:hover .additional-text {
+  opacity: 1;
+
+  transition: opacity 0.3s ease-in-out 0.35s; /* no delay when showing */
+}
+
+.shopicon {
+  color: #f1979a;
+}
+
+.category_name {
+  color: #7d5c3a;
+  font-family: "Sunflower";
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.category_asset {
+  position: absolute;
+}
+
+.footer {
+  background-image: url("/images/footerasset.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.footer_asset {
+  z-index: -1;
+}
+
+.feedback_box {
+  border: 4px solid #ffa68a;
+}
+
+.feedback_txt {
+  color: #000;
+  font-family: "Sofia";
+  font-style: normal;
+  font-weight: 400;
+  text-align: center;
+  line-height: normal;
+}
+.feedback_subtxt {
+  color: rgba(0, 0, 0, 0.6);
+  font-family: "Sunflower";
+  font-style: normal;
+  font-weight: 300;
+  line-height: normal;
+  text-align: center;
+}
+
+.input_txt {
+  border: 1px solid #f1979a;
+}
+.input_txt:focus {
+  outline: none;
+}
+
+.footer_overlay {
+  /* height: 50vh; */
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.footer_header {
+  color: #000;
+  font-family: Sofia;
+
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+.footer_txt {
+  color: #000;
+  font-family: Sunflower;
+  font-style: normal;
+  font-weight: 300;
+  line-height: normal;
+}

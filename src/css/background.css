@@ -1,0 +1,47 @@
+/* styles.module.css */
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+.bg-asset {
+  z-index: -1;
+  width: 450px;
+  height: 250px;
+  background-size: contain;
+  background-image: url("../assets/backgrounds/Asset 1.png");
+  background-repeat: no-repeat;
+  position: absolute;
+}
+
+.bg-asset2 {
+  z-index: -1;
+  min-width: 150px;
+  min-height: 200px;
+  background-size: contain;
+  background-image: url("../assets/backgrounds/Asset 2.png");
+  background-repeat: no-repeat;
+  position: absolute;
+}
+
+.top-right {
+  top: 0;
+  right: 0px;
+}
+
+.top-left {
+  top: 0;
+  left: 0;
+}
+
+.bottom-right {
+  bottom: 0;
+  right: 0;
+  rotate: 180deg;
+}
+
+.rotated-right {
+  bottom: 0;
+  right: 0;
+  rotate: 40deg;
+  overflow: hidden;
+}

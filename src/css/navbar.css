@@ -1,0 +1,91 @@
+/* styles.module.css */
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+.nav__item {
+  font-family: "sofia";
+}
+
+.primary {
+  font-family: "sofia";
+  background: #ff9494;
+  transition: all 0.5s ease-in-out;
+  color: #000;
+}
+.primary:hover {
+  background: #e68585;
+  transition: all 0.5s ease-in-out;
+}
+.secondary {
+  font-family: "sofia";
+  background: none;
+  border: solid 1px #ff9494;
+  transition: all 0.5s ease-in-out;
+  color: #000;
+}
+.secondary:hover {
+  background: #ff9494;
+  transition: all 0.5s ease-in-out;
+}
+
+.typed {
+  font-family: "sunflower";
+  background: none;
+  color: #ff9494;
+  text-decoration: underline;
+}
+
+.basebtn {
+  z-index: 1000;
+
+  font-size: 30px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  border-radius: 16px;
+
+  padding: 10px;
+}
+
+nav {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+nav img {
+  width: 15vw;
+}
+nav ul {
+  width: 30vw;
+  display: flex;
+  justify-content: space-between;
+}
+
+.nav__languages {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.mobile {
+  position: absolute;
+  z-index: 6000;
+  width: 50%;
+  height: 80vh;
+  background-color: #f5ebe0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  /* Animation properties */
+  transform: translateX(100%); /* Move content off-screen */
+  opacity: 0; /* Make content invisible */
+  transition: transform 0.3s ease, opacity 0.3s ease; /* Transition effect */
+  pointer-events: none; /* Disable interaction when content is hidden */
+}
+
+.mobile.block {
+  transform: translateX(95%); /* Reset to default position */
+  opacity: 1; /* Make content visible */
+  pointer-events: auto; /* Enable interaction */
+}
