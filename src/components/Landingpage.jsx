@@ -27,43 +27,47 @@ const Card = ({
     ? Math.round((1 - parseFloat(salePrice) / parseFloat(basePrice)) * 100)
     : 0;
   return (
-    <div className="cardcontainer relative w-32 sm:w-44 md:w-56 lg:w-64 h-auto">
-      <img src={itemUrl} alt="Item Image" className="rounded-3xl px-2 py-2" />
-      {isOnSale && (
-        <img
-          src="/images/cardasset1.png"
-          alt="asset"
-          className="absolute  cardasset"
-        />
-      )}
-      {isOnSale && <h1 className="absolute cardtxt">-{discountPercentage}%</h1>}
-      <div className="flex w-full justify-between px-2">
-        <div>
-          <h1 className="item_title text-sm md:text-base lg:text-lg">
-            {title}
-          </h1>
-          <div className="flex space-x-2">
-            <h1
-              className={`${
-                isOnSale ? "sale_price" : "base_price"
-              } text-xs md:text-base lg:text-lg`}
-            >
-              {basePrice} DA
-            </h1>
-            {isOnSale && (
-              <h1 className="new_price text-xs md:text-base lg:text-lg">
-                {salePrice} DA
-              </h1>
-            )}
-          </div>
-        </div>
-        {isLiked ? (
-          <MdFavorite className="heart text-3xl" />
-        ) : (
-          <MdFavoriteBorder className="heart text-3xl " />
+    <div className="min-h-full relative w-32 sm:w-44 md:w-56 lg:w-64 h-full">
+      <div className="cardcontainer">
+        <img src={itemUrl} alt="Item" className="rounded-3xl px-2 py-2" />
+        {isOnSale && (
+          <img
+            src="/images/cardasset1.png"
+            alt="asset"
+            className="absolute  cardasset"
+          />
         )}
+        {isOnSale && (
+          <h1 className="absolute cardtxt">-{discountPercentage}%</h1>
+        )}
+        <div className="flex w-full justify-between px-2">
+          <div>
+            <h1 className="item_title text-sm md:text-base lg:text-lg">
+              {title}
+            </h1>
+            <div className="flex space-x-2">
+              <h1
+                className={`${
+                  isOnSale ? "sale_price" : "base_price"
+                } text-xs md:text-base lg:text-lg`}
+              >
+                {basePrice} DA
+              </h1>
+              {isOnSale && (
+                <h1 className="new_price text-xs md:text-base lg:text-lg">
+                  {salePrice} DA
+                </h1>
+              )}
+            </div>
+          </div>
+          {isLiked ? (
+            <MdFavorite className="heart text-3xl" />
+          ) : (
+            <MdFavoriteBorder className="heart text-3xl " />
+          )}
+        </div>
       </div>
-      <div>
+      <div className="circle w-full h-full">
         <h1 className="text-xs sm:text-sm md:text-base lg:text-lg px-2">By</h1>
         <div className="pb-4">
           <img
@@ -132,11 +136,12 @@ const ShopCard = ({
 const ShopCardSlider = () => {
   return (
     <Splide
+      className="h-2/4 py-8"
       options={{
         type: "loop",
         perPage: 7, // Number of cards shown at once. Adjust as needed.
         width: "100%",
-        height: "40vh",
+        height: "50%",
         gap: "0.2rem",
         arrows: false,
         pagination: false,
@@ -159,8 +164,12 @@ const ShopCardSlider = () => {
             gap: "1rem",
           },
           435: {
+            type: "slide",
+            arrows: true,
+            focus: "center",
+            pagination: true,
+            autoplay: false,
             perPage: 1,
-            gap: "0.1rem",
           },
           768: {
             perPage: 3,
@@ -332,7 +341,8 @@ const TrendingItems = (props) => {
           breakpoints: {
             640: {
               perPage: 2,
-              arrows: false,
+              autoplay: false,
+              width: "100%",
             },
             1280: {
               perPage: 2,
@@ -453,7 +463,7 @@ const Footer = (props) => {
           <h1 className="feedback_txt text-base md:text-lg lg:text-2xl xl:text-4xl">
             Feedback
           </h1>
-          <h1 className="feedback_subtxt text-sm md:text-base lg:text-lg xl:text-2xl">
+          <h1 className="feedback_subtxt text-xs md:text-base lg:text-lg xl:text-2xl">
             How was your experience ?
           </h1>
         </div>

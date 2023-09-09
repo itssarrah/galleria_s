@@ -12,7 +12,6 @@ function App() {
     <div className="App">
       <Navbar />
       <BackgroundAsset position="top-left" />
-      <BackgroundAsset position="rotated-right" />
       <BackgroundAssetTwo position="top-right" />
       <LandingPage />
     </div>
