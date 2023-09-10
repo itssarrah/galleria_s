@@ -262,7 +262,7 @@
 }
 
 .footer {
-  background-image: url("/images/footerasset.png");
+  background-image: url("../assets/backgrounds/footerasset.png");
   background-repeat: no-repeat;
   background-size: cover;
 }
