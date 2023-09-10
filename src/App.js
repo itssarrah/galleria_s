@@ -1,4 +1,4 @@
-import { Navbar } from "./components/navbar.jsx";
+import { Navbar, Nav } from "./components/navbar.jsx";
 import { LandingPage } from "./components/Landingpage.jsx";
 import {
   BackgroundAsset,
@@ -10,7 +10,7 @@ import React from "react";
 function App() {
   return (
     <div className="App">
-      <Navbar />
+      <Nav />
       <BackgroundAsset position="top-left" />
       <BackgroundAssetTwo position="top-right" />
       <LandingPage />

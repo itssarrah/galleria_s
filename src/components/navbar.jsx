@@ -1,5 +1,6 @@
 import React from "react";
 import logo from "../assets/images/logo_typo.png";
+import fixedLogo from "../assets/images/logo_nav_fixed.png";
 import "../css/navbar.css";
 import { FaGlobe, FaBars, FaTimes } from "react-icons/fa";
 
@@ -31,11 +32,45 @@ function ContributeBtn({ text, importance = "primary" }) {
 
 function Navbar() {
   const [isOpen, setIsOpen] = React.useState(false);
-  let active = "text-3xl";
+  const [isFixed, setIsFixed] = React.useState(false);
+  React.useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY >= 350) {
+        setIsFixed(true);
+      } else {
+        setIsFixed(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  const [topPosition, setTopPosition] = React.useState(0);
+  const menuButtonRef = React.useRef(null);
+  const handleMenuClick = () => {
+    if (menuButtonRef.current) {
+      const rect = menuButtonRef.current.getBoundingClientRect();
+      setTopPosition(rect.bottom + window.scrollY);
+    }
+    setIsOpen(!isOpen);
+  };
+
   return (
     <>
-      <nav className="sm:flex-row mt-2 sm:justify-between mx-8 flex-col">
-        <img className="sm:flex hidden" src={logo} alt="Galleria logo" />
+      <nav
+        className={`sm:flex-row mt-2  sm:px-8 sm:justify-between sm:mx-0 mx-8 flex-col ${
+          isFixed ? "fixed top-0 bgnav sm:mt-0" : " "
+        }`}
+      >
+        <img
+          className="sm:flex hidden"
+          src={isFixed ? fixedLogo : logo}
+          alt="Galleria logo"
+        />
         <ul className="sm:flex hidden">
           <a href="#">
             <li className="text-sm md:text-base lg:text-3xl nav__item">Home</li>
@@ -61,11 +96,20 @@ function Navbar() {
         </div>
       </nav>
 
-      <div className="sm:hidden mt-2 mx-8 flex items-center justify-between">
-        <img className="w-36" src={logo} alt="Galleria logo" />
+      <div
+        className={` sm:hidden pt-2 px-8 w-full flex items-center justify-between  ${
+          isFixed ? "fixed bgnav top-0 " : ""
+        }`}
+      >
+        <img
+          className="w-36"
+          src={isFixed ? fixedLogo : logo}
+          alt="Galleria logo"
+        />
         <button
+          ref={menuButtonRef}
           className="sm:hidden transition-opacity duration-300"
-          onClick={() => setIsOpen(!isOpen)}
+          onClick={handleMenuClick}
         >
           {isOpen ? (
             <FaTimes className="cursor-pointer" />
@@ -74,9 +118,11 @@ function Navbar() {
           )}
         </button>
       </div>
+
       <div
+        style={{ top: `${topPosition}px` }}
         className={`sm:hidden mobile py-4 items-center flex flex-col space-y-4 ${
-          isOpen ? "block" : ""
+          isOpen ? "block" : "hidden"
         }`}
       >
         <ul className="flex flex-col h-24 justify-between ">
@@ -103,4 +149,43 @@ function Navbar() {
   );
 }
 
-export { Navbar, ContributeBtn };
+function Nav() {
+  let Links = [
+    {
+      name: "Home",
+      link: "/",
+    },
+    {
+      name: "Our Shops",
+      link: "/",
+    },
+    {
+      name: "About us",
+      link: "/",
+    },
+  ];
+  return (
+    <nav
+      className={`sm:flex-row pt-2  sm:px-8 sm:justify-between  px-0 flex-col bg-white`}
+    >
+      <img className="sm:flex " src={logo} alt="Galleria logo" />
+      <ul className="sm:flex-row flex sm:space-x-16 md:space-x-4  flex-col">
+        {Links.map((link) => (
+          <li className="text-sm md:text-base lg:text-2xl nav__item">
+            <a href="/">{link.name}</a>
+          </li>
+        ))}
+        <div className="nav__languages sm:flex ">
+          <FaGlobe />
+          <h2 className="nav__txt">English</h2>
+        </div>
+        <div className={`nav__btns sm:flex `}>
+          <ContributeBtn importance="typed" text="Log In" />
+          <ContributeBtn importance="primary" text="Contribute" />
+        </div>
+      </ul>
+    </nav>
+  );
+}
+
+export { Navbar, Nav, ContributeBtn };

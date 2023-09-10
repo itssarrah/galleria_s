@@ -114,15 +114,15 @@ const ShopCard = ({
             </div>
           </div>
           <div className="additional-text space-y-2 ">
-            <div className="w-full flex">
+            <div className="w-full flex items-center">
               <MdLocationOn className="shopicon text-3xl" />
               <h1>{location}</h1>
             </div>
-            <div className="w-full flex">
+            <div className="w-full flex items-center">
               <MdLocalPhone className="shopicon text-3xl" />
               <h1>+213{phoneNumber}</h1>
             </div>
-            <div className="w-full flex">
+            <div className="w-full flex items-center">
               <MdStar className="shopicon text-3xl" />
               {rating} out of 5
             </div>
