@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import logo from "../assets/images/logo_typo.png";
 import fixedLogo from "../assets/images/logo_nav_fixed.png";
 import "../css/navbar.css";
 import { FaGlobe, FaBars, FaTimes } from "react-icons/fa";
+import { Bars3BottomRightIcon, XMarkIcon } from "@heroicons/react/24/solid";
 
 function ContributeBtn({ text, importance = "primary" }) {
   let classNames;
@@ -30,8 +31,23 @@ function ContributeBtn({ text, importance = "primary" }) {
   );
 }
 
-function Navbar() {
-  const [isOpen, setIsOpen] = React.useState(false);
+function Nav() {
+  let Links = [
+    {
+      name: "Home",
+      link: "/",
+    },
+    {
+      name: "Our Shops",
+      link: "/",
+    },
+    {
+      name: "About us",
+      link: "/",
+    },
+  ];
+
+  let [isOpen, setIsOpen] = useState(false);
   const [isFixed, setIsFixed] = React.useState(false);
   React.useEffect(() => {
     const handleScroll = () => {
@@ -48,144 +64,49 @@ function Navbar() {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
-
-  const [topPosition, setTopPosition] = React.useState(0);
-  const menuButtonRef = React.useRef(null);
-  const handleMenuClick = () => {
-    if (menuButtonRef.current) {
-      const rect = menuButtonRef.current.getBoundingClientRect();
-      setTopPosition(rect.bottom + window.scrollY);
-    }
-    setIsOpen(!isOpen);
-  };
-
-  return (
-    <>
-      <nav
-        className={`sm:flex-row mt-2  sm:px-8 sm:justify-between sm:mx-0 mx-8 flex-col ${
-          isFixed ? "fixed top-0 bgnav sm:mt-0" : " "
-        }`}
-      >
-        <img
-          className="sm:flex hidden"
-          src={isFixed ? fixedLogo : logo}
-          alt="Galleria logo"
-        />
-        <ul className="sm:flex hidden">
-          <a href="#">
-            <li className="text-sm md:text-base lg:text-3xl nav__item">Home</li>
-          </a>
-          <a href="#">
-            <li className="text-sm md:text-base lg:text-2xl nav__item">
-              Our Shops
-            </li>
-          </a>
-          <a href="#">
-            <li className="text-sm md:text-base lg:text-2xl nav__item">
-              About us
-            </li>
-          </a>
-        </ul>
-        <div className="nav__languages sm:flex hidden">
-          <FaGlobe />
-          <h2 className="nav__txt">English</h2>
-        </div>
-        <div className={`nav__btns sm:flex hidden`}>
-          <ContributeBtn importance="typed" text="Log In" />
-          <ContributeBtn importance="primary" text="Contribute" />
-        </div>
-      </nav>
-
-      <div
-        className={` sm:hidden pt-2 px-8 w-full flex items-center justify-between  ${
-          isFixed ? "fixed bgnav top-0 " : ""
-        }`}
-      >
-        <img
-          className="w-36"
-          src={isFixed ? fixedLogo : logo}
-          alt="Galleria logo"
-        />
-        <button
-          ref={menuButtonRef}
-          className="sm:hidden transition-opacity duration-300"
-          onClick={handleMenuClick}
-        >
-          {isOpen ? (
-            <FaTimes className="cursor-pointer" />
-          ) : (
-            <FaBars className="cursor-pointer" />
-          )}
-        </button>
-      </div>
-
-      <div
-        style={{ top: `${topPosition}px` }}
-        className={`sm:hidden mobile py-4 items-center flex flex-col space-y-4 ${
-          isOpen ? "block" : "hidden"
-        }`}
-      >
-        <ul className="flex flex-col h-24 justify-between ">
-          <a href="#">
-            <li className="text-lg nav__item">Home</li>
-          </a>
-          <a href="#">
-            <li className="text-lg nav__item">Our Shops</li>
-          </a>
-          <a href="#">
-            <li className="text-lg nav__item">About us</li>
-          </a>
-        </ul>
-        <div className="flex items-center space-x-2">
-          <FaGlobe />
-          <h2 className="nav__txt">English</h2>
-        </div>
-        <div className="flex flex-col-reverse">
-          <ContributeBtn importance="typed" text="Log In" />
-          <ContributeBtn importance="primary" text="Contribute" />
-        </div>
-      </div>
-    </>
-  );
-}
-
-function Nav() {
-  let Links = [
-    {
-      name: "Home",
-      link: "/",
-    },
-    {
-      name: "Our Shops",
-      link: "/",
-    },
-    {
-      name: "About us",
-      link: "/",
-    },
-  ];
   return (
     <nav
-      className={`sm:flex-row pt-2  sm:px-8 sm:justify-between  px-0 flex-col bg-white`}
+      className={`sm:flex-row flex items-start sm:items-center  pt-2 sm:px-8 sm:justify-between px-0 flex-col p-4 z-[100] ${
+        isFixed ? "fixed top-0 bgnav sm:mt-0" : " "
+      } ${isOpen ? "bg-white" : ""}`}
     >
-      <img className="sm:flex " src={logo} alt="Galleria logo" />
-      <ul className="sm:flex-row flex sm:space-x-16 md:space-x-4  flex-col">
+      <img
+        className="sm:w-42 pl-4 sm:pl-0 z-[100] md:w-48 w-36"
+        src={isFixed || isOpen ? fixedLogo : logo}
+        alt="Galleria logo"
+      />
+      <div
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-7 h-7 z-[100] absolute right-8 top-6 cursor-pointer sm:hidden"
+      >
+        {isOpen ? <XMarkIcon /> : <Bars3BottomRightIcon />}
+      </div>
+      <ul
+        className={` sm:flex sm:items-center sm:pb-0 pb-12 sm:space-x-4 md:space-x-4 lg:space-x-16 absolute sm:static space-y-2  left-0 z-[10] w-full sm:w-auto sm:pl-0 pl-28 transition-all bg-white sm:bg-transparent duration-500 ease-in ${
+          isOpen ? "top-[79px]" : "top-[-300px]"
+        }`}
+        hhkdfk
+      >
         {Links.map((link) => (
           <li className="text-sm md:text-base lg:text-2xl nav__item">
             <a href="/">{link.name}</a>
           </li>
         ))}
-        <div className="nav__languages sm:flex ">
-          <FaGlobe />
-          <h2 className="nav__txt">English</h2>
-        </div>
-        <div className={`nav__btns sm:flex `}>
-          <ContributeBtn importance="typed" text="Log In" />
-          <ContributeBtn importance="primary" text="Contribute" />
-        </div>
+        <li>
+          <div className="sm:flex-col sm:gap-0 items-center flex-row gap-1 flex ">
+            <FaGlobe />
+            <h2 className="nav__txt">English</h2>
+          </div>
+        </li>
+        <li>
+          <div className={`flex flex-col-reverse sm:flex-row `}>
+            <ContributeBtn importance="typed" text="Log In" />
+            <ContributeBtn importance="primary" text="Contribute" />
+          </div>
+        </li>
       </ul>
     </nav>
   );
 }
 
-export { Navbar, Nav, ContributeBtn };
+export { Nav, ContributeBtn };
