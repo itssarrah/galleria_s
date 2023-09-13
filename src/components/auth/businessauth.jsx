@@ -18,8 +18,6 @@ import {
   CalendarDaysIcon,
   ArrowRightIcon,
   CheckIcon,
-  ChevronDoubleLeftIcon,
-  ChevronDoubleRightIcon,
 } from "@heroicons/react/24/solid";
 
 const Businessauth = () => {

@@ -72,6 +72,7 @@ function Nav() {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
   return (
     <nav
       className={`sm:flex-row flex items-start sm:items-center  pt-2 sm:px-8 sm:justify-between px-0 flex-col p-4 z-[100] ${
