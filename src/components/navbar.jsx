@@ -5,6 +5,9 @@ import "../css/navbar.css";
 import { FaGlobe } from "react-icons/fa";
 import { Bars3BottomRightIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import { Link } from "react-router-dom";
+
+import { useLocation } from "react-router-dom";
+
 function ContributeBtn({ text, importance = "primary", onClick }) {
   let classNames;
   switch (importance) {
@@ -51,6 +54,9 @@ function Nav() {
 
   let [isOpen, setIsOpen] = useState(false);
   const [isFixed, setIsFixed] = React.useState(false);
+  const location = useLocation();
+  const isRegistrationPage = location.pathname === "/businessregistration";
+
   React.useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY >= 350) {
@@ -69,7 +75,7 @@ function Nav() {
   return (
     <nav
       className={`sm:flex-row flex items-start sm:items-center  pt-2 sm:px-8 sm:justify-between px-0 flex-col p-4 z-[100] ${
-        isFixed ? "fixed top-0 bgnav sm:mt-0" : " "
+        !isRegistrationPage && isFixed ? "fixed top-0 bgnav sm:mt-0" : " "
       } ${isOpen ? "bg-white" : ""}`}
     >
       <img

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../../css/auth.css";
 import defaultImage from "../../assets/images/authbiz.png";
 import { ContributeBtn } from "../navbar";
@@ -18,6 +18,8 @@ import {
   CalendarDaysIcon,
   ArrowRightIcon,
   CheckIcon,
+  ChevronDoubleLeftIcon,
+  ChevronDoubleRightIcon,
 } from "@heroicons/react/24/solid";
 
 const Businessauth = () => {
@@ -28,6 +30,53 @@ const Businessauth = () => {
   const backFormStep = () => {
     setFormStep((cur) => cur - 1);
   };
+  useEffect(() => {
+    window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+  }, [formStep]);
+
+  const renderButton = () => {
+    if (formStep > 2) {
+      return undefined;
+    } else if (formStep === 1) {
+      return (
+        <>
+          <ContributeBtn
+            importance="secondary"
+            text="<<"
+            onClick={backFormStep}
+          />
+          <ContributeBtn
+            importance="primary"
+            text=">>"
+            onClick={completeFormStep}
+          />
+        </>
+      );
+    } else if (formStep === 2) {
+      return (
+        <>
+          <ContributeBtn
+            importance="secondary"
+            text="<<"
+            onClick={backFormStep}
+          />
+          <ContributeBtn
+            importance="primary"
+            text="Finish"
+            onClick={completeFormStep}
+          />
+        </>
+      );
+    } else if (formStep === 0) {
+      return (
+        <ContributeBtn
+          importance="primary"
+          text=">>"
+          onClick={completeFormStep}
+        />
+      );
+    }
+  };
   return (
     <>
       <h1 className="auth_header mx-auto pb-4 text-base md:text-2xl lg:text-4xl">
@@ -37,7 +86,7 @@ const Businessauth = () => {
         <div className="image_input">
           <ImageInputOutput />
         </div>
-        <div className="bg-white rounded-lg w-10/12 mx-auto h-screen">
+        <div className="bg-white rounded-lg w-10/12 mx-auto ">
           <ProgressBar step={formStep} />
           {formStep == 0 && (
             <section className="accinfo pt-24">
@@ -93,16 +142,7 @@ const Businessauth = () => {
             </section>
           )}
           <div className="flex w-3/12 items-center justify-around gap-1 mx-auto py-8 ">
-            <ContributeBtn
-              importance="secondary"
-              text="Previous"
-              onClick={backFormStep}
-            />
-            <ContributeBtn
-              importance="primary"
-              text="Next"
-              onClick={completeFormStep}
-            />
+            {renderButton()}
           </div>
         </div>
       </form>
@@ -176,7 +216,7 @@ const DateInput = ({ id, label }) => {
           selected={startDate}
           onChange={(date) => setStartDate(date)}
           dateFormat="MM/dd/yyyy"
-          className="bginput  text-sm md:text-lg rounded-xl px-4 py-2 w-120 h-12 outline-none"
+          className="bginput  text-sm md:text-lg rounded-xl px-4 py-2 md:w-120 w-64 h-12 outline-none"
           id={id}
           placeholderText="MM/dd/yyyy"
         />
