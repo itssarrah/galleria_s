@@ -2,14 +2,14 @@ import React, { useState } from "react";
 import logo from "../assets/images/logo_typo.png";
 import fixedLogo from "../assets/images/logo_nav_fixed.png";
 import "../css/navbar.css";
-import { FaGlobe, FaBars, FaTimes } from "react-icons/fa";
+import { FaGlobe } from "react-icons/fa";
 import { Bars3BottomRightIcon, XMarkIcon } from "@heroicons/react/24/solid";
-
-function ContributeBtn({ text, importance = "primary" }) {
+import { Link } from "react-router-dom";
+function ContributeBtn({ text, importance = "primary", onClick }) {
   let classNames;
   switch (importance) {
     case "primary":
-      classNames = "primary";
+      classNames = "primary bg-primary";
       break;
     case "secondary":
       classNames = "secondary";
@@ -18,12 +18,14 @@ function ContributeBtn({ text, importance = "primary" }) {
       classNames = "typed";
       break;
     default:
-      classNames = "primary";
+      classNames = "primary bg-primary";
       break;
   }
 
   return (
     <button
+      type="button"
+      onClick={onClick}
       className={`basebtn text-sm md:text-base lg:text-2xl ${classNames}`}
     >
       {text}
@@ -101,7 +103,9 @@ function Nav() {
         <li>
           <div className={`flex flex-col-reverse sm:flex-row `}>
             <ContributeBtn importance="typed" text="Log In" />
-            <ContributeBtn importance="primary" text="Contribute" />
+            <Link to="/businessregistration">
+              <ContributeBtn importance="primary" text="Contribute" />
+            </Link>
           </div>
         </li>
       </ul>

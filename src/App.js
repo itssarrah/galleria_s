@@ -6,15 +6,28 @@ import {
 } from "./components/background.jsx";
 import "./App.css";
 import React from "react";
+import { Businessauth } from "./components/auth/businessauth.jsx";
+
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 function App() {
   return (
-    <div className="App">
-      <Nav />
-      <BackgroundAsset position="top-left" />
-      <BackgroundAssetTwo position="top-right" />
-      <LandingPage />
-    </div>
+    <Router>
+      <div className="App">
+        <Nav />
+        <BackgroundAsset position="top-left" />
+        <BackgroundAssetTwo position="top-right" />
+        <div className="content">
+          <Routes>
+            <Route path="/" element={<LandingPage />}></Route>
+            <Route
+              path="/businessregistration"
+              element={<Businessauth />}
+            ></Route>
+          </Routes>
+        </div>
+      </div>
+    </Router>
   );
 }
 

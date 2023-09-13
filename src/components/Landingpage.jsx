@@ -1,5 +1,5 @@
 import React from "react";
-
+import { Link } from "react-router-dom";
 import "../css/Landingpage.css";
 import { ContributeBtn } from "./navbar";
 import bgasset from "../assets/images/landingpage_asset2.png";
@@ -413,7 +413,7 @@ const TrendingItems = (props) => {
 
 const Hero = () => {
   return (
-    <div className="landingall w-full pt-4 px-10 flex flex-col justify-around items-center lg:flex-row">
+    <div className="landingall w-full pt-4 px-10 flex flex-col-reverse justify-around items-center lg:flex-row">
       <img
         src={bgasset}
         alt="background"
@@ -445,7 +445,9 @@ const Hero = () => {
           digital roof !
         </p>
         <div className="flex flex-col items-center">
-          <ContributeBtn importance="primary" text="Contribute >>" />
+          <Link to="/businessregistration">
+            <ContributeBtn importance="primary" text="Contribute >>" />
+          </Link>
         </div>
       </div>
       <div className="right_side w-1/2">

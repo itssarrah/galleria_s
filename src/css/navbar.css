@@ -9,12 +9,12 @@
 
 .primary {
   font-family: "sofia";
-  background: #ff9494;
+  background-color: #ff9494;
   transition: all 0.5s ease-in-out;
   color: #000;
 }
 .primary:hover {
-  background: #e68585;
+  background-color: #e68585;
   transition: all 0.5s ease-in-out;
 }
 .secondary {
