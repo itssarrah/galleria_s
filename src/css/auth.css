@@ -1,0 +1,53 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+#fileInput {
+  display: none;
+}
+
+.label-button {
+  display: block;
+  border-radius: 16px;
+  background-color: #ff9494;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+.auth_header {
+  width: fit-content;
+  color: #000;
+  font-family: Sofia;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.bgprogress {
+  background-color: #ff9494;
+  box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.25);
+}
+
+.bgdefault {
+  border: solid 2px #ff9494;
+  color: #ff9494;
+  background-color: white;
+}
+
+.bgline {
+  background-color: lightgray;
+}
+.bginput {
+  background-color: rgba(245, 235, 224, 1);
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+}
+.input_label {
+  color: rgba(116, 70, 56, 1);
+  font-family: Sunflower;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+.subtxt,
+.overlay {
+  background-color: #ff9494;
+}
