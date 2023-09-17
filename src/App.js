@@ -7,6 +7,7 @@ import {
 import "./App.css";
 import React from "react";
 import { Businessauth } from "./components/auth/businessauth.jsx";
+import  Shop from "./views/shop/shopItemsSorted.jsx";
 
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
@@ -24,6 +25,8 @@ function App() {
               path="/businessregistration"
               element={<Businessauth />}
             ></Route>
+
+           <Route path="/shop" element={<Shop />}></Route>
           </Routes>
         </div>
       </div>
