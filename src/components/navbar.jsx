@@ -44,9 +44,6 @@ function Nav() {
     i18n.changeLanguage(selectedLang);
   };
   const { i18n } = useTranslation();
-  const flexDirection = i18n.language == "ar" ? "flex-row-reverse" : "flex-row";
-  const textAlign = i18n.language === "ar" ? "text-right" : "text-left";
-  console.log(i18n.language, flexDirection, textAlign);
 
   let Links = [
     {
@@ -86,7 +83,9 @@ function Nav() {
 
   return (
     <nav
-      className={`flex sm:${flexDirection}  items-start sm:items-center  pt-2 sm:px-8 sm:justify-between px-0 flex-col p-4 z-[100] ${
+      className={`flex ${
+        i18n.language === "ar" ? "sm:flex-row-reverse" : "sm:flex-row"
+      } items-start sm:items-center  pt-2 sm:px-8 sm:justify-between px-0 flex-col p-4 z-[100] ${
         !isRegistrationPage && isFixed ? "fixed top-0 bgnav sm:mt-0" : " "
       } ${isOpen ? "bg-white" : ""}`}
     >
@@ -102,7 +101,9 @@ function Nav() {
         {isOpen ? <XMarkIcon /> : <Bars3BottomRightIcon />}
       </div>
       <ul
-        className={` sm:flex sm:${flexDirection} sm:space-y-0 sm:items-center sm:pb-0 pb-12 sm:space-x-4 md:space-x-4 lg:space-x-20 absolute sm:static space-y-2  left-0 z-[10] w-full sm:w-auto sm:pl-0 pl-28 transition-all bg-white sm:bg-transparent duration-500 ease-in ${
+        className={` sm:flex ${
+          i18n.language === "ar" ? "sm:flex-row-reverse" : "sm:flex-row"
+        } sm:space-y-0 sm:items-center sm:pb-0 pb-12 sm:space-x-4 md:space-x-4 lg:space-x-20 absolute sm:static space-y-2  left-0 z-[10] w-full sm:w-auto sm:pl-0 pl-28 transition-all bg-white sm:bg-transparent duration-500 ease-in ${
           isOpen ? "top-[79px]" : "top-[-300px] "
         }`}
       >

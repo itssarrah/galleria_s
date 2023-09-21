@@ -11,7 +11,7 @@ import { MdLocationOn, MdLocalPhone, MdStar } from "react-icons/md";
 import Footer from "./Footer";
 import { useTranslation, Trans } from "react-i18next";
 import Faq from "react-faq-component";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const Card = ({
   itemUrl = "/images/carditem.png",
@@ -416,13 +416,16 @@ const TrendingItems = (props) => {
 const Hero = () => {
   const { t } = useTranslation("homepage");
   const { i18n } = useTranslation();
-  const flexDirection =
-    i18n.language === "ar" ? "flex-row-reverse" : "flex-row";
-  const textAlign = i18n.language === "ar" ? "text-right" : "text-left";
+  console.log(
+    "HEY SARRA THISIS THE TEXT UR LOOKIN FOR AND THIS IS THE INITIAL LANGUAGE :",
+    i18n.language
+  );
 
   return (
     <div
-      className={`landingall w-full pt-4 px-10 flex flex-col-reverse justify-around items-center lg:${flexDirection} ${textAlign}`}
+      className={`landingall w-full pt-4 px-10 justify-around items-center flex flex-col-reverse ${
+        i18n.language === "ar" ? "lg:flex-row-reverse" : "lg:flex-row"
+      }`}
     >
       <img
         src={bgasset}
