@@ -8,6 +8,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { FaInstagram, FaTiktok } from "react-icons/fa";
 import axios from "axios";
 import { useTranslation, Trans } from "react-i18next";
+
 import {
   PlusIcon,
   EnvelopeIcon,
@@ -573,6 +574,24 @@ function AccountInformation({ formData, setFormData }) {
 
 function PersonalInfo({ formData, setFormData }) {
   const { t } = useTranslation("auth");
+  const [wilayas, setWilayas] = useState([]);
+  const { i18n } = useTranslation();
+  useEffect(() => {
+    fetch("http://127.0.0.1:8000/api/wilayas")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => setWilayas(data))
+      .catch((error) =>
+        console.error(
+          "There was a problem with the fetch operation:",
+          error.message
+        )
+      );
+  }, []);
   return (
     <>
       <div className=" flex flex-col items-center gap-3">
@@ -608,9 +627,11 @@ function PersonalInfo({ formData, setFormData }) {
               <option disabled value="">
                 {t("wilaya_ph")}
               </option>
-              <option>Bejaia</option>
-              <option>Tizi Ouzou</option>
-              <option>Batna</option>
+              {wilayas.map((wilaya) => (
+                <option key={wilaya.id} value={wilaya.id}>
+                  {i18n.language == "ar" ? wilaya.ar_name : wilaya.name}
+                </option>
+              ))}
             </select>
             <div className="pointer-events-none absolute right-2 top-[5px] md:top-[1.5px] flex items-center justify-center px-2 rounded-full bg-white w-6 h-6 md:w-10 md:h-10">
               <ChevronDownIcon className="w-4 h-4 md:w-7 md:h-7 heart" />
