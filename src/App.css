@@ -3,7 +3,8 @@
 @import "tailwindcss/utilities";
 
 body {
-  font-family: "Sunflower";
+  font-family: "Jost", "Sunflower";
+  font-family: "Noto Kufi Arabic", sans-serif;
   background-color: #f5ebe0;
   -ms-overflow-style: none;
 }

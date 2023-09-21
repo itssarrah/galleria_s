@@ -7,6 +7,28 @@
   font-family: "sofia";
 }
 
+/* .active-link {
+  border-bottom: 2px solid #e68585 !important;
+  padding-bottom: 2px;
+} */
+
+.active-link {
+  position: relative; /* ensure the parent element is positioned */
+}
+
+.active-link::before {
+  content: "";
+  display: block;
+  width: 50%;
+  height: 4px; /* or whatever thickness you desire */
+  border-radius: 20%;
+  background-color: #ff9494; /* or any color you want */
+  margin: auto;
+  position: absolute; /* absolutely position the pseudo-element relative to its parent */
+  bottom: -10%; /* align to the bottom */
+  left: 55%; /* centers the pseudo-element when combined with 50% width */
+}
+
 .primary {
   font-family: "sofia";
   background-color: #ff9494;

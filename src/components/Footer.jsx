@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 const Footer = (props) => {
   const { t } = useTranslation("footer");
   return (
-    <div className="footer w-full relative space-y-4 pt-12">
+    <div id="footer" className="footer w-full relative space-y-4 pt-12">
       <div className="flex flex-col items-center justify-around feedback_box py-4 px-2 w-1/2 lg:w-1/3 h-44 lg:h-72 xl:h-80 bg-white rounded-2xl mx-auto">
         <div>
           <h1 className="feedback_txt text-base md:text-lg lg:text-2xl xl:text-4xl">

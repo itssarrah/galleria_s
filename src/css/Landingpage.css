@@ -13,6 +13,37 @@
   z-index: -1;
   background-repeat: no-repeat;
 }
+
+.faq-row-wrapper {
+  width: 90%;
+  font-family: "Jost";
+}
+
+/* For medium screens and up */
+@media (min-width: 768px) {
+  /* 768px is a common breakpoint for medium-sized screens */
+  .faq-row-wrapper {
+    width: 50%;
+  }
+}
+.faq-row {
+  border-radius: 20px;
+  background: #ff9494;
+  margin-bottom: 2rem;
+}
+.row-title {
+  padding: 2rem;
+  color: white;
+  margin-left: 20px;
+}
+.slogan {
+  color: #744638;
+  text-align: center;
+  font-family: "Jost";
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
 .left_Title {
   position: relative;
   color: #000;
@@ -22,7 +53,6 @@
 .landing_paragraph {
   color: #000;
   font-family: "Sunflower";
-  font-size: 30px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
@@ -324,4 +354,71 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.Team_container {
+  width: 320px;
+  height: 420px;
+  border-radius: 69px;
+  background: linear-gradient(180deg, #ffa3a3 0%, rgba(255, 195, 195, 0) 100%);
+  position: relative;
+}
+
+.eclipse_one,
+.eclipse_two {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  position: absolute;
+}
+.eclipse_one {
+  background-color: #bd3643;
+  /* z-index: 1; */
+  top: 38px;
+  left: 29%;
+  z-index: 4;
+}
+.eclipse_two {
+  background-color: #ff9494;
+  top: 60px;
+  left: 23%;
+  z-index: 2;
+}
+@media (max-width: 767px) {
+  .Team_container {
+    width: 70%; /* adjust as needed */
+    height: 50vh; /* adjust as needed, or set a percentage */
+    border-radius: 50px; /* adjust as needed */
+  }
+  .eclipse_one,
+  .eclipse_two {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    position: absolute;
+  }
+  .eclipse_two {
+    top: 50px;
+    left: 20%;
+  }
+}
+
+.avatar {
+  position: relative;
+  z-index: 6;
+}
+.team_sub {
+  color: rgba(0, 0, 0, 0.75);
+  text-align: center;
+  font-family: Sunflower;
+  font-style: normal;
+  font-weight: 300;
+  line-height: normal;
+}
+
+.splide__pagination .splide__pagination__page.is-active {
+  background-color: rgba(254, 162, 162, 1);
+}
+.splide__pagination .splide__pagination__page {
+  background-color: rgba(254, 162, 162, 0.3);
 }
