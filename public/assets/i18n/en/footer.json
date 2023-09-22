@@ -1,10 +1,12 @@
 {
   "fbk_title": "Feedback",
-  "fbk_subtitle": "How was your experience ?",
+  "fbk_subtitle": "How was your experience ? (anonymously)",
   "fbk_placeholder": "It was amazing..",
   "fbk_btn": "Send",
   "abt_title": "About us",
   "contact_title": "Contact",
   "follow_title": "Follow us",
-  "abt_desc": "Galleria or معرضي is a digital platform that aims to gather Algeria’s small businesses in one aesthetic place where one can shop peacfuly !"
+  "abt_desc": "Galleria or معرضي is a digital platform that aims to gather Algeria’s small businesses in one aesthetic place where one can shop peacfuly !",
+  "confirmationMessage": "Feedback sent successfully !",
+  "errorSubmittingFeedback": "There was an error sending the feedback :( "
 }

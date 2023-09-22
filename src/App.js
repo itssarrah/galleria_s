@@ -14,29 +14,25 @@ import "./i18n";
 import { useTranslation } from "react-i18next";
 
 function App() {
-  const { i18n } = useTranslation();
-  const isArabic = i18n.language == "ar";
   return (
-    <div className={isArabic ? "text-right" : "text-left"}>
-      <Router>
-        <div className="App">
-          <Nav />
-          <BackgroundAsset position="top-left" />
-          <BackgroundAssetTwo position="top-right" />
-          <div className="content">
-            <Routes>
-              <Route path="/" element={<LandingPage />}></Route>
-              <Route
-                path="/businessregistration"
-                element={<Businessauth />}
-              ></Route>
+    <Router>
+      <div className="App">
+        <Nav />
+        <BackgroundAsset position="top-left" />
+        <BackgroundAssetTwo position="top-right" />
+        <div className="content">
+          <Routes>
+            <Route path="/" element={<LandingPage />}></Route>
+            <Route
+              path="/businessregistration"
+              element={<Businessauth />}
+            ></Route>
 
-              <Route path="/shop" element={<Shop />}></Route>
-            </Routes>
-          </div>
+            <Route path="/shop" element={<Shop />}></Route>
+          </Routes>
         </div>
-      </Router>
-    </div>
+      </div>
+    </Router>
   );
 }
 

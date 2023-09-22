@@ -625,11 +625,21 @@ const TeamSlider = () => {
 
 const Team = () => {
   const { t } = useTranslation("homepage");
+  const { i18n } = useTranslation();
+
   return (
     <>
-      <div className="py-12 px-12">
-        <h1 className="primary_txt">{t("team_title")}</h1>
-        <h2 className="secondary_txt">{t("team_subtitle")}</h2>
+      <div className={`py-12 px-12 `}>
+        <h1
+          className={`primary_txt ${
+            i18n.language === "ar" ? "text-right" : "text-left"
+          }`}
+        >
+          {t("team_title")}
+        </h1>
+        <h2 className={`secondary_txt ${
+            i18n.language === "ar" ? "text-right" : "text-left"
+          }`}>{t("team_subtitle")}</h2>
       </div>
       <TeamSlider />
     </>

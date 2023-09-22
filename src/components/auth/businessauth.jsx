@@ -98,11 +98,26 @@ const Businessauth = () => {
     }
   };
 
-  const validateFormStepOne = () => {
+  const validateFormStepOne = async () => {
     // Email Format Verification
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
     if (!emailRegex.test(formData.email)) {
       alert(t("mail_error"));
+      return false;
+    }
+
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1:8000/api/check-email?email=${formData.email}`
+      );
+
+      if (response.data.exists) {
+        alert(t("email_already_exists_error"));
+        return false;
+      }
+    } catch (error) {
+      console.error("Error checking email:", error);
+      alert(t("error_checking_email"));
       return false;
     }
 
@@ -247,22 +262,26 @@ const Businessauth = () => {
     return true;
   };
 
-  const completeFormStep = () => {
+  const completeFormStep = async () => {
     if (formStep === 0) {
-      if (validateFormStepOne()) {
+      const isValidStepOne = await validateFormStepOne();
+      if (isValidStepOne) {
         setFormStep((cur) => cur + 1);
       }
     } else if (formStep === 1) {
+      // If validateFormStepTwo becomes async in the future, handle it similarly.
       if (validateFormStepTwo()) {
         setFormStep((cur) => cur + 1);
       }
     } else if (formStep === 2) {
+      // If validateFormStepThree becomes async in the future, handle it similarly.
       if (validateFormStepThree()) {
         submitFormData();
         setFormStep((cur) => cur + 1);
       }
     }
   };
+
   const backFormStep = () => {
     setFormStep((cur) => cur - 1);
   };
@@ -651,6 +670,22 @@ function PersonalInfo({ formData, setFormData }) {
 
 function Businessinfo({ formData, setFormData }) {
   const { t } = useTranslation("auth");
+  const [categories, setCategories] = useState([]);
+  const { i18n } = useTranslation();
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/categories"
+        ); // adjust the endpoint if needed
+        setCategories(response.data);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
   return (
     <>
       <div className=" flex flex-col items-center gap-3">
@@ -707,9 +742,15 @@ function Businessinfo({ formData, setFormData }) {
               <option disabled value="">
                 {t("biz_cat_ph")}
               </option>
-              <option>Mini Cakes</option>
-              <option>Accessories</option>
-              <option>Crochet</option>
+              {categories.map((category) => (
+                <option key={category.id} value={category.en_name}>
+                  {i18n.language === "en"
+                    ? category.en_name
+                    : i18n.language === "fr"
+                    ? category.fr_name
+                    : category.ar_name}
+                </option>
+              ))}
             </select>
             <div className="pointer-events-none absolute right-2 top-[5px] md:top-[1.5px] flex items-center justify-center px-2 rounded-full bg-white w-6 h-6 md:w-10 md:h-10">
               <ChevronDownIcon className="w-4 h-4 md:w-7 md:h-7 heart" />
