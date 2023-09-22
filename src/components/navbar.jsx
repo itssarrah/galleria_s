@@ -52,7 +52,7 @@ function Nav() {
     },
     {
       name: t("shop_link"),
-      link: "/shops",
+      link: "/shop",
     },
     {
       name: t("About_link"),

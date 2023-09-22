@@ -27,6 +27,7 @@ import {
 const Businessauth = () => {
   const { t } = useTranslation("auth");
   const [formStep, setFormStep] = React.useState(0);
+  const [order, setOrder] = useState(null);
 
   const [formData, setFormData] = useState({
     email: "",
@@ -85,7 +86,11 @@ const Businessauth = () => {
           },
         }
       );
-      console.log("Data submitted successfully", response.data);
+      if (response.data.message === "Registration successful") {
+        setOrder(response.data.order);
+      } else {
+        console.log(response.data.message);
+      }
     } catch (error) {
       console.error("There was an error sending the data", error);
       if (error.response) {
@@ -377,6 +382,7 @@ const Businessauth = () => {
                   components={{
                     pinktxt: <span className="heart" />,
                   }}
+                  values={{ order: order }}
                 />
               </h1>
               <p className="text-base lg:text-xl font-[400] w-11/12 pt-6 md:pt-12 text-center">

@@ -11,7 +11,6 @@ import Shop from "./views/shop/shopItemsSorted.jsx";
 
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./i18n";
-import { useTranslation } from "react-i18next";
 
 function App() {
   return (
