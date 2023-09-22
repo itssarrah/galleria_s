@@ -103,7 +103,7 @@ function Nav() {
       <ul
         className={` sm:flex ${
           i18n.language === "ar" ? "sm:flex-row-reverse" : "sm:flex-row"
-        } sm:space-y-0 sm:items-center sm:pb-0 pb-12 sm:space-x-4 md:space-x-4 lg:space-x-20 absolute sm:static space-y-2  left-0 z-[10] w-full sm:w-auto sm:pl-0 pl-28 transition-all bg-white sm:bg-transparent duration-500 ease-in ${
+        } sm:space-y-0 sm:items-center sm:pb-0 pb-12 sm:space-x-4 md:space-x-4 lg:space-x-20 absolute sm:static space-y-2  left-0  w-full sm:w-auto sm:pl-0 pl-28 transition-all bg-white sm:bg-transparent duration-500 ease-in ${
           isOpen ? "top-[79px]" : "top-[-300px] "
         }`}
       >
@@ -116,7 +116,7 @@ function Nav() {
         ))} */}
         {Links.map((link) => (
           <li
-            className={`text-sm md:text-base lg:text-2xl nav__item pl-20 ${
+            className={`text-sm md:text-base lg:text-2xl nav__item  ${
               location.pathname === link.link ? "active-link" : ""
             }`}
           >
