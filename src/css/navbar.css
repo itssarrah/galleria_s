@@ -5,12 +5,8 @@
 
 .nav__item {
   font-family: "sofia";
+  min-width: 100px;
 }
-
-/* .active-link {
-  border-bottom: 2px solid #e68585 !important;
-  padding-bottom: 2px;
-} */
 
 .active-link {
   position: relative; /* ensure the parent element is positioned */
@@ -26,7 +22,13 @@
   margin: auto;
   position: absolute; /* absolutely position the pseudo-element relative to its parent */
   bottom: -10%; /* align to the bottom */
-  left: 55%; /* centers the pseudo-element when combined with 50% width */
+  left: 5%; /* centers the pseudo-element when combined with 50% width */
+}
+
+@media (max-width: 639px) {
+  .active-link::before {
+    display: none;
+  }
 }
 
 .primary {
@@ -59,8 +61,6 @@
 }
 
 .basebtn {
-  z-index: 1000;
-
   font-size: 30px;
   font-style: normal;
   font-weight: 600;
@@ -72,6 +72,10 @@
 
 nav {
   width: 100%;
+  z-index: 999999999;
+}
+
+nav ul {
   z-index: 999999999;
 }
 

@@ -1,15 +1,36 @@
-import React from "react";
+import React, { useState } from "react";
+import axios from "axios";
 import logofull from "../assets/images/logo_full.png";
 import { MdEmail } from "react-icons/md";
 import { ContributeBtn } from "./navbar";
 import { FaInstagram, FaTiktok } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
+import { FaCheck } from "react-icons/fa";
 
 const Footer = (props) => {
   const { t } = useTranslation("footer");
+  const { i18n } = useTranslation();
+  const [feedbackText, setFeedbackText] = useState("");
+  const [message, setMessage] = useState("");
+
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const submitFeedback = async () => {
+    try {
+      const response = await axios.post("http://127.0.0.1:8000/api/feedback", {
+        feedback_text: feedbackText,
+      });
+
+      setMessage(t("confirmationMessage"));
+      setIsSubmitted(true);
+    } catch (error) {
+      console.error("Error submitting feedback:", error);
+      setMessage(t("errorSubmittingFeedback"));
+    }
+  };
+
   return (
     <div id="footer" className="footer w-full relative space-y-4 pt-12">
-      <div className="flex flex-col items-center justify-around feedback_box py-4 px-2 w-1/2 lg:w-1/3 h-44 lg:h-72 xl:h-80 bg-white rounded-2xl mx-auto">
+      <div className="flex flex-col items-center justify-around feedback_box py-4 px-2 w-1/2 lg:w-1/3 h-[240px] lg:h-72 xl:h-80 bg-white rounded-2xl mx-auto">
         <div>
           <h1 className="feedback_txt text-base md:text-lg lg:text-2xl xl:text-4xl">
             {t("fbk_title")}
@@ -18,12 +39,27 @@ const Footer = (props) => {
             {t("fbk_subtitle")}
           </h1>
         </div>
-        <input
-          type="text"
+        <textarea
+          value={feedbackText}
+          onChange={(e) => setFeedbackText(e.target.value)}
           placeholder={t("fbk_placeholder")}
-          className="input_txt p-4  lg:p-8 w-11/12 h-4"
+          className={`input_txt p-4  lg:p-8 w-11/12  ${
+            i18n.language === "ar" ? "text-right" : "text-left"
+          } `}
+        ></textarea>
+        <ContributeBtn
+          text={
+            isSubmitted ? <FaCheck size={32} className="heart" /> : t("fbk_btn")
+          }
+          importance="secondary"
+          onClick={submitFeedback}
         />
-        <ContributeBtn text={t("fbk_btn")} importance="secondary" />
+
+        {message && (
+          <p className="feedback_txt text-xs md:text-base lg:text-lg xl:text-2xl">
+            {message}
+          </p>
+        )}
       </div>
       <div className="footer_overlay items-center flex flex-col md:flex-row md:justify-around w-full">
         <img
