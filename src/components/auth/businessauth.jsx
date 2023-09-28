@@ -229,7 +229,7 @@ const Businessauth = () => {
 
     if (!containsOnlyLettersAndSpaces(formData.businessname)) {
       alert(t("bizname_error"));
-      // Handle the error
+      return false;
     }
     //file upload
     const fileInput = document.getElementById("fileInput");
