@@ -5,7 +5,7 @@ import "../css/navbar.css";
 import { FaGlobe } from "react-icons/fa";
 import { Bars3BottomRightIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import { Link } from "react-router-dom";
-
+import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
 
 function ContributeBtn({ text, importance = "primary", onClick }) {
@@ -37,17 +37,24 @@ function ContributeBtn({ text, importance = "primary", onClick }) {
 }
 
 function Nav() {
+  const { i18n } = useTranslation();
+  const { t } = useTranslation();
+  const changeLanguage = (event) => {
+    const selectedLang = event.target.value;
+    i18n.changeLanguage(selectedLang);
+  };
+
   let Links = [
     {
-      name: "Home",
+      name: t("home_link"),
       link: "/",
     },
     {
-      name: "Our Shops",
+      name: t("shop_link"),
       link: "/",
     },
     {
-      name: "About us",
+      name: t("About_link"),
       link: "/",
     },
   ];
@@ -91,10 +98,9 @@ function Nav() {
         {isOpen ? <XMarkIcon /> : <Bars3BottomRightIcon />}
       </div>
       <ul
-        className={` sm:flex sm:items-center sm:pb-0 pb-12 sm:space-x-4 md:space-x-4 lg:space-x-16 absolute sm:static space-y-2  left-0 z-[10] w-full sm:w-auto sm:pl-0 pl-28 transition-all bg-white sm:bg-transparent duration-500 ease-in ${
+        className={` sm:flex sm:space-y-0 sm:items-center sm:pb-0 pb-12 sm:space-x-4 md:space-x-4 lg:space-x-16 absolute sm:static space-y-2  left-0 z-[10] w-full sm:w-auto sm:pl-0 pl-28 transition-all bg-white sm:bg-transparent duration-500 ease-in ${
           isOpen ? "top-[79px]" : "top-[-300px]"
         }`}
-        hhkdfk
       >
         {Links.map((link) => (
           <li className="text-sm md:text-base lg:text-2xl nav__item">
@@ -102,16 +108,24 @@ function Nav() {
           </li>
         ))}
         <li>
-          <div className="sm:flex-col sm:gap-0 items-center flex-row gap-1 flex ">
+          <div className="sm:flex-col sm:gap-[0.25rem] items-center flex-row gap-1 flex ">
             <FaGlobe />
-            <h2 className="nav__txt">English</h2>
+            <select
+              className="nav__txt bg-transparent cursor-pointer outline-none"
+              onChange={changeLanguage}
+              value={i18n.language}
+            >
+              <option value="en">English</option>
+              <option value="fr">French</option>
+              <option value="ar">Arabic</option>
+            </select>
           </div>
         </li>
         <li>
           <div className={`flex flex-col-reverse sm:flex-row `}>
-            <ContributeBtn importance="typed" text="Log In" />
+            <ContributeBtn importance="typed" text={t("log_btn")} />
             <Link to="/businessregistration">
-              <ContributeBtn importance="primary" text="Contribute" />
+              <ContributeBtn importance="primary" text={t("contribute_btn")} />
             </Link>
           </div>
         </li>

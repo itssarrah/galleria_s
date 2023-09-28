@@ -7,6 +7,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { FaInstagram, FaTiktok } from "react-icons/fa";
 import axios from "axios";
+import { useTranslation, Trans } from "react-i18next";
 import {
   PlusIcon,
   EnvelopeIcon,
@@ -23,6 +24,7 @@ import {
 } from "@heroicons/react/24/solid";
 
 const Businessauth = () => {
+  const { t } = useTranslation("auth");
   const [formStep, setFormStep] = React.useState(0);
 
   const [formData, setFormData] = useState({
@@ -99,48 +101,46 @@ const Businessauth = () => {
     // Email Format Verification
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
     if (!emailRegex.test(formData.email)) {
-      alert("Enter a valid email format.");
+      alert(t("mail_error"));
       return false;
     }
 
     // Password Verification
     if (formData.password !== formData.confirmPassword) {
-      alert("Password and confirm password should match.");
+      alert(t("pass_match_error"));
       return false;
     }
     // Check for at least one lowercase character
     if (!/[a-z]/.test(formData.password)) {
-      alert("Password should contain at least one lowercase letter.");
+      alert(t("pass_lower_error"));
       return false;
     }
 
     // Check for at least one special character (e.g., @, #, $, etc.)
     if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/.test(formData.password)) {
-      alert(
-        "Password should contain at least one special character (@, #, $, etc.)."
-      );
+      alert(t("pass_special_error"));
       return false;
     }
     // Phone Number Verification
     if (!/^[\d]{9}$/.test(formData.phone)) {
-      alert("Phone number should have exactly 9 digits.");
+      alert(t("phone_error"));
       return false;
     }
     // Password Length Verification
     if (formData.password.length < 8) {
-      alert("Password should be at least 8 characters long.");
+      alert(t("pass_length_error"));
       return false;
     }
 
     // Password Uppercase Letter Verification
     if (!/[A-Z]/.test(formData.password)) {
-      alert("Password should contain at least one uppercase letter.");
+      alert(t("pass_upper_error"));
       return false;
     }
 
     // Password Number Verification
     if (!/[0-9]/.test(formData.password)) {
-      alert("Password should contain at least one number.");
+      alert(t("pass_num_error"));
       return false;
     }
 
@@ -150,7 +150,7 @@ const Businessauth = () => {
       formData.confirmPassword === "" ||
       formData.phone === ""
     ) {
-      alert("Please fill all fields.");
+      alert(t("empty_error"));
       return false;
     }
     return true;
@@ -161,17 +161,18 @@ const Businessauth = () => {
       const selectedYear = formData.birthdate.getFullYear();
       const currentYear = new Date().getFullYear();
       if (currentYear - selectedYear < 13) {
-        alert("You must be 13 years or older to register.");
+        alert(t("birth_error"));
         return false;
       }
     }
 
     if (formData.fullname.length < 3) {
-      alert("Full name should be at least 3 characters long.");
+      alert(t("name_length_error"));
       return false;
     }
     if (!containsOnlyLettersAndSpaces(formData.fullname)) {
-      alert("Fullname is invalid.");
+      alert(t("name_error"));
+      return false;
     }
 
     if (
@@ -179,7 +180,7 @@ const Businessauth = () => {
       formData.wilaya === "" ||
       !formData.birthdate
     ) {
-      alert("Please fill all fields.");
+      alert(t("empty_error"));
       return false;
     }
     return true;
@@ -190,38 +191,23 @@ const Businessauth = () => {
     const maxPrice = parseFloat(formData.maxPrice);
 
     if (minPrice <= 0 || maxPrice <= 0) {
-      alert("Prices should be positive values.");
+      alert(t("price_pos_error"));
       return false;
     }
 
     // Price Verification
     if (parseInt(formData.minPrice) >= parseInt(formData.maxPrice)) {
-      alert("Min price should be less than max price.");
+      alert(t("price_error"));
       return false;
     }
     // Business Name Verification
     if (formData.businessname.length < 3) {
-      alert("Business name should be at least 3 characters long.");
+      alert(t("bizname_length_error"));
       return false;
     }
 
-    // Business Description Verification
-    if (formData.businessdesc.length < 3) {
-      alert("Business description should be at least 3 characters long.");
-      return false;
-    }
-    if (
-      formData.businessname === "" ||
-      formData.businessdesc === "" ||
-      formData.businessType === "" ||
-      formData.minPrice === "" ||
-      formData.maxPrice === ""
-    ) {
-      alert("Please fill all fields.");
-      return false;
-    }
     if (!containsOnlyLettersAndSpaces(formData.businessname)) {
-      alert("Business name is invalid.");
+      alert(t("bizname_error"));
       // Handle the error
     }
     //file upload
@@ -229,20 +215,31 @@ const Businessauth = () => {
     const file = fileInput.files[0];
 
     if (!file) {
-      alert("Please upload an image.");
+      alert(t("upload_error"));
       return false;
     }
 
     // Check file type
     const acceptedImageTypes = ["image/gif", "image/jpeg", "image/png"];
     if (!acceptedImageTypes.includes(file.type)) {
-      alert("Only images (jpg, jpeg, png, gif) are allowed.");
+      alert(t("upload_type_error"));
       return false;
     }
 
     // Check file size (Let's say we're allowing up to 5MB)
     if (file.size > 5 * 1024 * 1024) {
-      alert("Uploaded image should not exceed 5MB.");
+      alert(t("upload_size_error"));
+      return false;
+    }
+
+    if (
+      formData.businessname === "" ||
+      formData.businessdesc === "" ||
+      formData.businessType === "" ||
+      formData.minPrice === "" ||
+      formData.maxPrice === ""
+    ) {
+      alert(t("empty_error"));
       return false;
     }
 
@@ -300,7 +297,7 @@ const Businessauth = () => {
           />
           <ContributeBtn
             importance="primary"
-            text="Finish"
+            text={t("finish_btn")}
             onClick={completeFormStep}
           />
         </>
@@ -318,7 +315,7 @@ const Businessauth = () => {
   return (
     <>
       <h1 className="auth_header mx-auto pb-4 text-base md:text-2xl lg:text-4xl">
-        Small Business Registration :
+        {t("auth_title")}
       </h1>
       <form>
         <div className="image_input">
@@ -347,21 +344,43 @@ const Businessauth = () => {
           {formStep == 3 && (
             <section className="flex flex-col items-center congrats pt-28">
               <h1 className="auth_header text-lg md:text-4xl ">
-                Account Created{" "}
-                <span className="subtxt p-2 rounded-3xl">Successfuly</span>
+                <Trans
+                  i18nKey="auth:success_title"
+                  components={{
+                    pink: <span className="subtxt p-2 rounded-3xl" />,
+                  }}
+                />
               </h1>
               <h1 className="input_label w-11/12 text-center text-xl md:text-5xl xl:text-6xl  pt-8">
-                You are the <span className="heart">TOP #6 </span>Small business
-                to register !{" "}
+                <Trans
+                  i18nKey="auth:sucess_header"
+                  components={{
+                    pinktxt: <span className="heart" />,
+                  }}
+                />
               </h1>
               <p className="text-base lg:text-xl font-[400] w-11/12 pt-6 md:pt-12 text-center">
-                you are on the waiting list, We will notify you once the
-                platform is ready ! keep in touch and
-                <span className="heart font-bold"> Stay Tuned</span>.
+                <span className="heart font-bold">
+                  <Trans
+                    i18nKey="auth:success_marketing"
+                    components={{
+                      newline: <br />,
+                    }}
+                  />
+                </span>
               </p>
+              <p className="text-base lg:text-xl font-[400] w-11/12 pt-6  text-center">
+                <Trans
+                  i18nKey="auth:success_desc"
+                  components={{
+                    pinkbold: <span className="heart font-bold" />,
+                  }}
+                />
+              </p>
+
               <div className=" pt-6 md:pt-12">
                 <h1 className="flex auth_header text-base md:text-3xl">
-                  Follow us :{" "}
+                  {t("success_follow")}
                 </h1>
                 <div className="flex gap-2 md:gap-8">
                   <a
@@ -417,7 +436,7 @@ const InputField = ({
   return (
     <div className="md:w-120 w-64">
       <label htmlFor={id} className={`input_label text-sm md:text-lg `}>
-        {label}:
+        {label}
       </label>
       <div className="flex relative items-center">
         {prefix && (
@@ -450,37 +469,8 @@ const InputField = ({
   );
 };
 
-const DateInputNew = ({ id, label, selectedDate, setFormData }) => {
-  const [startDate, setStartDate] = useState(selectedDate);
-
-  useEffect(() => {
-    setFormData((prev) => ({ ...prev, birthdate: startDate }));
-  }, [startDate, setFormData]);
-
-  const renderCustomHeader = ({ date, decreaseMonth, increaseMonth }) => (
-    <div style={{ margin: 10, display: "flex", justifyContent: "center" }}>
-      <button onClick={decreaseMonth}>{"<-"}</button>
-      <span>{date.getFullYear()}</span>
-      <button onClick={increaseMonth}>{"->"}</button>
-    </div>
-  );
-
-  return (
-    <div>
-      <label htmlFor={id}>{label}:</label>
-      <DatePicker
-        selected={startDate}
-        onChange={(date) => setStartDate(date)}
-        renderCustomHeader={renderCustomHeader}
-        showMonthDropdown={false}
-        showYearDropdown={true}
-        dropdownMode="select"
-      />
-    </div>
-  );
-};
-
 const DateInput = ({ id, label, selectedDate, setFormData }) => {
+  const { t } = useTranslation("auth");
   const [startDate, setStartDate] = useState(selectedDate);
 
   useEffect(() => {
@@ -490,7 +480,7 @@ const DateInput = ({ id, label, selectedDate, setFormData }) => {
   return (
     <div className="md:w-120 w-64">
       <label htmlFor={id} className="input_label text-sm md:text-lg">
-        {label}:
+        {label}
       </label>
       <div className="flex z-[99999] cursor-pointer relative ">
         <DatePicker
@@ -514,6 +504,7 @@ const DateInput = ({ id, label, selectedDate, setFormData }) => {
 };
 
 function AccountInformation({ formData, setFormData }) {
+  const { t } = useTranslation("auth");
   return (
     <>
       <div className=" flex flex-col items-center gap-3">
@@ -522,7 +513,7 @@ function AccountInformation({ formData, setFormData }) {
           id="email"
           placeholder="abcdef@example.com"
           IconComponent={EnvelopeIcon}
-          label="Email"
+          label={t("email")}
           value={formData.email}
           onChange={(e) =>
             setFormData((prev) => ({ ...prev, email: e.target.value }))
@@ -535,7 +526,7 @@ function AccountInformation({ formData, setFormData }) {
           placeholder="************"
           IconComponent={EyeIcon}
           maxl={20}
-          label="Password"
+          label={t("pass")}
           value={formData.password}
           onChange={(e) =>
             setFormData((prev) => ({ ...prev, password: e.target.value }))
@@ -549,7 +540,7 @@ function AccountInformation({ formData, setFormData }) {
           placeholder="************"
           IconComponent={EyeIcon}
           maxl={20}
-          label="Confirm Password"
+          label={t("pass_conf")}
           value={formData.confirmPassword}
           onChange={(e) =>
             setFormData((prev) => ({
@@ -565,7 +556,7 @@ function AccountInformation({ formData, setFormData }) {
           placeholder="00 00 00 00"
           IconComponent={PhoneIcon}
           maxl={9}
-          label="Phone Number"
+          label={t("phone")}
           prefix="+213"
           value={formData.phone}
           onChange={(e) =>
@@ -581,6 +572,7 @@ function AccountInformation({ formData, setFormData }) {
 }
 
 function PersonalInfo({ formData, setFormData }) {
+  const { t } = useTranslation("auth");
   return (
     <>
       <div className=" flex flex-col items-center gap-3">
@@ -588,10 +580,10 @@ function PersonalInfo({ formData, setFormData }) {
           type="text"
           id="fullname"
           name="fullname"
-          placeholder="My name"
+          placeholder={t("fullname_ph")}
           IconComponent={UserPlusIcon}
           maxl={20}
-          label="Your Full Name"
+          label={t("fullname")}
           value={formData.fullname}
           onChange={(e) =>
             setFormData((prev) => ({
@@ -602,7 +594,7 @@ function PersonalInfo({ formData, setFormData }) {
         />
         <div>
           <label htmlFor="select" className="input_label text-sm md:text-lg">
-            Wilaya :
+            {t("wilaya")}
           </label>
           <div className="relative md:w-120 w-64">
             <select
@@ -614,7 +606,7 @@ function PersonalInfo({ formData, setFormData }) {
               }
             >
               <option disabled value="">
-                Choose Your Wilaya
+                {t("wilaya_ph")}
               </option>
               <option>Bejaia</option>
               <option>Tizi Ouzou</option>
@@ -627,7 +619,7 @@ function PersonalInfo({ formData, setFormData }) {
         </div>
         <DateInput
           id="birthdate"
-          label="Your Birthday"
+          label={t("birthdate")}
           selectedDate={FormData.birthdate}
           setFormData={setFormData}
         />
@@ -637,6 +629,7 @@ function PersonalInfo({ formData, setFormData }) {
 }
 
 function Businessinfo({ formData, setFormData }) {
+  const { t } = useTranslation("auth");
   return (
     <>
       <div className=" flex flex-col items-center gap-3">
@@ -644,10 +637,10 @@ function Businessinfo({ formData, setFormData }) {
           type="text"
           id="businessname"
           name="businessname"
-          placeholder="Yourname.co"
+          placeholder={t("biz_name_ph")}
           IconComponent={UserIcon}
           maxl={20}
-          label="Business Name"
+          label={t("biz_name")}
           value={formData.businessname}
           onChange={(e) =>
             setFormData((prev) => ({
@@ -660,10 +653,10 @@ function Businessinfo({ formData, setFormData }) {
           type="text"
           id="businessdesc"
           name="businessdesc"
-          placeholder="I make some hand made jewerly.."
+          placeholder={t("biz_desc_ph")}
           IconComponent={BuildingStorefrontIcon}
           maxl={80}
-          label="Decribe Your Business"
+          label={t("biz_desc")}
           customh="h-20"
           value={formData.businessdesc}
           onChange={(e) =>
@@ -676,7 +669,7 @@ function Businessinfo({ formData, setFormData }) {
 
         <div>
           <label htmlFor="select" className="input_label text-sm md:text-lg">
-            Select what type of business you hold :
+            {t("biz_cat")}
           </label>
           <div className="relative md:w-120 w-64">
             <select
@@ -691,7 +684,7 @@ function Businessinfo({ formData, setFormData }) {
               }
             >
               <option disabled value="">
-                Choose Your Category
+                {t("biz_cat_ph")}
               </option>
               <option>Mini Cakes</option>
               <option>Accessories</option>
@@ -706,7 +699,7 @@ function Businessinfo({ formData, setFormData }) {
           htmlFor="price"
           className="pt-8 text-center input_label text-sm md:text-lg"
         >
-          Specify your price range :
+          {t("price_title")}
         </label>
         <div>
           <PriceRangeInput formData={formData} setFormData={setFormData} />
@@ -717,11 +710,12 @@ function Businessinfo({ formData, setFormData }) {
 }
 
 const PriceRangeInput = ({ formData, setFormData }) => {
+  const { t } = useTranslation("auth");
   return (
     <div className="md:w-120 w-64 flex flex-col justify-around md:flex-row  items-center  pt-2">
       <div className="flex flex-col mb-4">
         <label htmlFor="minPrice" className="input_label text-sm md:text-lg">
-          Min Price:
+          {t("min_price_title")}
         </label>
         <input
           name="minPrice"
@@ -731,14 +725,14 @@ const PriceRangeInput = ({ formData, setFormData }) => {
           onChange={(e) =>
             setFormData((prev) => ({ ...prev, minPrice: e.target.value }))
           }
-          placeholder="Enter min price"
+          placeholder={t("min_price_ph")}
           className="bginput text-sm md:text-lg rounded-xl px-4 py-2 w-full h-12 outline-none"
         />
       </div>
       <ArrowRightIcon className="w-10 h-10 heart hidden md:block" />
       <div className="flex flex-col">
         <label htmlFor="maxPrice" className="input_label text-sm md:text-lg">
-          Max Price:
+          {t("max_price_title")}
         </label>
         <input
           name="maxPrice"
@@ -748,7 +742,7 @@ const PriceRangeInput = ({ formData, setFormData }) => {
           onChange={(e) =>
             setFormData((prev) => ({ ...prev, maxPrice: e.target.value }))
           }
-          placeholder="Enter max price"
+          placeholder={t("max_price_ph")}
           className="bginput text-sm md:text-lg rounded-xl px-4 py-2 w-full h-12 outline-none"
         />
       </div>
@@ -798,6 +792,7 @@ function ImageInputOutput({ formData, setFormData }) {
 }
 
 function ProgressBar({ step }) {
+  const { t } = useTranslation("auth");
   let widthClass;
   switch (step) {
     case 0:
@@ -825,7 +820,7 @@ function ProgressBar({ step }) {
           </div>
 
           <h1 className="pt-7 w-7 h-7 text-center text-sm md:text-lg lg:text-xl">
-            Account Information
+            {t("phase_one")}
           </h1>
         </div>
         <div>
@@ -837,7 +832,7 @@ function ProgressBar({ step }) {
             {step > 1 ? <CheckIcon className="w-7 h-7" /> : "2"}
           </div>
           <h1 className="absolute top-7 left-0 right-0 mx-auto w-11 h-7 text-center text-sm md:text-lg lg:text-xl">
-            Personal Information
+            {t("phase_two")}
           </h1>
         </div>
         <div>
@@ -849,7 +844,7 @@ function ProgressBar({ step }) {
             {step > 2 ? <CheckIcon className="w-7 h-7" /> : "3"}
           </div>
           <h1 className="w-7 h-7 top-7  text-center absolute right-6 text-sm md:text-lg lg:text-xl">
-            Business Information
+            {t("phase_three")}
           </h1>
         </div>
       </div>

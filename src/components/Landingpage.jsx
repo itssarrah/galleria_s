@@ -9,7 +9,7 @@ import "@splidejs/splide/dist/css/splide.min.css";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import { MdLocationOn, MdLocalPhone, MdStar } from "react-icons/md";
 import Footer from "./Footer";
-
+import { useTranslation, Trans } from "react-i18next";
 
 const Card = ({
   itemUrl = "/images/carditem.png",
@@ -280,14 +280,15 @@ const ShopCardSlider = () => {
 };
 
 const TrendingShops = (props) => {
+  const { t } = useTranslation("homepage");
   return (
     <div {...props}>
       <div className="pb-12">
-        <h1 className="primary_txt">Trending Shops:</h1>
-        <h2 className="secondary_txt">Top #3 trending categories this week:</h2>
+        <h1 className="primary_txt">{t("shop_header")}</h1>
+        <h2 className="secondary_txt">{t("shop_subheader")}</h2>
       </div>
       <h1 className="category_name relative text-base sm:text-lg md:text-xl lg:text-2xl pb-4">
-        For Cakes
+        {t("category_production")} Cakes
         {/* <img
           className="category_asset"
           src="/images/categoryasset.png"
@@ -296,7 +297,7 @@ const TrendingShops = (props) => {
       </h1>
       <ShopCardSlider />
       <h1 className="category_name relative text-base sm:text-lg md:text-xl lg:text-2xl pb-4">
-        For Accessories
+        {t("category_production")} Accessories
         {/* <img
           className="category_asset"
           src="/images/categoryasset.png"
@@ -305,7 +306,7 @@ const TrendingShops = (props) => {
       </h1>
       <ShopCardSlider />
       <h1 className="category_name relative text-base sm:text-lg md:text-xl lg:text-2xl pb-4">
-        For Embroidery
+        {t("category_production")} Embroidery
         {/* <img
           className="category_asset"
           src="/images/categoryasset.png"
@@ -318,11 +319,12 @@ const TrendingShops = (props) => {
 };
 
 const TrendingItems = (props) => {
+  const { t } = useTranslation("homepage");
   return (
     <div {...props}>
       <div className="pb-12">
-        <h1 className="primary_txt">Trending Items:</h1>
-        <h2 className="secondary_txt">This week's best sellers :</h2>
+        <h1 className="primary_txt">{t("items_header")}</h1>
+        <h2 className="secondary_txt">{t("items_subheader")}</h2>
       </div>
       <Splide
         className="mx-auto "
@@ -410,6 +412,7 @@ const TrendingItems = (props) => {
 };
 
 const Hero = () => {
+  const { t } = useTranslation("homepage");
   return (
     <div className="landingall w-full pt-4 px-10 flex flex-col-reverse justify-around items-center lg:flex-row">
       <img
@@ -424,27 +427,29 @@ const Hero = () => {
       />
       <div className="left_side w-1/2 space-y-6">
         <h1 className="left_Title leading-10 text-2xl  sm:text-3xl  md:text-5xl md:leading-normal lg:text-6xl lg:leading-normal ">
-          Your Gallery Of Algerian Artisans & Small Businesses
+          {t("hero_title")}
           <div className="txtoverlay w-36 sm:w-48 md:w-62 lg:w-72 lg:leading-4 "></div>
         </h1>
 
         <p className="landing_paragraph text-sm sm:text-base md:text-lg lg:text-2xl hidden 2xl:block">
-          At Galleria, we deeply value the role of small businesses in Algeria.
-          Our mission to <span className="font-bold">unite</span> them under one
-          digital roof ! providing a dedicated platform where their diverse
-          offerings can be showcased to the world. We're committed to supporting
-          and uplifting the Algerian entrepreneurial spirit, ensuring that every
-          small business gets the <span className="font-bold">visibility </span>
-          it deserves.
+          <Trans
+            i18nKey="homepage:hero_desc_long"
+            components={{ bold: <span className="font-bold" /> }}
+          />
         </p>
         <p className="landing_paragraph text-sm sm:text-base md:text-lg lg:text-xl  2xl:hidden">
-          At Galleria, we deeply value the role of small businesses in Algeria.
-          Our mission to <span className="font-bold">unite</span> them under one
-          digital roof !
+          {/* {t("hero_desc_short")} */}
+          <Trans
+            i18nKey="homepage:hero_desc_short"
+            components={{ bold: <span className="font-bold" /> }}
+          />
         </p>
         <div className="flex flex-col items-center">
           <Link to="/businessregistration">
-            <ContributeBtn importance="primary" text="Contribute >>" />
+            <ContributeBtn
+              importance="primary"
+              text={`${t("common:contribute_btn")} >>`}
+            />
           </Link>
         </div>
       </div>
@@ -454,8 +459,6 @@ const Hero = () => {
     </div>
   );
 };
-
-
 
 const LandingPage = () => {
   return (
