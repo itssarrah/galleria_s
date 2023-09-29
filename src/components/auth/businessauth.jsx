@@ -8,6 +8,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { FaInstagram, FaTiktok } from "react-icons/fa";
 import axios from "axios";
 import { useTranslation, Trans } from "react-i18next";
+import { BACKEND_URL } from "../../config";
 
 import {
   PlusIcon,
@@ -27,6 +28,7 @@ import {
 const Businessauth = () => {
   const { t } = useTranslation("auth");
   const [formStep, setFormStep] = React.useState(0);
+  const [order, setOrder] = useState(null);
 
   const [formData, setFormData] = useState({
     email: "",
@@ -77,7 +79,7 @@ const Businessauth = () => {
 
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/store-business",
+        `${BACKEND_URL}api/store-business`,
         actualFormData, // Sending the FormData object
         {
           headers: {
@@ -85,7 +87,11 @@ const Businessauth = () => {
           },
         }
       );
-      console.log("Data submitted successfully", response.data);
+      if (response.data.message === "Registration successful") {
+        setOrder(response.data.order);
+      } else {
+        console.log(response.data.message);
+      }
     } catch (error) {
       console.error("There was an error sending the data", error);
       if (error.response) {
@@ -108,7 +114,7 @@ const Businessauth = () => {
 
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8000/api/check-email?email=${formData.email}`
+        `${BACKEND_URL}api/check-email?email=${formData.email}`
       );
 
       if (response.data.exists) {
@@ -224,7 +230,7 @@ const Businessauth = () => {
 
     if (!containsOnlyLettersAndSpaces(formData.businessname)) {
       alert(t("bizname_error"));
-      // Handle the error
+      return false;
     }
     //file upload
     const fileInput = document.getElementById("fileInput");
@@ -377,6 +383,7 @@ const Businessauth = () => {
                   components={{
                     pinktxt: <span className="heart" />,
                   }}
+                  values={{ order: order }}
                 />
               </h1>
               <p className="text-base lg:text-xl font-[400] w-11/12 pt-6 md:pt-12 text-center">
@@ -596,7 +603,7 @@ function PersonalInfo({ formData, setFormData }) {
   const [wilayas, setWilayas] = useState([]);
   const { i18n } = useTranslation();
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/api/wilayas")
+    fetch(`${BACKEND_URL}api/wilayas`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -675,9 +682,7 @@ function Businessinfo({ formData, setFormData }) {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get(
-          "http://127.0.0.1:8000/api/categories"
-        ); // adjust the endpoint if needed
+        const response = await axios.get(`${BACKEND_URL}api/categories`);
         setCategories(response.data);
       } catch (error) {
         console.error("Error fetching categories:", error);
