@@ -8,6 +8,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { FaInstagram, FaTiktok } from "react-icons/fa";
 import axios from "axios";
 import { useTranslation, Trans } from "react-i18next";
+import { BACKEND_URL } from "../../config";
 
 import {
   PlusIcon,
@@ -78,7 +79,7 @@ const Businessauth = () => {
 
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/store-business",
+        `${BACKEND_URL}api/store-business`,
         actualFormData, // Sending the FormData object
         {
           headers: {
@@ -113,7 +114,7 @@ const Businessauth = () => {
 
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8000/api/check-email?email=${formData.email}`
+        `${BACKEND_URL}api/check-email?email=${formData.email}`
       );
 
       if (response.data.exists) {
@@ -602,7 +603,7 @@ function PersonalInfo({ formData, setFormData }) {
   const [wilayas, setWilayas] = useState([]);
   const { i18n } = useTranslation();
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/api/wilayas")
+    fetch(`${BACKEND_URL}api/wilayas`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -681,9 +682,7 @@ function Businessinfo({ formData, setFormData }) {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get(
-          "http://127.0.0.1:8000/api/categories"
-        ); // adjust the endpoint if needed
+        const response = await axios.get(`${BACKEND_URL}api/categories`);
         setCategories(response.data);
       } catch (error) {
         console.error("Error fetching categories:", error);

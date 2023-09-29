@@ -6,6 +6,7 @@ import { ContributeBtn } from "./navbar";
 import { FaInstagram, FaTiktok } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 import { FaCheck } from "react-icons/fa";
+import { BACKEND_URL } from "../config";
 
 const Footer = (props) => {
   const { t } = useTranslation("footer");
@@ -16,7 +17,7 @@ const Footer = (props) => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const submitFeedback = async () => {
     try {
-      const response = await axios.post("http://127.0.0.1:8000/api/feedback", {
+      const response = await axios.post(`${BACKEND_URL}api/feedback`, {
         feedback_text: feedbackText,
       });
 
