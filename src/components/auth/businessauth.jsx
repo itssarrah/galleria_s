@@ -612,10 +612,12 @@ function PersonalInfo({ formData, setFormData }) {
       })
       .then((data) => setWilayas(data))
       .catch((error) =>
+
         console.error(
           "There was a problem with the fetch operation:",
           error
         )
+
       );
   }, []);
   return (
