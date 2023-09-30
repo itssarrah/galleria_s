@@ -115,14 +115,16 @@ function Nav() {
           </li>
         ))} */}
         {Links.map((link) => (
-          <li
-            className={`text-sm md:text-base lg:text-2xl nav__item  ${
-              location.pathname === link.link ? "active-link" : ""
-            }`}
-          >
-            <a href={link.link}>{link.name}</a>
-          </li>
-        ))}
+    <li
+        key={link.name}  // It's good practice to add a 'key' prop when mapping over elements
+        className={`text-sm md:text-base lg:text-2xl nav__item ${
+            location.pathname === link.link ? "active-link" : ""
+        }`}
+    >
+        <Link to={link.link}>{link.name}</Link>
+    </li>
+))}
+
 
         <li>
           <div className="sm:flex-col sm:gap-[0.25rem] items-center flex-row gap-1 flex ">
