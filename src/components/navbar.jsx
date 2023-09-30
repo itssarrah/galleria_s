@@ -142,7 +142,7 @@ function Nav() {
         </li>
         <li>
           <div className={`flex flex-col-reverse sm:flex-row `}>
-            <ContributeBtn importance="typed" text={t("log_btn")} />
+{/*             <ContributeBtn importance="typed" text={t("log_btn")} /> */}
             <Link to="/businessregistration">
               <ContributeBtn importance="primary" text={t("contribute_btn")} />
             </Link>
