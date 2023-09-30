@@ -595,6 +595,13 @@ const TeamSlider = () => {
             role="Project Manager , Full-Stack Developer"
           />
         </SplideSlide>
+         <SplideSlide>
+          <TeamCard
+            source="/images/amira.jpg"
+            name="Amira Boudaoud"
+            role="Backend Manager,Backend Developer"
+          />
+        </SplideSlide>
         <SplideSlide>
           <TeamCard
             source="/images/nes.jpg"
@@ -630,13 +637,7 @@ const TeamSlider = () => {
             role="Documents Manager"
           />
         </SplideSlide>
-        <SplideSlide>
-          <TeamCard
-            source="/images/amira.jpg"
-            name="Amira Boudaoud"
-            role="Backend Manager,Backend Developer"
-          />
-        </SplideSlide>
+       
         <SplideSlide>
           <TeamCard
             name="Larbi Said-Cheikh"
