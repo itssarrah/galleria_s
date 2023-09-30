@@ -603,21 +603,22 @@ function PersonalInfo({ formData, setFormData }) {
   const [wilayas, setWilayas] = useState([]);
   const { i18n } = useTranslation();
   useEffect(() => {
-    fetch(`${BACKEND_URL}api/wilayas`)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
+    const fetchWilayas = async () => {
+        try {
+            const response = await axios.get(`${BACKEND_URL}api/wilayas`);
+            
+            if (response.status === 200) {
+                setWilayas(response.data);
+            } else {
+                console.error("Network response was not ok:", response.statusText);
+            }
+        } catch (error) {
+            console.error("There was a problem with the fetch operation:", error.message);
         }
-        return response.json();
-      })
-      .then((data) => setWilayas(data))
-      .catch((error) =>
-        console.error(
-          "There was a problem with the fetch operation:",
-          error.message
-        )
-      );
-  }, []);
+    };
+
+    fetchWilayas();
+}, []);
   return (
     <>
       <div className=" flex flex-col items-center gap-3">
