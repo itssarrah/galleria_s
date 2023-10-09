@@ -1,8 +1,58 @@
-import React from "react"
+import React, {useState, useRef} from "react"
+import MultiRangeSlider from "./MultiRangeSlider";
 const Filter=()=>{
+    const wilayasList = [
+        { name: 'Adrar' },
+        { name: 'Chlef' },
+        { name: 'Laghouat' },
+        // Add more wilayas as needed
+    ];
+    const initialCategories = [
+        {
+            name: 'Layer Cakes',
+            num_search: '2567'
+        },
+        // Change according to the backend endpoint variables 
+    ];
+
+    const handleWilayaClick = (wilaya) => {
+        if (!selectedWilayas.includes(wilaya)) {
+            setSelectedWilayas([...selectedWilayas, wilaya]);
+        }
+    };
+
+    const [categories, setCategories] = useState(initialCategories);
+    const [searchResults, setSearchResults] = useState([]);
+    const [selectedWilayas, setSelectedWilayas] = useState([]);
+
+
+    const searchInputRef = useRef(null);
+
+
+    const handleCategoryClick = (index) => {
+        const updatedCategories = [...categories];
+        updatedCategories[index].clicked = !updatedCategories[index].clicked;
+        setCategories(updatedCategories);
+    };
+
+    const toggleSearchInputFocus = () => {
+        searchInputRef.current.focus();
+    };
+
+    const handleSearch = () => {
+        const searchTerm = searchInputRef.current.value.toLowerCase();
+        // Filter wilayas based on the search term
+        const filteredWilayas = wilayasList.filter(wilaya =>
+            wilaya.name.toLowerCase().includes(searchTerm)
+        );
+        setSearchResults(filteredWilayas);
+    };
+
+
+  
     return (
         <div>
-            <div className="w-[278px] border border- border-white flex flex-col">
+            <div className="w-[278px] border  border-white flex flex-col border-[5px]">
                 <p className="text-center text-[30px] font-sunflower text-[rgb(255,148,148)] font-bold">FILTER</p>
                 <div className="flex flex-col items-start justify-start px-2 py-8 gap-[20px]">
                     <p className="text-black font-sofia text-[22px] text-left">Format :</p>
@@ -37,6 +87,72 @@ const Filter=()=>{
 
                     <p className="text-black font-sofia text-[22px] text-left">Categories Selected :</p>
 
+                    <div>
+                            
+                        <ul className="list-none pl-4 space-y-1">
+                            {categories.map((category, index) => (
+                                <li
+                                    key={index}
+                                    className={`text-black font-sunflower text-18px text-left space-x-20 px-2 cursor-pointer`}
+                                    onClick={() => handleCategoryClick(index)}
+                                >
+                                    <span className={`${category.clicked ? 'text-[#FF9494]' : 'opacity-30'} font-sunflower text-18px `}>
+                                        {category.name}
+                                    </span>{' '}
+                                    <span className="font-sunflower text-18px opacity-70">
+                                        {category.num_search}
+                                    </span>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                
+                    <p className="text-black font-sofia text-[22px] text-left mt-2">Price Ranges :</p>
+                        <MultiRangeSlider
+                        min={0}
+                        max={1000}
+                        onChange={({ min, max }) => console.log(`min = ${min}, max = ${max}`)} />
+
+
+                    <p className="text-black font-sofia text-[22px] text-left">Wilaya :</p>
+
+                    <div className="flex flex-col ">
+                        <div className="search-input-container">
+                            <div className="relative flex flex-row items-start justify-center ">
+                              
+                        <input 
+                        type="search"
+                        list='wilayas'
+                        placeholder="type..."
+                        className="
+                        w-full h-9 rounded-lg border border-[#FF9494] bg-[#F5EBE0] focus:outline-none px-3 py-2 mb-5 ml-1"
+                        ref={searchInputRef}
+                                    onChange={handleSearch}
+                        />
+                                <button className=" search-button bg-[#FF9494] rounded-full px-1.5 py-0 mt-1.5 ml-1" onClick={toggleSearchInputFocus}>
+                                    +
+                                </button>
+                       
+                        </div>
+                        </div>
+                    </div>
+                    {selectedWilayas.length > 0 && (
+                        <div>
+                            <ul className="list-none pl-4 space-y-1">
+                                {selectedWilayas.map((wilaya, index) => (
+                                    <li key={index} className="text-black font-sunflower text-18px text-left space-x-20 px-2">
+                                        <span className="font-sunflower text-18px">
+                                            {wilaya}
+                                        </span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+
+                
+
+                    
 
                 </div>
 
