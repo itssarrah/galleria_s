@@ -8,6 +8,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import { FaInstagram, FaTiktok } from "react-icons/fa";
 import axios from "axios";
 import { useTranslation, Trans } from "react-i18next";
+import { BACKEND_URL } from "../../config";
+
 import {
   PlusIcon,
   EnvelopeIcon,
@@ -26,6 +28,7 @@ import {
 const Businessauth = () => {
   const { t } = useTranslation("auth");
   const [formStep, setFormStep] = React.useState(0);
+  const [order, setOrder] = useState(null);
 
   const [formData, setFormData] = useState({
     email: "",
@@ -76,7 +79,7 @@ const Businessauth = () => {
 
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/store-business",
+        `${BACKEND_URL}api/store-business`,
         actualFormData, // Sending the FormData object
         {
           headers: {
@@ -84,7 +87,11 @@ const Businessauth = () => {
           },
         }
       );
-      console.log("Data submitted successfully", response.data);
+      if (response.data.message === "Registration successful") {
+        setOrder(response.data.order);
+      } else {
+        console.log(response.data.message);
+      }
     } catch (error) {
       console.error("There was an error sending the data", error);
       if (error.response) {
@@ -97,11 +104,26 @@ const Businessauth = () => {
     }
   };
 
-  const validateFormStepOne = () => {
+  const validateFormStepOne = async () => {
     // Email Format Verification
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
     if (!emailRegex.test(formData.email)) {
       alert(t("mail_error"));
+      return false;
+    }
+
+    try {
+      const response = await axios.get(
+        `${BACKEND_URL}api/check-email?email=${formData.email}`
+      );
+
+      if (response.data.exists) {
+        alert(t("email_already_exists_error"));
+        return false;
+      }
+    } catch (error) {
+      console.error("Error checking email:", error);
+      alert(t("error_checking_email"));
       return false;
     }
 
@@ -208,7 +230,7 @@ const Businessauth = () => {
 
     if (!containsOnlyLettersAndSpaces(formData.businessname)) {
       alert(t("bizname_error"));
-      // Handle the error
+      return false;
     }
     //file upload
     const fileInput = document.getElementById("fileInput");
@@ -246,22 +268,26 @@ const Businessauth = () => {
     return true;
   };
 
-  const completeFormStep = () => {
+  const completeFormStep = async () => {
     if (formStep === 0) {
-      if (validateFormStepOne()) {
+      const isValidStepOne = await validateFormStepOne();
+      if (isValidStepOne) {
         setFormStep((cur) => cur + 1);
       }
     } else if (formStep === 1) {
+      // If validateFormStepTwo becomes async in the future, handle it similarly.
       if (validateFormStepTwo()) {
         setFormStep((cur) => cur + 1);
       }
     } else if (formStep === 2) {
+      // If validateFormStepThree becomes async in the future, handle it similarly.
       if (validateFormStepThree()) {
         submitFormData();
         setFormStep((cur) => cur + 1);
       }
     }
   };
+
   const backFormStep = () => {
     setFormStep((cur) => cur - 1);
   };
@@ -357,6 +383,7 @@ const Businessauth = () => {
                   components={{
                     pinktxt: <span className="heart" />,
                   }}
+                  values={{ order: order }}
                 />
               </h1>
               <p className="text-base lg:text-xl font-[400] w-11/12 pt-6 md:pt-12 text-center">
@@ -573,6 +600,24 @@ function AccountInformation({ formData, setFormData }) {
 
 function PersonalInfo({ formData, setFormData }) {
   const { t } = useTranslation("auth");
+  const [wilayas, setWilayas] = useState([]);
+  const { i18n } = useTranslation();
+  useEffect(() => {
+    fetch(`${BACKEND_URL}api/wilayas`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => setWilayas(data))
+      .catch((error) =>
+        console.error(
+          "There was a problem with the fetch operation:",
+          error.message
+        )
+      );
+  }, []);
   return (
     <>
       <div className=" flex flex-col items-center gap-3">
@@ -608,9 +653,11 @@ function PersonalInfo({ formData, setFormData }) {
               <option disabled value="">
                 {t("wilaya_ph")}
               </option>
-              <option>Bejaia</option>
-              <option>Tizi Ouzou</option>
-              <option>Batna</option>
+              {wilayas.map((wilaya) => (
+                <option key={wilaya.id} value={wilaya.id}>
+                  {i18n.language == "ar" ? wilaya.ar_name : wilaya.name}
+                </option>
+              ))}
             </select>
             <div className="pointer-events-none absolute right-2 top-[5px] md:top-[1.5px] flex items-center justify-center px-2 rounded-full bg-white w-6 h-6 md:w-10 md:h-10">
               <ChevronDownIcon className="w-4 h-4 md:w-7 md:h-7 heart" />
@@ -630,6 +677,20 @@ function PersonalInfo({ formData, setFormData }) {
 
 function Businessinfo({ formData, setFormData }) {
   const { t } = useTranslation("auth");
+  const [categories, setCategories] = useState([]);
+  const { i18n } = useTranslation();
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get(`${BACKEND_URL}api/categories`);
+        setCategories(response.data);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
   return (
     <>
       <div className=" flex flex-col items-center gap-3">
@@ -686,9 +747,15 @@ function Businessinfo({ formData, setFormData }) {
               <option disabled value="">
                 {t("biz_cat_ph")}
               </option>
-              <option>Mini Cakes</option>
-              <option>Accessories</option>
-              <option>Crochet</option>
+              {categories.map((category) => (
+                <option key={category.id} value={category.en_name}>
+                  {i18n.language === "en"
+                    ? category.en_name
+                    : i18n.language === "fr"
+                    ? category.fr_name
+                    : category.ar_name}
+                </option>
+              ))}
             </select>
             <div className="pointer-events-none absolute right-2 top-[5px] md:top-[1.5px] flex items-center justify-center px-2 rounded-full bg-white w-6 h-6 md:w-10 md:h-10">
               <ChevronDownIcon className="w-4 h-4 md:w-7 md:h-7 heart" />
