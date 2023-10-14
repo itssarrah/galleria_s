@@ -1,0 +1,67 @@
+.product-card {
+  font-family: "Sunflower", sans-serif;
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+}
+
+.product-info {
+  padding: 3rem 0;
+}
+
+.product-title {
+  font-family: "Sofia", cursive;
+  font-size: 3rem;
+}
+
+.from-seller {
+  font-size: 2rem;
+  color: rgba(0, 0, 0, 0.55);
+}
+
+.seller-name {
+  font-weight: bolder;
+  text-decoration: underline;
+}
+
+.product-price {
+  max-width: 20rem;
+  padding: 3rem 0;
+  font-size: 3rem;
+  font-weight: bolder;
+  background-image: url("../../assets/images/product_asset1.png");
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.product-price > span {
+  color: white;
+  text-align: center;
+  display: inline-block;
+  width: 100%;
+}
+
+.detail {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  color: #7d5c3a;
+  gap: 1rem;
+}
+
+.icon {
+  color: #ff9494;
+  font-size: 2rem;
+}
+
+.product-description {
+  padding: 1rem 3rem;
+}
+
+.heart-icon {
+  font-size: 4rem;
+  color: #7d5c3a;
+  margin-top: 1rem;
+}
