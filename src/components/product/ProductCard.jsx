@@ -56,6 +56,7 @@ const ProductCard = ({
           )}
         </p>
       </div>
+      {/* TODO: fix slider */}
       <PreviewSlider images={images} />
     </div>
   );
