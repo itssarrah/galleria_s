@@ -1,14 +1,15 @@
 import React from "react";
 import ProductCard from "../../components/product/ProductCard";
-import { Card } from "../../components/Landingpage";
+import SuggestedProducts from "../../components/product/SuggestedProducts";
 
 // css
-import "./product-page.css"
+import "./product-page.css";
 
 const ProductPage = ({ id }) => {
   return (
     <div className="product-page">
-      <ProductCard/>
+      <ProductCard />
+      <SuggestedProducts />
     </div>
   );
 };

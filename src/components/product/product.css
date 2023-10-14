@@ -1,7 +1,9 @@
+/* Product Card */
+
 .product-card {
   font-family: "Sunflower", sans-serif;
-  display: flex;
-  flex-direction: row;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 2rem;
 }
 
@@ -65,3 +67,15 @@
   color: #7d5c3a;
   margin-top: 1rem;
 }
+
+/* SuggestedProducts */
+.cards-container {
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+  gap: 1rem;
+}
+
+.cards-container > card {
+  max-height: 10rem;
+}
+

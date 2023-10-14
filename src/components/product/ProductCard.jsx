@@ -1,9 +1,11 @@
 import React from "react";
+import PreviewSlider from "./PreviewSlider";
 import { Link } from "react-router-dom";
 import { HiLocationMarker, HiPhone } from "react-icons/hi";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
-import PreviewSlider from "./PreviewSlider";
-import "./product-card.css";
+
+// css imports
+import "./product.css";
 
 const ProductCard = ({
   itemUrl = "/images/carditem.png",
@@ -12,13 +14,7 @@ const ProductCard = ({
   salePrice = "500.00",
   isOnSale = true,
   isLiked = false,
-  images = [
-    "../../assets/images/logo.png",
-    "../../assets/images/logo.png",
-    "../../assets/images/logo.png",
-    "../../assets/images/logo.png",
-    "../../assets/images/logo.png",
-  ],
+  images = [],
   description = "Lorem ipsum dolor sit amet consectetur. Mattis sed sodales urna nisl facilisi egestas. Congue tortor auctor lectus auctor dolor aenean egestas vel. Et id nunc nisl nulla.",
   location = "Bejaia",
   phoneNumber = "+2135 78 83 29 33",
@@ -27,7 +23,7 @@ const ProductCard = ({
   return (
     <div className="product-card">
       <div>
-        <img src={itemUrl} alt="product image" />
+        <img src={itemUrl} alt="product" className="overflow-hidden w-full h-full" />
       </div>
       <div className="product-info">
         <h2 className="product-title mb-5">{title}</h2>
@@ -56,8 +52,7 @@ const ProductCard = ({
           )}
         </p>
       </div>
-      {/* TODO: fix slider */}
-      <PreviewSlider images={images} />
+      <PreviewSlider />
     </div>
   );
 };
