@@ -29,8 +29,8 @@ const ProductCard = ({
         <h2 className="product-title mb-5">{title}</h2>
         <p className="from-seller">
           from{" "}
-          <Link to={sellerUrl}>
-            <span className="seller-name">{seller}</span>
+          <Link to={sellerUrl} className="link">
+            <span >{seller}</span>
           </Link>
         </p>
         <div className="product-price">

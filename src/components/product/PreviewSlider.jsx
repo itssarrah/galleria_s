@@ -21,19 +21,19 @@ const PreviewSlider = ({
         perPage: 5.5,
         width: "100%",
         height: "50%",
-        gap: "0.2rem",
+        gap: "0.5rem",
         arrows: false,
         pagination: false,
         autoplay: true,
-        interval: 750,
+        interval: 5000,
         pauseOnHover: true,
-        perMove: 1,
-        speed: 1000,
+        perMove: 5,
+        speed: 5000,
       }}
     >
       {images.map((image, index) => (
         <SplideSlide key={index}>
-          <img key={`ps-img-${index}`} src={image} alt="preview product" />
+          <img key={`ps-img-${index}`} src={image} alt="preview product" className="rounded-full"/>
         </SplideSlide>
       ))}
     </Splide>

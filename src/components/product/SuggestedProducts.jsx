@@ -4,103 +4,12 @@ import { Card } from "../Landingpage";
 import { Link } from "react-router-dom";
 
 import "./product.css";
-import { min } from "date-fns";
 
 const SuggestedProducts = ({
   products = [
     {
-      itemUrl: "/",
-      sellerUrl: "/",
-      title: "Random Product",
-      basePrice: "1000",
-      salePrice: "999",
-      isOnSale: true,
-      isLiked: true,
-      seller: "Anonymous",
-    },
-    {
-      itemUrl: "/",
-      sellerUrl: "/",
-      title: "Random Product",
-      basePrice: "1000",
-      salePrice: "999",
-      isOnSale: true,
-      isLiked: true,
-      seller: "Anonymous",
-    },
-    {
-      itemUrl: "/",
-      sellerUrl: "/",
-      title: "Random Product",
-      basePrice: "1000",
-      salePrice: "999",
-      isOnSale: true,
-      isLiked: true,
-      seller: "Anonymous",
-    },
-    {
-      itemUrl: "/",
-      sellerUrl: "/",
-      title: "Random Product",
-      basePrice: "1000",
-      salePrice: "999",
-      isOnSale: true,
-      isLiked: true,
-      seller: "Anonymous",
-    },
-    {
-      itemUrl: "/",
-      sellerUrl: "/",
-      title: "Random Product",
-      basePrice: "1000",
-      salePrice: "999",
-      isOnSale: true,
-      isLiked: true,
-      seller: "Anonymous",
-    },
-    {
-      itemUrl: "/",
-      sellerUrl: "/",
-      title: "Random Product",
-      basePrice: "1000",
-      salePrice: "999",
-      isOnSale: true,
-      isLiked: true,
-      seller: "Anonymous",
-    },
-    {
-      itemUrl: "/",
-      sellerUrl: "/",
-      title: "Random Product",
-      basePrice: "1000",
-      salePrice: "999",
-      isOnSale: true,
-      isLiked: true,
-      seller: "Anonymous",
-    },
-    {
-      itemUrl: "/",
-      sellerUrl: "/",
-      title: "Random Product",
-      basePrice: "1000",
-      salePrice: "999",
-      isOnSale: true,
-      isLiked: true,
-      seller: "Anonymous",
-    },
-    {
-      itemUrl: "/",
-      sellerUrl: "/",
-      title: "Random Product",
-      basePrice: "1000",
-      salePrice: "999",
-      isOnSale: true,
-      isLiked: true,
-      seller: "Anonymous",
-    },
-    {
-      itemUrl: "/",
-      sellerUrl: "/",
+      itemUrl: "/images/carditem.png",
+      sellerUrl: "/images/cardseller.png",
       title: "Random Product",
       basePrice: "1000",
       salePrice: "999",
@@ -118,32 +27,145 @@ const SuggestedProducts = ({
       isLiked: true,
       seller: "Anonymous",
     },
+    {
+      itemUrl: "/images/carditem.png",
+      sellerUrl: "/images/cardseller.png",
+      title: "Random Product",
+      basePrice: "1000",
+      salePrice: "999",
+      isOnSale: true,
+      isLiked: true,
+      seller: "Anonymous",
+    },
+    {
+      itemUrl: "/images/carditem.png",
+      sellerUrl: "/images/cardseller.png",
+      title: "Random Product",
+      basePrice: "1000",
+      salePrice: "999",
+      isOnSale: true,
+      isLiked: true,
+      seller: "Anonymous",
+    },
+    {
+      itemUrl: "/images/carditem.png",
+      sellerUrl: "/images/cardseller.png",
+      title: "Random Product",
+      basePrice: "1000",
+      salePrice: "999",
+      isOnSale: true,
+      isLiked: true,
+      seller: "Anonymous",
+    },
+    {
+      itemUrl: "/images/carditem.png",
+      sellerUrl: "/images/cardseller.png",
+      title: "Random Product",
+      basePrice: "1000",
+      salePrice: "999",
+      isOnSale: true,
+      isLiked: true,
+      seller: "Anonymous",
+    },
+    {
+      itemUrl: "/images/carditem.png",
+      sellerUrl: "/images/cardseller.png",
+      title: "Random Product",
+      basePrice: "1000",
+      salePrice: "999",
+      isOnSale: true,
+      isLiked: true,
+      seller: "Anonymous",
+    },
+    {
+      itemUrl: "/images/carditem.png",
+      sellerUrl: "/images/cardseller.png",
+      title: "Random Product",
+      basePrice: "1000",
+      salePrice: "999",
+      isOnSale: true,
+      isLiked: true,
+      seller: "Anonymous",
+    },
+    {
+      itemUrl: "/images/carditem.png",
+      sellerUrl: "/images/cardseller.png",
+      title: "Random Product",
+      basePrice: "1000",
+      salePrice: "999",
+      isOnSale: true,
+      isLiked: true,
+      seller: "Anonymous",
+    },
+    {
+      itemUrl: "/images/carditem.png",
+      sellerUrl: "/images/cardseller.png",
+      title: "Random Product",
+      basePrice: "1000",
+      salePrice: "999",
+      isOnSale: true,
+      isLiked: true,
+      seller: "Anonymous",
+    },
+    {
+      itemUrl: "/images/carditem.png",
+      sellerUrl: "/images/cardseller.png",
+      title: "Random Product",
+      basePrice: "1000",
+      salePrice: "999",
+      isOnSale: true,
+      isLiked: true,
+      seller: "Anonymous",
+    },
+    {
+      itemUrl: "/images/carditem.png",
+      sellerUrl: "/images/cardseller.png",
+      title: "Random Product",
+      basePrice: "1000",
+      salePrice: "999",
+      isOnSale: true,
+      isLiked: true,
+      seller: "Anonymous",
+    },
+    {
+      itemUrl: "/images/carditem.png",
+      sellerUrl: "/images/cardseller.png",
+      title: "Random Product",
+      basePrice: "1000",
+      salePrice: "999",
+      isOnSale: true,
+      isLiked: true,
+      seller: "Now you see me",
+    },
   ],
 }) => {
   const productsCount = products.length;
   const [maxProductDisplay, setMaxProductDisplay] = useState(8);
 
-  // TODO: fix cards' height
-
   return (
-    <>
-      <div className="cards-container">
-        {products.slice(0, 8).map((product, index) => (
-          <div>
-            <Card key={index} {...products} />
-          </div>
-        ))}
+    <div className="flex flex-col justify-center align-center">
+      <div>
+        <h2 className="product-title pb-5">Browse some more : </h2>
+        <div className="cards-grid">
+          {products.slice(0, maxProductDisplay).map((product, index) => (
+            <Card key={index} {...product} />
+          ))}
+        </div>
       </div>
+
       {productsCount > maxProductDisplay && (
         <Link
+          className="block w-full text-center p-3 link"
           onClick={() =>
-            setMaxProductDisplay((prevMax) => min(productsCount, prevMax * 2))
+            setMaxProductDisplay((prevMax) =>
+              Math.min(productsCount, prevMax * 2)
+            )
           }
         >
           Load More
         </Link>
       )}
-    </>
+    </div>
   );
 };
 

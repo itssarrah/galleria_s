@@ -1,3 +1,11 @@
+/* Shared */
+.link {
+  font-weight: bolder;
+  text-decoration: underline;
+  color: rgba(0, 0, 0, 0.55);
+  font-size: 2rem;
+}
+
 /* Product Card */
 
 .product-card {
@@ -19,11 +27,6 @@
 .from-seller {
   font-size: 2rem;
   color: rgba(0, 0, 0, 0.55);
-}
-
-.seller-name {
-  font-weight: bolder;
-  text-decoration: underline;
 }
 
 .product-price {
@@ -69,13 +72,31 @@
 }
 
 /* SuggestedProducts */
-.cards-container {
+
+.cards-grid {
   display: grid;
   grid-template-columns: auto auto auto auto;
-  gap: 1rem;
+  gap: 3rem 1rem;
 }
 
-.cards-container > card {
-  max-height: 10rem;
+.circle {
+  aspect-ratio: 1 / 1;
+  height: auto;
+  border-radius: 0 0 50% 50%;
 }
 
+
+/* Rating */
+.bar {
+  height: 4rem;
+  border-radius: 18px;
+  background-color: #D9D9D9;
+  overflow: hidden;
+  margin: 1rem 0;
+}
+
+.bar > div {
+  height: 100%;
+  background-color: #DD6969;
+  border-radius: 18px;
+}
