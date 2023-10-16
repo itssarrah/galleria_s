@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PreviewSlider from "./PreviewSlider";
 import { Link } from "react-router-dom";
 import { HiLocationMarker, HiPhone } from "react-icons/hi";
@@ -20,17 +20,25 @@ const ProductCard = ({
   phoneNumber = "+2135 78 83 29 33",
   seller = "SweetyPie",
 }) => {
+  const [liked, setLiked] = useState(isLiked);
+
+  const toggleIsLiked = () => setLiked((prevIsLiked) => !prevIsLiked);
+
   return (
     <div className="product-card">
       <div>
-        <img src={itemUrl} alt="product" className="overflow-hidden w-full h-full" />
+        <img
+          src={itemUrl}
+          alt="product"
+          className="overflow-hidden w-full h-full"
+        />
       </div>
       <div className="product-info">
         <h2 className="product-title mb-5">{title}</h2>
         <p className="from-seller">
           from{" "}
           <Link to={sellerUrl} className="link">
-            <span >{seller}</span>
+            <span>{seller}</span>
           </Link>
         </p>
         <div className="product-price">
@@ -45,10 +53,10 @@ const ProductCard = ({
         </div>
         <p className="product-description">
           {description} {"\n"}
-          {isLiked ? (
-            <AiFillHeart className="heart-icon" />
+          {liked ? (
+            <AiFillHeart className="heart-icon" onClick={toggleIsLiked} />
           ) : (
-            <AiOutlineHeart className="heart-icon" />
+            <AiOutlineHeart className="heart-icon" onClick={toggleIsLiked} />
           )}
         </p>
       </div>
