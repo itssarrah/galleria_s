@@ -26,13 +26,12 @@ const ProductCard = ({
 
   return (
     <div className="product-card">
-      <div>
-        <img
-          src={itemUrl}
-          alt="product"
-          className="overflow-hidden w-full h-full"
-        />
-      </div>
+      <img
+        src={itemUrl}
+        alt="product"
+        id="product-img"
+        className="overflow-hidden w-full"
+      />
       <div className="product-info">
         <h2 className="product-title mb-5">{title}</h2>
         <p className="from-seller">

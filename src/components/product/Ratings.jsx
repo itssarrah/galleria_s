@@ -1,5 +1,5 @@
 import React from "react";
-import Stars from "./Stars"
+import Stars from "./Stars";
 import { AiFillStar } from "react-icons/ai";
 
 // css
@@ -39,15 +39,7 @@ const RatingsChart = ({ ratings, totalRatings }) =>
     </div>
   ));
 
-const Ratings = ({
-  ratings = {
-    1: 1,
-    2: 80,
-    3: 50,
-    4: 20,
-    5: 200,
-  },
-}) => {
+const Ratings = ({ ratings = {} }) => {
   const totalRatings = Object.values(ratings).reduce((a, b) => a + b);
   if (totalRatings === 0) return "No ratings yet";
 
