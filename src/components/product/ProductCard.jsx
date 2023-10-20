@@ -25,37 +25,44 @@ const ProductCard = ({
   const toggleIsLiked = () => setLiked((prevIsLiked) => !prevIsLiked);
 
   return (
-    <div className="product-card">
+    <div className="product-card grid grid-cols-1 gap-5 md:grid-cols-2">
       <img
         src={itemUrl}
         alt="product"
         id="product-img"
         className="overflow-hidden w-full"
       />
-      <div className="product-info">
-        <h2 className="product-title mb-5">{title}</h2>
-        <p className="from-seller">
-          from{" "}
-          <Link to={sellerUrl} className="link">
-            <span>{seller}</span>
-          </Link>
-        </p>
-        <div className="product-price">
-          <span>{salePrice}da</span>
+      <div className="px-3 md:py-3 xl:py-[3rem]">
+        <div className="mb-3 flex justify-between align-center md:block">
+          <div>
+            <h2 className="product-title mb-1 md:mb-5 text-2xl lg:text-3xl xl:text-4xl">
+              {title}
+            </h2>
+            <p className="text-black/[.55] md:text-xl lg:text-2xl xl:text-3xl">
+              from{" "}
+              <Link to={sellerUrl} className="link">
+                <span>{seller}</span>
+              </Link>
+            </p>
+          </div>
+          <div className="product-price py-3 px-5 md:text-2xl lg:text-3xl xl:text-4xl md:py-[3rem] md:px-[1rem] align-center">
+            <span>{salePrice}DZD</span>
+          </div>
         </div>
-        <div className="detail">
+
+          <div className="detail text-md md:text-lg lg:text-xl xl:text-2xl">
           <HiLocationMarker className="icon" /> <span>{location}</span>
         </div>
-        <div className="detail">
+        <div className="detail text-md md:text-lg lg:text-xl xl:text-2xl">
           <HiPhone className="icon" />
           <span className="font-black">{phoneNumber}</span>
         </div>
-        <p className="product-description">
+        <p className="pr-[1rem] text-sm md:text-md lg:text-lg xl:text-xl">
           {description} {"\n"}
           {liked ? (
-            <AiFillHeart className="heart-icon" onClick={toggleIsLiked} />
+            <AiFillHeart className="heart-icon text-4xl lg:text-5xl xl:text-6xl" onClick={toggleIsLiked} />
           ) : (
-            <AiOutlineHeart className="heart-icon" onClick={toggleIsLiked} />
+            <AiOutlineHeart className="heart-icon text-4xl lg:text-5xl xl:text-6xl" onClick={toggleIsLiked} />
           )}
         </p>
       </div>

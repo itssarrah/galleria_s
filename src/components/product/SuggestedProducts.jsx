@@ -12,8 +12,8 @@ const SuggestedProducts = ({ products = [] }) => {
   return (
     <div className="flex flex-col justify-center align-center">
       <div>
-        <h2 className="product-title pb-5">Browse some more : </h2>
-        <div className="cards-grid">
+        <h2 className="product-title pb-5 mb-1 md:mb-5 text-2xl lg:text-3xl xl:text-4xl">Browse some more : </h2>
+        <div className="grid grid-cols-2 sm:grid-cols-3 2xl:grid-cols-4 3xl:grid-cols-5 gap-y-[2rem]">
           {products.slice(0, maxProductDisplay).map((product, index) => (
             <Card key={index} {...product} />
           ))}

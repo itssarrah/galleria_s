@@ -18,7 +18,7 @@ const ReviewCard = ({
   className = "",
 }) => {
   return (
-    <div className={`review-card flex flex-col justify-around ${className}`}>
+    <div className={`review-card flex flex-col gap-5 justify-around ${className}`}>
       <div className="flex gap-3 items-center">
         <img
           src={userPicture}
@@ -52,10 +52,11 @@ const ReviewsModal = ({
   const reviewsCount = reviews.length;
 
   return (
-    <div className="modal-overlay">
-      <div className="reviews-modal">
+    
+    <div className="modal-overlay px-5 md:px-[5rem] lg:px-[8rem] xl:px-[10rem]">
+      <div className="reviews-modal py-20 lg:px-[6rem] xl:px-[8rem]">
         <AiFillCloseCircle
-          className="text-white text-7xl absolute top-[3rem] right-[2rem]"
+          className="text-white text-5xl lg:text-7xl absolute top-[3rem] right-[2rem]"
           onClick={closeModal}
         />
         <div className="text-center p-2">
@@ -102,14 +103,14 @@ const Reviews = ({ title = "Layer cake for birthdays", _reviews = [] }) => {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="pl-[4rem]">
-        <h2 className="product-title">Top Reviews</h2>
+      <div className="mt-10 lg:mt-0">
+        <h2 className="product-title mb-1 md:mb-5 text-2xl lg:text-3xl xl:text-4xl">Top Reviews</h2>
         <p className="text-md text-[#666666]">Swipe to see more reviews!</p>
       </div>
       <Splide>
         {reviews.map((review, index) => (
           <SplideSlide key={`ss-${index}`}>
-            <ReviewCard key={`ss-rc-${index}`} {...review} showDate={true} />
+            <ReviewCard key={`ss-rc-${index}`} {...review} showDate={false} />
           </SplideSlide>
         ))}
       </Splide>

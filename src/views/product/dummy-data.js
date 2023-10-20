@@ -87,7 +87,7 @@ export const item = {
   itemUrl: "/images/carditem.png",
   sellerUrl: "/images/cardseller.png",
   title: "Layer Cake for birthdays",
-  salePrice: "500.00",
+  salePrice: "100000.00",
   isOnSale: true,
   isLiked: false,
   images: [],

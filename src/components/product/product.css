@@ -4,15 +4,12 @@
   font-weight: bolder;
   text-decoration: underline;
   color: rgba(0, 0, 0, 0.55);
-  font-size: 2rem;
 }
 
 /* Product Card */
 
 .product-card {
   font-family: "Sunflower", sans-serif;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
 }
 
 #product-img {
@@ -26,22 +23,20 @@
 
 .product-title {
   font-family: "Sofia", cursive;
-  font-size: 3rem;
 }
 
 .from-seller {
-  font-size: 2rem;
   color: rgba(0, 0, 0, 0.55);
 }
 
 .product-price {
-  max-width: 20rem;
-  padding: 3rem 0;
-  font-size: 3rem;
+  width: fit-content;
+  height: fit-content;
   font-weight: bolder;
   background-image: url("../../assets/images/product_asset1.png");
   background-position: center;
   background-repeat: no-repeat;
+  background-size: contain;
 }
 
 .product-price > span {
@@ -56,22 +51,15 @@
   flex-direction: row;
   align-items: center;
   margin-bottom: 1rem;
-  font-size: 1.5rem;
   color: #7d5c3a;
   gap: 1rem;
 }
 
 .icon {
   color: #ff9494;
-  font-size: 2rem;
-}
-
-.product-description {
-  padding: 1rem 3rem;
 }
 
 .heart-icon {
-  font-size: 4rem;
   color: #7d5c3a;
   margin-top: 1rem;
 }
@@ -79,8 +67,6 @@
 /* SuggestedProducts */
 
 .cards-grid {
-  display: grid;
-  grid-template-columns: auto auto auto auto;
   gap: 3rem 1rem;
 }
 
@@ -93,7 +79,6 @@
 /* Rating */
 
 .bar {
-  height: 3rem;
   border-radius: 18px;
   background-color: #d9d9d9;
   overflow: hidden;
@@ -109,7 +94,6 @@
 .rating-container {
   display: flex;
   align-items: center;
-  gap: 0.2rem;
   font-family: "Sunflower";
   font-weight: bolder;
 }
@@ -126,14 +110,12 @@
 /* Reviews */
 
 .review-card {
-  /* min-height: 18rem; */
-  aspect-ratio: 5 / 2;
-  min-width: 40rem;
   padding: 1rem 3rem;
   margin-top: 1rem;
   border-radius: 16px;
   background-color: #fff7f2;
   overflow: hidden;
+  max-width: 45rem;
 }
 
 .review-card.nicer {
@@ -175,6 +157,10 @@
   left: -1rem;
 }
 
+.splide__pagination {
+  display: none;
+}
+
 /* Reviews Modal */
 .modal-overlay {
   position: fixed;
@@ -187,18 +173,18 @@
   align-items: center;
   width: 100%;
   height: 100%;
-  padding: 10rem 15rem;
+  /* padding: 10rem 15rem; */
   background-color: rgba(0, 0, 0, 0.25);
 }
 
 .reviews-modal {
   border-radius: 25px;
   background-color: #fdded2;
-  padding: 5rem 10rem 8rem;
   max-height: 50rem;
   scroll-margin: 5rem;
   position: relative;
-  background-image: url("../../assets/backgrounds/Asset\ 3.png"), url("../../assets/backgrounds/Asset\ 2.png");
+  background-image: url("../../assets/backgrounds/Asset\ 3.png"),
+    url("../../assets/backgrounds/Asset\ 2.png");
   background-position: right center, left top;
   background-repeat: repeat-y;
 }

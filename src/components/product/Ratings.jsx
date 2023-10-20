@@ -20,7 +20,7 @@ const RatingBar = ({ percentage = 50 }) => {
     width: `${percentage}%`,
   };
   return (
-    <div className="bar w-full">
+    <div className="bar w-full h-7 md:h-8 lg:h-9 xl:h-10">
       <div style={style}></div>
     </div>
   );
@@ -28,14 +28,16 @@ const RatingBar = ({ percentage = 50 }) => {
 
 const RatingsChart = ({ ratings, totalRatings }) =>
   [5, 4, 3, 2, 1].map((k) => (
-    <div key={`rc-${k}`} className="rating-container">
-      <span className="text-2xl font-bold flex mr-5">
-        {k}
-        <AiFillStar className="star-icon filled inline" />
-      </span>
-      <RatingBar
-        percentage={(100 * (ratings[k] ? ratings[k] : 0)) / totalRatings}
-      />
+    <div className="w-full">
+      <div key={`rc-${k}`} className="rating-container">
+        <span className="text-xl lg:text-2xl font-bold flex mr-5">
+          {k}
+          <AiFillStar className="star-icon filled inline" />
+        </span>
+        <RatingBar
+          percentage={(100 * (ratings[k] ? ratings[k] : 0)) / totalRatings}
+        />
+      </div>
     </div>
   ));
 
@@ -47,7 +49,9 @@ const Ratings = ({ ratings = {} }) => {
 
   return (
     <div>
-      <h2 className="product-title">Reviews</h2>
+      <h2 className="product-title mb-1 md:mb-5 text-2xl lg:text-3xl xl:text-4xl">
+        Reviews
+      </h2>
       <Stars average={average} showText={true} />
       <p className="font-bold mt-2">{totalRatings} Total Ratings</p>
       <RatingsChart ratings={ratings} totalRatings={totalRatings} />
