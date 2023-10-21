@@ -16,7 +16,7 @@ const Hero = () => {
     ];
 
     return (
-        <div className="w-full">
+        <div className="w-full mb-4">
             <div className="flex flex-col items-center justify-center w-full px-[10px] lg:px-[50px]">
                 <p className="font-sofia text-center text-[24px] md:text-[42px] lg:text-[42px] mt-4 font-normal">
                     Small business of the week
