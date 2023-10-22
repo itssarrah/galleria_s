@@ -537,13 +537,13 @@ const Renderfaq = () => {
   );
 };
 
-const TeamCard = ({ name, role }) => {
+const TeamCard = ({ name, role, source }) => {
   return (
     <>
       <div className="flex flex-col items-center Team_container mx-auto my-8 mb-14">
         <img
-          src="/images/oldme.png"
-          className="rounded-full w-6/12 avatar mt-12"
+          src={source}
+          className="rounded-full w-[150px] h-[150px] avatar mt-12 object-cover"
         />
         <div className="eclipse_one"></div>
         <div className="eclipse_two"></div>
@@ -590,32 +590,59 @@ const TeamSlider = () => {
       >
         <SplideSlide>
           <TeamCard
+            source="/images/oldme.png"
             name="Sarra Arab"
             role="Project Manager , Full-Stack Developer"
           />
         </SplideSlide>
         <SplideSlide>
           <TeamCard
-            name="Sarra Arab"
-            role="Project Manager , Full-Stack Developer"
+            source="/images/amira.jpg"
+            name="Amira Boudaoud"
+            role="Backend Manager,Backend Developer"
           />
         </SplideSlide>
         <SplideSlide>
           <TeamCard
-            name="Sarra Arab"
-            role="Project Manager , Full-Stack Developer"
+            source="/images/nes.jpg"
+            name="Nessrine Abdelhak"
+            role="Backend Developer"
           />
         </SplideSlide>
         <SplideSlide>
           <TeamCard
-            name="Sarra Arab"
-            role="Project Manager , Full-Stack Developer"
+            source="/images/sarah.jpg"
+            name="Sarah Mahmoudi"
+            role="Backend Developer"
           />
         </SplideSlide>
         <SplideSlide>
           <TeamCard
-            name="Sarra Arab"
-            role="Project Manager , Full-Stack Developer"
+            source="/images/hana.jpg"
+            name="Hana Afra"
+            role="Social Media Manager"
+          />
+        </SplideSlide>
+        <SplideSlide>
+          <TeamCard
+            source="/images/lyes.jpeg"
+            name="Elyas Hadjar"
+            role="Design Manager"
+          />
+        </SplideSlide>
+        <SplideSlide>
+          <TeamCard
+            source="/images/default.png"
+            name="Djomana BenChabane"
+            role="Documents Manager"
+          />
+        </SplideSlide>
+
+        <SplideSlide>
+          <TeamCard
+            name="Larbi Said-Cheikh"
+            role="Front-end Developer"
+            source="/images/larvi.jpg"
           />
         </SplideSlide>
       </Splide>
@@ -637,9 +664,13 @@ const Team = () => {
         >
           {t("team_title")}
         </h1>
-        <h2 className={`secondary_txt ${
+        <h2
+          className={`secondary_txt ${
             i18n.language === "ar" ? "text-right" : "text-left"
-          }`}>{t("team_subtitle")}</h2>
+          }`}
+        >
+          {t("team_subtitle")}
+        </h2>
       </div>
       <TeamSlider />
     </>
@@ -654,6 +685,8 @@ const LandingPage = () => {
       <h1 className="slogan text-base sm:text-lg md:text-2xl lg:text-4xl pt-8 text-center opacity-60">
         {t("title_coming")}
       </h1>
+      <TrendingItems className="w-full px-10 pt-12" />
+      <TrendingShops className="w-full px-10 pt-12 " />
       <Renderfaq />
       <Team />
       <Footer />

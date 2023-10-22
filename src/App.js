@@ -12,6 +12,7 @@ import ProductPage from "./views/product/ProductPage.jsx";
 
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./i18n";
+import UserAuth from "./components/auth/userauth.jsx";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
               path="/businessregistration"
               element={<Businessauth />}
             ></Route>
+            <Route path="/userregistration" element={<UserAuth />}></Route>
 
             <Route path="/shop" element={<Shop />}></Route>
             <Route path="/product" element={<ProductPage/>}></Route>

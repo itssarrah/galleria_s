@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
 
-function ContributeBtn({ text, importance = "primary", onClick }) {
+function ContributeBtn({ text, importance = "primary", onClick, disabled }) {
   let classNames;
   switch (importance) {
     case "primary":
@@ -27,6 +27,7 @@ function ContributeBtn({ text, importance = "primary", onClick }) {
 
   return (
     <button
+      disabled={disabled}
       type="button"
       onClick={onClick}
       className={`basebtn text-sm md:text-base lg:text-2xl ${classNames}`}
@@ -116,11 +117,12 @@ function Nav() {
         ))} */}
         {Links.map((link) => (
           <li
-            className={`text-sm md:text-base lg:text-2xl nav__item  ${
+            key={link.name} // It's good practice to add a 'key' prop when mapping over elements
+            className={`text-sm md:text-base lg:text-2xl nav__item ${
               location.pathname === link.link ? "active-link" : ""
             }`}
           >
-            <a href={link.link}>{link.name}</a>
+            <Link to={link.link}>{link.name}</Link>
           </li>
         ))}
 
@@ -140,7 +142,9 @@ function Nav() {
         </li>
         <li>
           <div className={`flex flex-col-reverse sm:flex-row `}>
-            <ContributeBtn importance="typed" text={t("log_btn")} />
+            <Link to="/userregistration">
+              <ContributeBtn importance="typed" text={t("log_btn")} />
+            </Link>
             <Link to="/businessregistration">
               <ContributeBtn importance="primary" text={t("contribute_btn")} />
             </Link>
