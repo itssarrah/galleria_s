@@ -1,0 +1,15 @@
+.product-page {
+  display: flex;
+  flex-direction: column;
+  gap: 5rem;
+  background-image: url("../../assets/backgrounds/Asset\ 3.png"),
+    url("../../assets/backgrounds/Asset\ 2.png"),
+    url("../../assets/backgrounds/Asset\ 2.png"),
+    url("../../assets/backgrounds/Asset\ 2.png");
+  background-position: right center, left bottom, left center, right top;
+  background-repeat: no-repeat;
+}
+
+.modal-open {
+  overflow: hidden;
+}
