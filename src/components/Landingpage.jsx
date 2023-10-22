@@ -595,7 +595,7 @@ const TeamSlider = () => {
             role="Project Manager , Full-Stack Developer"
           />
         </SplideSlide>
-         <SplideSlide>
+        <SplideSlide>
           <TeamCard
             source="/images/amira.jpg"
             name="Amira Boudaoud"
@@ -637,7 +637,7 @@ const TeamSlider = () => {
             role="Documents Manager"
           />
         </SplideSlide>
-       
+
         <SplideSlide>
           <TeamCard
             name="Larbi Said-Cheikh"
@@ -685,6 +685,8 @@ const LandingPage = () => {
       <h1 className="slogan text-base sm:text-lg md:text-2xl lg:text-4xl pt-8 text-center opacity-60">
         {t("title_coming")}
       </h1>
+      <TrendingItems className="w-full px-10 pt-12" />
+      <TrendingShops className="w-full px-10 pt-12 " />
       <Renderfaq />
       <Team />
       <Footer />

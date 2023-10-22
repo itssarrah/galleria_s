@@ -47,8 +47,7 @@ const Businessauth = () => {
   const [isLoading, setIsLoading] = useState(false);
   const submitFormData = async () => {
     const actualFormData = new FormData();
-    console.log(formData);
-    // Append each form field to the FormData object
+
     for (let key in formData) {
       actualFormData.append(key, formData[key]);
     }
@@ -571,4 +570,4 @@ function ProgressBar({ step }) {
   );
 }
 
-export { Businessauth };
+export { Businessauth, ImageInputOutput };
