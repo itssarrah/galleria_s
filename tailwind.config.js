@@ -12,7 +12,7 @@ module.exports = {
       width: {
         120: "40vw",
       },
-      color: {
+      textColor: { // changed from 'color'
         'main__pink': '#FF9494',
       },
       backgroundColor: {
