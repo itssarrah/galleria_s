@@ -7,9 +7,10 @@ import {
 import "./App.css";
 import React from "react";
 import { Businessauth } from "./components/auth/businessauth.jsx";
-import  Shop from "./views/shop/shopItemsSorted.jsx";
+import Shop from "./views/shop/shopItemsSorted.jsx";
 
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import "./i18n";
 
 function App() {
   return (
@@ -26,7 +27,7 @@ function App() {
               element={<Businessauth />}
             ></Route>
 
-           <Route path="/shop" element={<Shop />}></Route>
+            <Route path="/shop" element={<Shop />}></Route>
           </Routes>
         </div>
       </div>

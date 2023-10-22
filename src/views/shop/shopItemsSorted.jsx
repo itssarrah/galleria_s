@@ -1,4 +1,5 @@
 import React from "react";
+
 import navbar from "../../components/navbar"
 import Hero from "../../components/shop/Hero"
 import Footer from "../../components/Footer";
@@ -16,3 +17,5 @@ const Shop = () => {
     )
 }
 export default Shop
+
+

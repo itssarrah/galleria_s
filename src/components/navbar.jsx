@@ -5,7 +5,7 @@ import "../css/navbar.css";
 import { FaGlobe } from "react-icons/fa";
 import { Bars3BottomRightIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import { Link } from "react-router-dom";
-
+import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
 
 function ContributeBtn({ text, importance = "primary", onClick }) {
@@ -37,18 +37,26 @@ function ContributeBtn({ text, importance = "primary", onClick }) {
 }
 
 function Nav() {
+  const { t } = useTranslation();
+
+  const changeLanguage = (event) => {
+    const selectedLang = event.target.value;
+    i18n.changeLanguage(selectedLang);
+  };
+  const { i18n } = useTranslation();
+
   let Links = [
     {
-      name: "Home",
+      name: t("home_link"),
       link: "/",
     },
     {
-      name: "Our Shops",
-      link: "/",
+      name: t("shop_link"),
+      link: "/shop",
     },
     {
-      name: "About us",
-      link: "/",
+      name: t("About_link"),
+      link: "/#footer",
     },
   ];
 
@@ -72,9 +80,12 @@ function Nav() {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
   return (
     <nav
-      className={`sm:flex-row flex items-start sm:items-center  pt-2 sm:px-8 sm:justify-between px-0 flex-col p-4 z-[100] ${
+      className={`flex ${
+        i18n.language === "ar" ? "sm:flex-row-reverse" : "sm:flex-row"
+      } items-start sm:items-center  pt-2 sm:px-8 sm:justify-between px-0 flex-col p-4 z-[100] ${
         !isRegistrationPage && isFixed ? "fixed top-0 bgnav sm:mt-0" : " "
       } ${isOpen ? "bg-white" : ""}`}
     >
@@ -90,27 +101,48 @@ function Nav() {
         {isOpen ? <XMarkIcon /> : <Bars3BottomRightIcon />}
       </div>
       <ul
-        className={` sm:flex sm:items-center sm:pb-0 pb-12 sm:space-x-4 md:space-x-4 lg:space-x-16 absolute sm:static space-y-2  left-0 z-[10] w-full sm:w-auto sm:pl-0 pl-28 transition-all bg-white sm:bg-transparent duration-500 ease-in ${
-          isOpen ? "top-[79px]" : "top-[-300px]"
+        className={` sm:flex ${
+          i18n.language === "ar" ? "sm:flex-row-reverse" : "sm:flex-row"
+        } sm:space-y-0 sm:items-center sm:pb-0 pb-12 sm:space-x-4 md:space-x-4 lg:space-x-20 absolute sm:static space-y-2  left-0  w-full sm:w-auto sm:pl-0 pl-28 transition-all bg-white sm:bg-transparent duration-500 ease-in ${
+          isOpen ? "top-[79px]" : "top-[-300px] "
         }`}
-        hhkdfk
       >
+        {/* {Links.map((link) => (
+          <li className="text-sm md:text-base lg:text-2xl nav__item pr-8 text-center">
+            <NavLink to={link.link} activeClassName="active-link">
+              {link.name}
+            </NavLink>
+          </li>
+        ))} */}
         {Links.map((link) => (
-          <li className="text-sm md:text-base lg:text-2xl nav__item">
-            <a href="/">{link.name}</a>
+          <li
+            className={`text-sm md:text-base lg:text-2xl nav__item  ${
+              location.pathname === link.link ? "active-link" : ""
+            }`}
+          >
+            <a href={link.link}>{link.name}</a>
           </li>
         ))}
+
         <li>
-          <div className="sm:flex-col sm:gap-0 items-center flex-row gap-1 flex ">
+          <div className="sm:flex-col sm:gap-[0.25rem] items-center flex-row gap-1 flex ">
             <FaGlobe />
-            <h2 className="nav__txt">English</h2>
+            <select
+              className="nav__txt bg-transparent cursor-pointer outline-none"
+              onChange={changeLanguage}
+              value={i18n.language}
+            >
+              <option value="en">English</option>
+              <option value="fr">French</option>
+              <option value="ar">العربية</option>
+            </select>
           </div>
         </li>
         <li>
           <div className={`flex flex-col-reverse sm:flex-row `}>
-            <ContributeBtn importance="typed" text="Log In" />
+            <ContributeBtn importance="typed" text={t("log_btn")} />
             <Link to="/businessregistration">
-              <ContributeBtn importance="primary" text="Contribute" />
+              <ContributeBtn importance="primary" text={t("contribute_btn")} />
             </Link>
           </div>
         </li>

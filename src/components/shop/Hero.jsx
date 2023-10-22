@@ -6,14 +6,15 @@ import image4 from "../../assets/images/PottyPot4.png";
 import image5 from "../../assets/images/PottyPot5.png";
 
 const Hero = () => {
-    const Data = [
-        {
-            title: "PottyPlot",
-            images: [image1, image2, image3, image4, image5],
-            description:
-                "Lorem ipsum dolor sit amet consectetur. Quisque mauris condimentum in mauris sed.",
-        },
-    ];
+  const Data = [
+    {
+      title: "PottyPlot",
+      images: [image1, image2, image3, image4, image5],
+      description:
+        "Lorem ipsum dolor sit amet consectetur. Quisque mauris condimentum in mauris sed.",
+    },
+  ];
+
 
     return (
         <div className="w-full mb-4">
@@ -72,7 +73,17 @@ const Hero = () => {
                 ))}
             </div>
         </div>
-    );
+        {Data.map((item, index) => (
+          <p
+            key={index}
+            className="font-sunflower px-0 md:px-20 lg:px-[100px] text-center text-black font-normal mt-[20px] text-[16px] md:text-[24px] lg:text-[32px]"
+          >
+            {item.description}
+          </p>
+        ))}
+      </div>
+    </div>
+  );
 };
 
 export default Hero;

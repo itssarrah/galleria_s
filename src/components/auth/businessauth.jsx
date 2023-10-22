@@ -2,8 +2,13 @@ import React, { useState, useEffect } from "react";
 import "../../css/auth.css";
 import defaultImage from "../../assets/images/authbiz.png";
 import { ContributeBtn } from "../navbar";
+
 import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import { FaInstagram, FaTiktok } from "react-icons/fa";
+import axios from "axios";
+import { useTranslation, Trans } from "react-i18next";
+import { BACKEND_URL } from "../../config";
 
 import {
   PlusIcon,
@@ -18,15 +23,271 @@ import {
   CalendarDaysIcon,
   ArrowRightIcon,
   CheckIcon,
-  ChevronDoubleLeftIcon,
-  ChevronDoubleRightIcon,
 } from "@heroicons/react/24/solid";
 
 const Businessauth = () => {
+  const { t } = useTranslation("auth");
   const [formStep, setFormStep] = React.useState(0);
-  const completeFormStep = () => {
-    setFormStep((cur) => cur + 1);
+  const [order, setOrder] = useState(null);
+
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+    confirmPassword: "",
+    phone: "",
+    fullname: "",
+    wilaya: "",
+    birthdate: null,
+    businessname: "",
+    businessdesc: "",
+    businessType: "",
+    minPrice: "",
+    maxPrice: "",
+  });
+
+  //validations
+  function containsNumbers(str) {
+    return /\d/.test(str);
+  }
+  const pattern = /^[a-zA-Z\s]+$/;
+  function containsOnlyLettersAndSpaces(str) {
+    const pattern = /^[a-zA-Z\s]+$/;
+    return pattern.test(str);
+  }
+
+  const submitFormData = async () => {
+    const actualFormData = new FormData();
+    console.log(formData);
+    // Append each form field to the FormData object
+    for (let key in formData) {
+      actualFormData.append(key, formData[key]);
+    }
+
+    const formattedDate = formData.birthdate.toISOString().split("T")[0];
+    actualFormData.set("birthdate", formattedDate);
+
+    actualFormData.set("password_confirmation", formData.confirmPassword);
+
+    const fileInput = document.getElementById("fileInput");
+    if (fileInput && fileInput.files[0]) {
+      actualFormData.append("image", fileInput.files[0]);
+    }
+
+    for (let [key, value] of actualFormData.entries()) {
+      console.log(key, value);
+    }
+
+    try {
+      const response = await axios.post(
+        `${BACKEND_URL}api/store-business`,
+        actualFormData, // Sending the FormData object
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      if (response.data.message === "Registration successful") {
+        setOrder(response.data.order);
+      } else {
+        console.log(response.data.message);
+      }
+    } catch (error) {
+      console.error("There was an error sending the data", error);
+      if (error.response) {
+        console.error("Data:", error.response.data);
+        console.error("Status:", error.response.status);
+        console.error("Headers:", error.response.headers);
+      } else {
+        console.error("Error Message:", error.message);
+      }
+    }
   };
+
+  const validateFormStepOne = async () => {
+    // Email Format Verification
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    if (!emailRegex.test(formData.email)) {
+      alert(t("mail_error"));
+      return false;
+    }
+
+    try {
+      const response = await axios.get(
+        `${BACKEND_URL}api/check-email?email=${formData.email}`
+      );
+
+      if (response.data.exists) {
+        alert(t("email_already_exists_error"));
+        return false;
+      }
+    } catch (error) {
+      console.error("Error checking email:", error);
+      alert(t("error_checking_email"));
+      return false;
+    }
+
+    // Password Verification
+    if (formData.password !== formData.confirmPassword) {
+      alert(t("pass_match_error"));
+      return false;
+    }
+    // Check for at least one lowercase character
+    if (!/[a-z]/.test(formData.password)) {
+      alert(t("pass_lower_error"));
+      return false;
+    }
+
+    // Check for at least one special character (e.g., @, #, $, etc.)
+    if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/.test(formData.password)) {
+      alert(t("pass_special_error"));
+      return false;
+    }
+    // Phone Number Verification
+    if (!/^[\d]{9}$/.test(formData.phone)) {
+      alert(t("phone_error"));
+      return false;
+    }
+    // Password Length Verification
+    if (formData.password.length < 8) {
+      alert(t("pass_length_error"));
+      return false;
+    }
+
+    // Password Uppercase Letter Verification
+    if (!/[A-Z]/.test(formData.password)) {
+      alert(t("pass_upper_error"));
+      return false;
+    }
+
+    // Password Number Verification
+    if (!/[0-9]/.test(formData.password)) {
+      alert(t("pass_num_error"));
+      return false;
+    }
+
+    if (
+      formData.email === "" ||
+      formData.password === "" ||
+      formData.confirmPassword === "" ||
+      formData.phone === ""
+    ) {
+      alert(t("empty_error"));
+      return false;
+    }
+    return true;
+  };
+
+  const validateFormStepTwo = () => {
+    if (formData.birthdate) {
+      const selectedYear = formData.birthdate.getFullYear();
+      const currentYear = new Date().getFullYear();
+      if (currentYear - selectedYear < 13) {
+        alert(t("birth_error"));
+        return false;
+      }
+    }
+
+    if (formData.fullname.length < 3) {
+      alert(t("name_length_error"));
+      return false;
+    }
+    if (!containsOnlyLettersAndSpaces(formData.fullname)) {
+      alert(t("name_error"));
+      return false;
+    }
+
+    if (
+      formData.fullname === "" ||
+      formData.wilaya === "" ||
+      !formData.birthdate
+    ) {
+      alert(t("empty_error"));
+      return false;
+    }
+    return true;
+  };
+
+  const validateFormStepThree = () => {
+    const minPrice = parseFloat(formData.minPrice);
+    const maxPrice = parseFloat(formData.maxPrice);
+
+    if (minPrice <= 0 || maxPrice <= 0) {
+      alert(t("price_pos_error"));
+      return false;
+    }
+
+    // Price Verification
+    if (parseInt(formData.minPrice) >= parseInt(formData.maxPrice)) {
+      alert(t("price_error"));
+      return false;
+    }
+    // Business Name Verification
+    if (formData.businessname.length < 3) {
+      alert(t("bizname_length_error"));
+      return false;
+    }
+
+    if (!containsOnlyLettersAndSpaces(formData.businessname)) {
+      alert(t("bizname_error"));
+      return false;
+    }
+    //file upload
+    const fileInput = document.getElementById("fileInput");
+    const file = fileInput.files[0];
+
+    if (!file) {
+      alert(t("upload_error"));
+      return false;
+    }
+
+    // Check file type
+    const acceptedImageTypes = ["image/gif", "image/jpeg", "image/png"];
+    if (!acceptedImageTypes.includes(file.type)) {
+      alert(t("upload_type_error"));
+      return false;
+    }
+
+    // Check file size (Let's say we're allowing up to 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      alert(t("upload_size_error"));
+      return false;
+    }
+
+    if (
+      formData.businessname === "" ||
+      formData.businessdesc === "" ||
+      formData.businessType === "" ||
+      formData.minPrice === "" ||
+      formData.maxPrice === ""
+    ) {
+      alert(t("empty_error"));
+      return false;
+    }
+
+    return true;
+  };
+
+  const completeFormStep = async () => {
+    if (formStep === 0) {
+      const isValidStepOne = await validateFormStepOne();
+      if (isValidStepOne) {
+        setFormStep((cur) => cur + 1);
+      }
+    } else if (formStep === 1) {
+      // If validateFormStepTwo becomes async in the future, handle it similarly.
+      if (validateFormStepTwo()) {
+        setFormStep((cur) => cur + 1);
+      }
+    } else if (formStep === 2) {
+      // If validateFormStepThree becomes async in the future, handle it similarly.
+      if (validateFormStepThree()) {
+        submitFormData();
+        setFormStep((cur) => cur + 1);
+      }
+    }
+  };
+
   const backFormStep = () => {
     setFormStep((cur) => cur - 1);
   };
@@ -62,7 +323,7 @@ const Businessauth = () => {
           />
           <ContributeBtn
             importance="primary"
-            text="Finish"
+            text={t("finish_btn")}
             onClick={completeFormStep}
           />
         </>
@@ -80,47 +341,73 @@ const Businessauth = () => {
   return (
     <>
       <h1 className="auth_header mx-auto pb-4 text-base md:text-2xl lg:text-4xl">
-        Small Business Registration :
+        {t("auth_title")}
       </h1>
       <form>
         <div className="image_input">
-          <ImageInputOutput />
+          <ImageInputOutput formData={formData} setFormData={setFormData} />
         </div>
         <div className="bg-white rounded-lg w-10/12 mx-auto ">
           <ProgressBar step={formStep} />
           {formStep == 0 && (
             <section className="accinfo pt-24">
-              <AccountInformation />
+              <AccountInformation
+                formData={formData}
+                setFormData={setFormData}
+              />
             </section>
           )}
           {formStep == 1 && (
             <section className="persoinfo pt-24">
-              <PersonalInfo />
+              <PersonalInfo formData={formData} setFormData={setFormData} />
             </section>
           )}
           {formStep == 2 && (
             <section className="bizinfo pt-24">
-              <Businessinfo />
+              <Businessinfo formData={formData} setFormData={setFormData} />
             </section>
           )}
           {formStep == 3 && (
             <section className="flex flex-col items-center congrats pt-28">
               <h1 className="auth_header text-lg md:text-4xl ">
-                Account Created{" "}
-                <span className="subtxt p-2 rounded-3xl">Successfuly</span>
+                <Trans
+                  i18nKey="auth:success_title"
+                  components={{
+                    pink: <span className="subtxt p-2 rounded-3xl" />,
+                  }}
+                />
               </h1>
               <h1 className="input_label w-11/12 text-center text-xl md:text-5xl xl:text-6xl  pt-8">
-                You are the <span className="heart">TOP #6 </span>Small business
-                to register !{" "}
+                <Trans
+                  i18nKey="auth:sucess_header"
+                  components={{
+                    pinktxt: <span className="heart" />,
+                  }}
+                  values={{ order: order }}
+                />
               </h1>
               <p className="text-base lg:text-xl font-[400] w-11/12 pt-6 md:pt-12 text-center">
-                you are on the waiting list, We will notify you once the
-                platform is ready ! keep in touch and
-                <span className="heart font-bold"> Stay Tuned</span>.
+                <span className="heart font-bold">
+                  <Trans
+                    i18nKey="auth:success_marketing"
+                    components={{
+                      newline: <br />,
+                    }}
+                  />
+                </span>
               </p>
+              <p className="text-base lg:text-xl font-[400] w-11/12 pt-6  text-center">
+                <Trans
+                  i18nKey="auth:success_desc"
+                  components={{
+                    pinkbold: <span className="heart font-bold" />,
+                  }}
+                />
+              </p>
+
               <div className=" pt-6 md:pt-12">
                 <h1 className="flex auth_header text-base md:text-3xl">
-                  Follow us :{" "}
+                  {t("success_follow")}
                 </h1>
                 <div className="flex gap-2 md:gap-8">
                   <a
@@ -159,6 +446,9 @@ const InputField = ({
   label,
   prefix,
   customh,
+  value, // New prop
+  onChange, // New prop
+  name,
 }) => {
   const [isPasswordVisible, setPasswordVisibility] = useState(false);
   const [CurrentIcon, setCurrentIcon] = useState(IconComponent);
@@ -173,7 +463,7 @@ const InputField = ({
   return (
     <div className="md:w-120 w-64">
       <label htmlFor={id} className={`input_label text-sm md:text-lg `}>
-        {label}:
+        {label}
       </label>
       <div className="flex relative items-center">
         {prefix && (
@@ -182,6 +472,7 @@ const InputField = ({
           </span>
         )}
         <input
+          name={name}
           className={`bginput text-sm md:text-lg rounded-xl px-4 py-2 w-full ${
             customh ? customh : "h-12"
           } outline-none ${prefix ? "pl-14" : "pl-4"}`}
@@ -189,6 +480,8 @@ const InputField = ({
           id={id}
           placeholder={placeholder}
           maxLength={maxl}
+          value={value} // Controlled input value
+          onChange={onChange} // Controlled input handler
         />
         <div
           className={`bg-white absolute right-2 top-3 md:top-1 rounded-full w-6 h-6 md:w-10 md:h-10 flex items-center justify-center ${
@@ -203,22 +496,31 @@ const InputField = ({
   );
 };
 
-const DateInput = ({ id, label }) => {
-  const [startDate, setStartDate] = useState(null);
+const DateInput = ({ id, label, selectedDate, setFormData }) => {
+  const { t } = useTranslation("auth");
+  const [startDate, setStartDate] = useState(selectedDate);
+
+  useEffect(() => {
+    setFormData((prev) => ({ ...prev, birthdate: startDate }));
+  }, [startDate, setFormData]);
 
   return (
     <div className="md:w-120 w-64">
       <label htmlFor={id} className="input_label text-sm md:text-lg">
-        {label}:
+        {label}
       </label>
       <div className="flex z-[99999] cursor-pointer relative ">
         <DatePicker
+          name="birthdate"
           selected={startDate}
           onChange={(date) => setStartDate(date)}
           dateFormat="MM/dd/yyyy"
           className="bginput  text-sm md:text-lg rounded-xl px-4 py-2 md:w-120 w-64 h-12 outline-none"
           id={id}
           placeholderText="MM/dd/yyyy"
+          showMonthDropdown
+          showYearDropdown
+          dropdownMode="select"
         />
         <div className="bg-white absolute right-2 top-3 md:top-1 rounded-full w-6 h-6 md:w-10 md:h-10 flex items-center justify-center">
           <CalendarDaysIcon className="md:w-7 md:h-7 w-4 h-4 heart" />
@@ -228,7 +530,8 @@ const DateInput = ({ id, label }) => {
   );
 };
 
-function AccountInformation() {
+function AccountInformation({ formData, setFormData }) {
+  const { t } = useTranslation("auth");
   return (
     <>
       <div className=" flex flex-col items-center gap-3">
@@ -237,7 +540,12 @@ function AccountInformation() {
           id="email"
           placeholder="abcdef@example.com"
           IconComponent={EnvelopeIcon}
-          label="Email"
+          label={t("email")}
+          value={formData.email}
+          onChange={(e) =>
+            setFormData((prev) => ({ ...prev, email: e.target.value }))
+          }
+          name="email"
         />
         <InputField
           type="password"
@@ -245,98 +553,209 @@ function AccountInformation() {
           placeholder="************"
           IconComponent={EyeIcon}
           maxl={20}
-          label="Password"
+          label={t("pass")}
+          value={formData.password}
+          onChange={(e) =>
+            setFormData((prev) => ({ ...prev, password: e.target.value }))
+          }
+          name="password"
         />
         <InputField
           type="password"
-          id="password"
+          id="password_confirmation"
+          name="password_confirmation "
           placeholder="************"
           IconComponent={EyeIcon}
           maxl={20}
-          label="Confirm Password"
+          label={t("pass_conf")}
+          value={formData.confirmPassword}
+          onChange={(e) =>
+            setFormData((prev) => ({
+              ...prev,
+              confirmPassword: e.target.value,
+            }))
+          }
         />
         <InputField
           type="tel"
           id="phone"
+          name="phone"
           placeholder="00 00 00 00"
           IconComponent={PhoneIcon}
           maxl={9}
-          label="Phone Number"
+          label={t("phone")}
           prefix="+213"
+          value={formData.phone}
+          onChange={(e) =>
+            setFormData((prev) => ({
+              ...prev,
+              phone: e.target.value,
+            }))
+          }
         />
       </div>
     </>
   );
 }
 
-function PersonalInfo() {
+function PersonalInfo({ formData, setFormData }) {
+  const { t } = useTranslation("auth");
+  const [wilayas, setWilayas] = useState([]);
+  const { i18n } = useTranslation();
+  useEffect(() => {
+    fetch(`${BACKEND_URL}api/wilayas`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => setWilayas(data))
+      .catch((error) =>
+        console.error(
+          "There was a problem with the fetch operation:",
+          error.message
+        )
+      );
+  }, []);
   return (
     <>
       <div className=" flex flex-col items-center gap-3">
         <InputField
           type="text"
           id="fullname"
-          placeholder="My name"
+          name="fullname"
+          placeholder={t("fullname_ph")}
           IconComponent={UserPlusIcon}
           maxl={20}
-          label="Your Full Name"
+          label={t("fullname")}
+          value={formData.fullname}
+          onChange={(e) =>
+            setFormData((prev) => ({
+              ...prev,
+              fullname: e.target.value,
+            }))
+          }
         />
         <div>
           <label htmlFor="select" className="input_label text-sm md:text-lg">
-            Wilaya :
+            {t("wilaya")}
           </label>
           <div className="relative md:w-120 w-64">
-            <select className="block cursor-pointer appearance-none w-full bginput text-sm md:text-lg rounded-xl px-4 py-2 pr-8 outline-none">
-              <option disabled>Choose Your Wilaya</option>
-              <option>Bejaia</option>
-              <option>Tizi Ouzou</option>
-              <option>Batna</option>
+            <select
+              name="wilaya"
+              className="block cursor-pointer appearance-none w-full bginput text-sm md:text-lg rounded-xl px-4 py-2 pr-8 outline-none"
+              value={formData.wilaya}
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev, wilaya: e.target.value }))
+              }
+            >
+              <option disabled value="">
+                {t("wilaya_ph")}
+              </option>
+              {wilayas.map((wilaya) => (
+                <option key={wilaya.id} value={wilaya.id}>
+                  {i18n.language == "ar" ? wilaya.ar_name : wilaya.name}
+                </option>
+              ))}
             </select>
             <div className="pointer-events-none absolute right-2 top-[5px] md:top-[1.5px] flex items-center justify-center px-2 rounded-full bg-white w-6 h-6 md:w-10 md:h-10">
               <ChevronDownIcon className="w-4 h-4 md:w-7 md:h-7 heart" />
             </div>
           </div>
         </div>
-        <DateInput id="birthdate" label="Your Birthday" />
+        <DateInput
+          id="birthdate"
+          label={t("birthdate")}
+          selectedDate={FormData.birthdate}
+          setFormData={setFormData}
+        />
       </div>
     </>
   );
 }
 
-function Businessinfo() {
+function Businessinfo({ formData, setFormData }) {
+  const { t } = useTranslation("auth");
+  const [categories, setCategories] = useState([]);
+  const { i18n } = useTranslation();
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get(`${BACKEND_URL}api/categories`);
+        setCategories(response.data);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
   return (
     <>
       <div className=" flex flex-col items-center gap-3">
         <InputField
           type="text"
           id="businessname"
-          placeholder="Yourname.co"
+          name="businessname"
+          placeholder={t("biz_name_ph")}
           IconComponent={UserIcon}
           maxl={20}
-          label="Business Name"
+          label={t("biz_name")}
+          value={formData.businessname}
+          onChange={(e) =>
+            setFormData((prev) => ({
+              ...prev,
+              businessname: e.target.value,
+            }))
+          }
         />
         <InputField
           type="text"
           id="businessdesc"
-          placeholder="I make some hand made jewerly.."
+          name="businessdesc"
+          placeholder={t("biz_desc_ph")}
           IconComponent={BuildingStorefrontIcon}
           maxl={80}
-          label="Decribe Your Business"
+          label={t("biz_desc")}
           customh="h-20"
+          value={formData.businessdesc}
+          onChange={(e) =>
+            setFormData((prev) => ({
+              ...prev,
+              businessdesc: e.target.value,
+            }))
+          }
         />
 
         <div>
           <label htmlFor="select" className="input_label text-sm md:text-lg">
-            Select what type of business you hold :
+            {t("biz_cat")}
           </label>
           <div className="relative md:w-120 w-64">
-            <select className="block cursor-pointer appearance-none w-full bginput text-sm md:text-lg rounded-xl px-4 py-2 pr-8 outline-none">
-              <option selected disabled>
-                Choose Your Category
+            <select
+              name="businessType"
+              className="block cursor-pointer appearance-none w-full bginput text-sm md:text-lg rounded-xl px-4 py-2 pr-8 outline-none"
+              value={formData.businessType}
+              onChange={(e) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  businessType: e.target.value,
+                }))
+              }
+            >
+              <option disabled value="">
+                {t("biz_cat_ph")}
               </option>
-              <option>Mini Cakes</option>
-              <option>Accessories</option>
-              <option>Crochet</option>
+              {categories.map((category) => (
+                <option key={category.id} value={category.en_name}>
+                  {i18n.language === "en"
+                    ? category.en_name
+                    : i18n.language === "fr"
+                    ? category.fr_name
+                    : category.ar_name}
+                </option>
+              ))}
             </select>
             <div className="pointer-events-none absolute right-2 top-[5px] md:top-[1.5px] flex items-center justify-center px-2 rounded-full bg-white w-6 h-6 md:w-10 md:h-10">
               <ChevronDownIcon className="w-4 h-4 md:w-7 md:h-7 heart" />
@@ -347,46 +766,50 @@ function Businessinfo() {
           htmlFor="price"
           className="pt-8 text-center input_label text-sm md:text-lg"
         >
-          Specify your price range :
+          {t("price_title")}
         </label>
         <div>
-          <PriceRangeInput />
+          <PriceRangeInput formData={formData} setFormData={setFormData} />
         </div>
       </div>
     </>
   );
 }
 
-const PriceRangeInput = () => {
-  const [minPrice, setMinPrice] = useState("");
-  const [maxPrice, setMaxPrice] = useState("");
-
+const PriceRangeInput = ({ formData, setFormData }) => {
+  const { t } = useTranslation("auth");
   return (
     <div className="md:w-120 w-64 flex flex-col justify-around md:flex-row  items-center  pt-2">
       <div className="flex flex-col mb-4">
         <label htmlFor="minPrice" className="input_label text-sm md:text-lg">
-          Min Price:
+          {t("min_price_title")}
         </label>
         <input
+          name="minPrice"
           type="number"
           id="minPrice"
-          value={minPrice}
-          onChange={(e) => setMinPrice(e.target.value)}
-          placeholder="Enter min price"
+          value={formData.minPrice}
+          onChange={(e) =>
+            setFormData((prev) => ({ ...prev, minPrice: e.target.value }))
+          }
+          placeholder={t("min_price_ph")}
           className="bginput text-sm md:text-lg rounded-xl px-4 py-2 w-full h-12 outline-none"
         />
       </div>
       <ArrowRightIcon className="w-10 h-10 heart hidden md:block" />
       <div className="flex flex-col">
         <label htmlFor="maxPrice" className="input_label text-sm md:text-lg">
-          Max Price:
+          {t("max_price_title")}
         </label>
         <input
+          name="maxPrice"
           type="number"
           id="maxPrice"
-          value={maxPrice}
-          onChange={(e) => setMaxPrice(e.target.value)}
-          placeholder="Enter max price"
+          value={formData.maxPrice}
+          onChange={(e) =>
+            setFormData((prev) => ({ ...prev, maxPrice: e.target.value }))
+          }
+          placeholder={t("max_price_ph")}
           className="bginput text-sm md:text-lg rounded-xl px-4 py-2 w-full h-12 outline-none"
         />
       </div>
@@ -394,7 +817,7 @@ const PriceRangeInput = () => {
   );
 };
 
-function ImageInputOutput() {
+function ImageInputOutput({ formData, setFormData }) {
   const [imageSrc, setImageSrc] = useState(null);
 
   const handleImageChange = (event) => {
@@ -403,6 +826,8 @@ function ImageInputOutput() {
       const reader = new FileReader();
       reader.onloadend = () => {
         setImageSrc(reader.result);
+        // Also update the formData to include the base64 representation of the image.
+        setFormData((prev) => ({ ...prev, image: reader.result }));
       };
       reader.readAsDataURL(file);
     }
@@ -417,6 +842,7 @@ function ImageInputOutput() {
       />
 
       <input
+        name="image"
         id="fileInput"
         type="file"
         accept="image/*"
@@ -433,6 +859,7 @@ function ImageInputOutput() {
 }
 
 function ProgressBar({ step }) {
+  const { t } = useTranslation("auth");
   let widthClass;
   switch (step) {
     case 0:
@@ -460,7 +887,7 @@ function ProgressBar({ step }) {
           </div>
 
           <h1 className="pt-7 w-7 h-7 text-center text-sm md:text-lg lg:text-xl">
-            Account Information
+            {t("phase_one")}
           </h1>
         </div>
         <div>
@@ -472,7 +899,7 @@ function ProgressBar({ step }) {
             {step > 1 ? <CheckIcon className="w-7 h-7" /> : "2"}
           </div>
           <h1 className="absolute top-7 left-0 right-0 mx-auto w-11 h-7 text-center text-sm md:text-lg lg:text-xl">
-            Personal Information
+            {t("phase_two")}
           </h1>
         </div>
         <div>
@@ -484,7 +911,7 @@ function ProgressBar({ step }) {
             {step > 2 ? <CheckIcon className="w-7 h-7" /> : "3"}
           </div>
           <h1 className="w-7 h-7 top-7  text-center absolute right-6 text-sm md:text-lg lg:text-xl">
-            Business Information
+            {t("phase_three")}
           </h1>
         </div>
       </div>
