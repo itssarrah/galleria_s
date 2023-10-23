@@ -6,13 +6,18 @@ import { Link } from "react-router-dom";
 import "./product.css";
 
 const SuggestedProducts = ({ products = [] }) => {
+  const initialMaxProductDisplay = 8;
   const productsCount = products.length;
-  const [maxProductDisplay, setMaxProductDisplay] = useState(8);
+  const [maxProductDisplay, setMaxProductDisplay] = useState(
+    initialMaxProductDisplay
+  );
 
   return (
     <div className="flex flex-col justify-center align-center">
       <div>
-        <h2 className="product-title pb-5 mb-1 md:mb-5 text-2xl lg:text-3xl xl:text-4xl">Browse some more : </h2>
+        <h2 className="product-title pb-5 mb-1 md:mb-5 text-2xl lg:text-3xl xl:text-4xl">
+          Browse some more :{" "}
+        </h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 2xl:grid-cols-4 3xl:grid-cols-5 gap-y-[2rem]">
           {products.slice(0, maxProductDisplay).map((product, index) => (
             <Card key={index} {...product} />
@@ -30,6 +35,16 @@ const SuggestedProducts = ({ products = [] }) => {
           }
         >
           Load More
+        </Link>
+      )}
+      {maxProductDisplay > initialMaxProductDisplay && (
+        <Link
+          className="block w-full text-center p-3 link"
+          onClick={() =>
+            setMaxProductDisplay(initialMaxProductDisplay)
+          }
+        >
+          Show Less
         </Link>
       )}
     </div>
