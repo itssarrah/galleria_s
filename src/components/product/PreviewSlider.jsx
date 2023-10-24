@@ -1,13 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import { AiFillCloseCircle } from "react-icons/ai";
 
 // css
 import "./product.css";
 
+const breakpoints = {
+  1280: {
+    gap: "3rem",
+  },
+  1024: {
+    gap: "3rem",
+  },
+  640: {
+    gap: "1rem",
+  },
+};
+
 const PreviewSlider = ({
   images = [
-    "/images/logo.png",
+    "/images/carditem.png",
     "/images/logo.png",
     "/images/logo.png",
     "/images/logo.png",
@@ -18,17 +30,37 @@ const PreviewSlider = ({
   ],
 }) => {
   const [imageClicked, setImageClicked] = useState(false);
-  const [clickedImageIndex, setClickedImageIndex] = useState(0);
+  const [clickedImageSrc, setClickedImageSrc] = useState("");
 
-  const showImageOverlay = (event, index) => {
+
+  const showImageOverlay = (event) => {
+    setClickedImageSrc(event.target.src);
     setImageClicked(true);
-    setClickedImageIndex(index);
     document.body.classList.add("modal-open");
   };
   const hideImageOverlay = () => {
     setImageClicked(false);
     document.body.classList.remove("modal-open");
   };
+
+  useEffect(() => {
+    const slideElements = document.querySelectorAll(".preview-slide");
+
+    slideElements.forEach((slide) => {
+      slide.addEventListener("click", (event) => {
+        showImageOverlay(event);
+      });
+    });
+
+
+    return () => {
+      slideElements.forEach((slide) => {
+        slide.removeEventListener("click", (event) => {
+          showImageOverlay(event);
+        });
+      });
+    };
+  }, []);
 
   return (
     <>
@@ -38,8 +70,7 @@ const PreviewSlider = ({
           type: "loop",
           perPage: 5.5,
           width: "100%",
-          height: "50%",
-          gap: "3rem",
+          height: "100%",
           arrows: false,
           pagination: false,
           autoplay: true,
@@ -47,6 +78,24 @@ const PreviewSlider = ({
           pauseOnHover: true,
           perMove: 5,
           speed: 5000,
+          gap: "3rem",
+          breakpoints: {
+            1280: {
+              gap: "3rem",
+            },
+            1024: {
+              gap: "2rem",
+              height: "200%",
+            },
+            768: {
+              gap: "1rem",
+              height: "200%",
+            },
+            640: {
+              gap: "1rem",
+              height: "200%",
+            },
+          },
         }}
       >
         {images.map((image, index) => (
@@ -55,8 +104,7 @@ const PreviewSlider = ({
               key={`ps-img-${index}`}
               src={image}
               alt="preview product"
-              className="rounded-full"
-              onClick={(event) => showImageOverlay(event, index)}
+              className="h-full w-full aspect-square rounded-full preview-slide"
             />
           </SplideSlide>
         ))}
@@ -68,9 +116,9 @@ const PreviewSlider = ({
             onClick={hideImageOverlay}
           />
           <img
-            src={images[clickedImageIndex]}
+            src={clickedImageSrc}
             alt="preview item"
-            className=""
+            className="max-w-sm md:max-w-xl xl:max-w-2xl 2xl:max-w-3xl"
           />
         </div>
       )}
