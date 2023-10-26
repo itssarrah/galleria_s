@@ -18,7 +18,9 @@ const ReviewCard = ({
   className = "",
 }) => {
   return (
-    <div className={`review-card flex flex-col gap-5 justify-around ${className}`}>
+    <div
+      className={`review-card flex flex-col gap-5 justify-around ${className}`}
+    >
       <div className="flex gap-3 items-center">
         <img
           src={userPicture}
@@ -43,6 +45,7 @@ const ReviewCard = ({
 const ReviewsModal = ({
   title,
   reviews,
+  initialMaxReviewsDisplay,
   maxReviewsDisplay,
   setMaxReviewsDisplay,
   closeModal,
@@ -52,7 +55,6 @@ const ReviewsModal = ({
   const reviewsCount = reviews.length;
 
   return (
-    
     <div className="modal-overlay px-5 md:px-[5rem] lg:px-[8rem] xl:px-[10rem]">
       <div className="reviews-modal py-20 lg:px-[6rem] xl:px-[8rem]">
         <AiFillCloseCircle
@@ -79,17 +81,26 @@ const ReviewsModal = ({
               Load More
             </Link>
           )}
+          {maxReviewsDisplay > initialMaxReviewsDisplay && (
+            <Link
+              className="block w-full text-center p-3 link"
+              onClick={() => setMaxReviewsDisplay(initialMaxReviewsDisplay)}
+            >
+              Show Less
+            </Link>
+          )}
         </div>
       </div>
     </div>
   );
 };
 
-const Reviews = ({ title = "Layer cake for birthdays", _reviews = [] }) => {
-  const [reviews, setReviews] = useState(_reviews);
-  const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
+const Reviews = ({ title = "Layer cake for birthdays", reviews = [] }) => {
+  const initialMaxReviewsDisplay = 8;
   const [showReviews, setShowReviews] = useState(false);
-  const [maxReviewsDisplay, setMaxReviewsDisplay] = useState(8);
+  const [maxReviewsDisplay, setMaxReviewsDisplay] = useState(
+    initialMaxReviewsDisplay
+  );
 
   const showReviewsModal = () => {
     setShowReviews(true);
@@ -97,37 +108,64 @@ const Reviews = ({ title = "Layer cake for birthdays", _reviews = [] }) => {
   };
   const hideReviewsModal = () => {
     setShowReviews(false);
-    setMaxReviewsDisplay(8);
+    setMaxReviewsDisplay(initialMaxReviewsDisplay);
     document.body.classList.remove("modal-open");
   };
 
   return (
-    <div className="flex flex-col gap-6">
-      <div className="mt-10 lg:mt-0">
-        <h2 className="product-title mb-1 md:mb-5 text-2xl lg:text-3xl xl:text-4xl">Top Reviews</h2>
-        <p className="text-md text-[#666666]">Swipe to see more reviews!</p>
-      </div>
-      <Splide>
-        {reviews.map((review, index) => (
-          <SplideSlide key={`ss-${index}`}>
-            <ReviewCard key={`ss-rc-${index}`} {...review} showDate={false} />
-          </SplideSlide>
-        ))}
-      </Splide>
-      <Link className="link self-center text-sm" onClick={showReviewsModal}>
-        {" "}
-        See All{" "}
-      </Link>
-      {showReviews && (
-        <ReviewsModal
-          title={title}
-          reviews={reviews}
-          closeModal={hideReviewsModal}
-          maxReviewsDisplay={maxReviewsDisplay}
-          setMaxReviewsDisplay={setMaxReviewsDisplay}
-        />
+    <>
+      {reviews.length > 0 ? (
+        <div>
+          <div className="flex flex-col gap-6">
+            <div className="mt-10 lg:mt-0">
+              <h2 className="product-title mb-1 md:mb-5 text-2xl lg:text-3xl xl:text-4xl">
+                Top Reviews
+              </h2>
+              <p className="text-md text-[#666666]">
+                Swipe to see more reviews!
+              </p>
+            </div>
+
+            <Splide>
+              {reviews.map((review, index) => (
+                <SplideSlide key={`ss-${index}`}>
+                  <ReviewCard
+                    key={`ss-rc-${index}`}
+                    {...review}
+                    showDate={false}
+                  />
+                </SplideSlide>
+              ))}
+            </Splide>
+            <Link
+              className="link self-center text-sm"
+              onClick={showReviewsModal}
+            >
+              {" "}
+              See All{" "}
+            </Link>
+
+            {showReviews && (
+              <ReviewsModal
+                title={title}
+                reviews={reviews}
+                closeModal={hideReviewsModal}
+                initialMaxReviewsDisplay={initialMaxReviewsDisplay}
+                maxReviewsDisplay={maxReviewsDisplay}
+                setMaxReviewsDisplay={setMaxReviewsDisplay}
+              />
+            )}
+          </div>
+        </div>
+      ) : (
+        <div className="mt-10 lg:mt-0">
+          <h2 className="product-title mb-1 md:mb-5 text-2xl lg:text-3xl xl:text-4xl">
+            Top Reviews
+          </h2>
+          <p className="text-md text-[#666666]">There are no reviews yet, be the <b>first</b> to rate!</p>
+        </div>
       )}
-    </div>
+    </>
   );
 };
 
