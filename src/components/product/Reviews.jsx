@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import { AiFillCloseCircle } from "react-icons/ai";
-import Stars from "./Stars";
+import Stars from "../Stars";
 
 // css
 import "./product.css";

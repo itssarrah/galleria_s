@@ -98,15 +98,6 @@
   font-weight: bolder;
 }
 
-.star-icon {
-  font-size: 2rem;
-  color: #d9d9d9;
-}
-
-.star-icon.filled {
-  color: #dd6969;
-}
-
 /* Reviews */
 
 .review-card {

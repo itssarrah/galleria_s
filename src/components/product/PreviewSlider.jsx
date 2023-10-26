@@ -10,12 +10,19 @@ const breakpoints = {
     gap: "3rem",
   },
   1024: {
-    gap: "3rem",
+    gap: "2rem",
+    height: "200%",
+  },
+  768: {
+    gap: "1rem",
+    height: "200%",
   },
   640: {
     gap: "1rem",
+    height: "200%",
   },
-};
+}
+
 
 const PreviewSlider = ({
   images = [
@@ -79,23 +86,7 @@ const PreviewSlider = ({
           perMove: 5,
           speed: 5000,
           gap: "3rem",
-          breakpoints: {
-            1280: {
-              gap: "3rem",
-            },
-            1024: {
-              gap: "2rem",
-              height: "200%",
-            },
-            768: {
-              gap: "1rem",
-              height: "200%",
-            },
-            640: {
-              gap: "1rem",
-              height: "200%",
-            },
-          },
+          breakpoints: breakpoints
         }}
       >
         {images.map((image, index) => (

@@ -1,5 +1,5 @@
 import React from "react";
-import Stars from "./Stars";
+import Stars from "../Stars";
 import { AiFillStar } from "react-icons/ai";
 
 // css
@@ -32,7 +32,7 @@ const RatingsChart = ({ ratings, totalRatings }) =>
       <div key={`rc-${k}`} className="rating-container">
         <span className="text-xl lg:text-2xl font-bold flex mr-5">
           {k}
-          <AiFillStar className="star-icon filled inline" />
+          <AiFillStar className="text-[2rem] text-[#dd6969] inline" />
         </span>
         <RatingBar
           percentage={(100 * (ratings[k] ? ratings[k] : 0)) / totalRatings}
