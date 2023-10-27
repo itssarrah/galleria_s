@@ -60,7 +60,7 @@ const ReviewsModal = ({
     <div className="modal-overlay px-5 md:px-[5rem] lg:px-[8rem] xl:px-[10rem]">
       <div className="reviews-modal py-20 lg:px-[6rem] xl:px-[8rem]">
         <AiFillCloseCircle
-          className="text-white text-5xl lg:text-7xl absolute top-[3rem] right-[2rem]"
+          className="text-white text-5xl lg:text-7xl absolute top-[3rem] right-[2rem] cursor-pointer"
           onClick={closeModal}
         />
         <div className="text-center p-2">

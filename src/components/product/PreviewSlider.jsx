@@ -95,7 +95,7 @@ const PreviewSlider = ({
               key={`ps-img-${index}`}
               src={image}
               alt="preview product"
-              className="h-full w-full aspect-square rounded-full preview-slide"
+              className="h-full w-full aspect-square rounded-full preview-slide cursor-pointer"
             />
           </SplideSlide>
         ))}
@@ -103,7 +103,7 @@ const PreviewSlider = ({
       {imageClicked && (
         <div className="modal-overlay">
           <AiFillCloseCircle
-            className="text-white text-5xl lg:text-7xl absolute top-[3rem] right-[2rem]"
+            className="text-white text-5xl lg:text-7xl absolute top-[3rem] right-[2rem] cursor-pointer"
             onClick={hideImageOverlay}
           />
           <img
