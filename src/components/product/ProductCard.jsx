@@ -3,6 +3,7 @@ import PreviewSlider from "./PreviewSlider";
 import { Link } from "react-router-dom";
 import { HiLocationMarker, HiPhone } from "react-icons/hi";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
+import { useTranslation } from "react-i18next";
 
 // css imports
 import "./product.css";
@@ -20,9 +21,11 @@ const ProductCard = ({
   phoneNumber = "+2135 78 83 29 33",
   seller = "SweetyPie",
 }) => {
+  const { t } = useTranslation("product");
   const [liked, setLiked] = useState(isLiked);
-
   const toggleIsLiked = () => setLiked((prevIsLiked) => !prevIsLiked);
+
+  const direction = t("direction");
 
   return (
     <div className="product-card grid grid-cols-1 gap-5 md:grid-cols-2">
@@ -38,19 +41,19 @@ const ProductCard = ({
             <h2 className="product-title mb-1 md:mb-5 text-2xl lg:text-3xl xl:text-4xl">
               {title}
             </h2>
-            <p className="text-black/[.55] md:text-xl lg:text-2xl xl:text-3xl">
-              from{" "}
+            <p className="text-black/[.55] md:text-xl lg:text-2xl xl:text-3xl" dir={direction}>
+              {`${t("from")} `}
               <Link to={sellerUrl} className="link">
                 <span>{seller}</span>
               </Link>
             </p>
           </div>
-          <div className="product-price py-3 px-5 md:text-2xl lg:text-3xl xl:text-4xl md:py-[3rem] md:px-[1rem] align-center">
-            <span>{salePrice}DZD</span>
+          <div className="product-price py-3 px-5 md:text-2xl lg:text-3xl xl:text-4xl md:py-[3rem] md:px-[1rem] align-center" dir={direction}>
+            <span>{salePrice}{t("dzd")}</span>
           </div>
         </div>
 
-          <div className="detail text-md md:text-lg lg:text-xl xl:text-2xl">
+        <div className="detail text-md md:text-lg lg:text-xl xl:text-2xl">
           <HiLocationMarker className="icon" /> <span>{location}</span>
         </div>
         <div className="detail text-md md:text-lg lg:text-xl xl:text-2xl">
@@ -60,9 +63,15 @@ const ProductCard = ({
         <p className="pr-[1rem] text-sm md:text-md lg:text-lg xl:text-xl">
           {description} {"\n"}
           {liked ? (
-            <AiFillHeart className="heart-icon text-4xl lg:text-5xl xl:text-6xl" onClick={toggleIsLiked} />
+            <AiFillHeart
+              className="heart-icon text-4xl lg:text-5xl xl:text-6xl"
+              onClick={toggleIsLiked}
+            />
           ) : (
-            <AiOutlineHeart className="heart-icon text-4xl lg:text-5xl xl:text-6xl" onClick={toggleIsLiked} />
+            <AiOutlineHeart
+              className="heart-icon text-4xl lg:text-5xl xl:text-6xl"
+              onClick={toggleIsLiked}
+            />
           )}
         </p>
       </div>

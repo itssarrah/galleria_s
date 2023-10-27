@@ -3,6 +3,7 @@ import Stars from "../Stars";
 
 // css
 import "./review-card.css";
+import { useTranslation } from "react-i18next";
 
 const textSizes = {
   600: 162,
@@ -21,21 +22,22 @@ const ReviewCard = ({
   description = "Et est quae aspernatur commodi officiis sit consectetur sint maxime. Nisi et quis aperiam commodi quis accusamus ipsam. Aut suscipit adipisci quisquam quasi quasi laboriosam explicabo voluptatem. Aliquam illum qui voluptate consequatur maxime a ullam. Eveniet eum nihil possimus sint et numquam. Voluptas quia rem sit.Et est quae aspernatur commodi officiis sit consectetur sint maxime. Nisi et quis aperiam commodi quis accusamus ipsam. Aut suscipit adipisci quisquam quasi quasi laboriosam explicabo voluptatem. Aliquam illum qui voluptate consequatur maxime a ullam. Eveniet eum nihil possimus sint et numquam. Voluptas quia rem sit.Et est quae aspernatur commodi officiis sit consectetur sint maxime. Nisi et quis aperiam commodi quis accusamus ipsam. Aut suscipit adipisci quisquam quasi quasi laboriosam explicabo voluptatem. Aliquam illum qui voluptate consequatur maxime a ullam. Eveniet eum nihil possimus sint et numquam. Voluptas quia rem sit.",
   date = new Date(Date.now()).toLocaleDateString("fr-FR"),
 }) => {
-
+  const { t } = useTranslation("product");
   const [size, setSize] = useState();
-  const [showLess, setShowLess] = useState(true)
+  const [showLess, setShowLess] = useState(true);
+
+  const direction = t("direction");
 
   const getClosestBreakpoint = () => {
     for (const breakpoint in textSizes)
-      if (window.innerWidth < breakpoint) 
-        return breakpoint
-    return 1920
-  }
+      if (window.innerWidth < breakpoint) return breakpoint;
+    return 1920;
+  };
 
-  const handleResize = () => setSize(textSizes[getClosestBreakpoint()])
+  const handleResize = () => setSize(textSizes[getClosestBreakpoint()]);
 
   useEffect(() => {
-    handleResize()
+    handleResize();
     window.addEventListener("resize", () => {
       console.log(window.innerWidth);
       handleResize();
@@ -59,18 +61,19 @@ const ReviewCard = ({
       <div className="p-5 justify-between">
         <div>
           <h2 className="font-sofia font-bold text-xl">{title}</h2>
-          <div className="flex justify-between my-2 text-black/[.55]">
+          <div className="flex justify-between my-2 text-black/[.55]" dir={direction}>
             <span>
-              From <span className="underline">{seller}</span>
+              {`${t("from")} `} <span className="underline">{seller}</span>
             </span>
             <span className="font-black text-[#7D5C3A] text-md">
-              {parseFloat(price.toFixed(2))} DZD
-            </span>
+              {parseFloat(price.toFixed(2))} {t("dzd")}
+            </span> 
           </div>
         </div>
         <div>
           <Stars average={stars} totalNumberOfStars={5} />
-          <p className="bg-white py-3 px-2 my-2 rounded-md"
+          <p
+            className="bg-white py-3 px-2 my-2 rounded-md"
             onClick={() => setShowLess((prevShowLess) => !prevShowLess)}
           >
             {showLess && description.length > size

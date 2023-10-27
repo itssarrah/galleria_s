@@ -4,6 +4,7 @@ import { AiFillStar } from "react-icons/ai";
 
 // css
 import "./product.css";
+import { useTranslation } from "react-i18next";
 
 const calculateAverage = (ratings, totalRatings) => {
   let weightedSum = 0;
@@ -42,18 +43,22 @@ const RatingsChart = ({ ratings, totalRatings }) =>
   ));
 
 const Ratings = ({ ratings = {} }) => {
+  const { t } = useTranslation("product");
   const totalRatings = Object.values(ratings).reduce((a, b) => a + b);
   if (totalRatings === 0) return "No ratings yet";
 
   const average = calculateAverage(ratings, totalRatings);
+  const direction = t("direction");
 
   return (
-    <div>
-      <h2 className="product-title mb-1 md:mb-5 text-2xl lg:text-3xl xl:text-4xl">
-        Reviews
+    <div >
+      <h2 className="product-title mb-1 md:mb-5 text-2xl lg:text-3xl xl:text-4xl" dir={direction}>
+        {t("reviews")}
       </h2>
-      <Stars average={average} showText={true} />
-      <p className="font-bold mt-2">{totalRatings} Total Ratings</p>
+      <Stars average={average} showText={true} dir={direction}/>
+      <p className="font-bold mt-2" dir={direction}>
+        {totalRatings} {t("total_ratings")}
+      </p>
       <RatingsChart ratings={ratings} totalRatings={totalRatings} />
     </div>
   );
