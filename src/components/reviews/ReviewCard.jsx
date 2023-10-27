@@ -23,6 +23,7 @@ const ReviewCard = ({
 }) => {
 
   const [size, setSize] = useState();
+  const [showLess, setShowLess] = useState(true)
 
   const getClosestBreakpoint = () => {
     for (const breakpoint in textSizes)
@@ -53,7 +54,7 @@ const ReviewCard = ({
       <img
         src={image}
         alt="product"
-        className="w-full md:h-full md:w-auto lg:w-full xl:w-auto xl:max-w-[40%]"
+        className="w-full md:w-auto lg:w-full xl:w-auto xl:max-w-[40%]"
       />
       <div className="p-5 justify-between">
         <div>
@@ -69,8 +70,10 @@ const ReviewCard = ({
         </div>
         <div>
           <Stars average={stars} totalNumberOfStars={5} />
-          <p className="bg-white py-3 px-2 my-2 rounded-md">
-            {description.length > size
+          <p className="bg-white py-3 px-2 my-2 rounded-md"
+            onClick={() => setShowLess((prevShowLess) => !prevShowLess)}
+          >
+            {showLess && description.length > size
               ? description.slice(0, size) + "..."
               : description}
           </p>
