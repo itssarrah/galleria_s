@@ -90,11 +90,13 @@ function Nav() {
         !isRegistrationPage && isFixed ? "fixed top-0 bgnav sm:mt-0" : " "
       } ${isOpen ? "bg-white" : ""}`}
     >
-      <img
-        className="sm:w-42 pl-4 sm:pl-0 z-[100] md:w-48 w-36"
-        src={isFixed || isOpen ? fixedLogo : logo}
-        alt="Galleria logo"
-      />
+      <Link to="/">
+        <img
+          className="sm:w-42 pl-4 sm:pl-0 z-[100] md:w-48 w-36 cursor-pointer"
+          src={isFixed || isOpen ? fixedLogo : logo}
+          alt="Galleria logo"
+        />
+      </Link>
       <div
         onClick={() => setIsOpen(!isOpen)}
         className="w-7 h-7 z-[100] absolute right-8 top-6 cursor-pointer sm:hidden"
@@ -142,10 +144,13 @@ function Nav() {
         </li>
         <li>
           <div className={`flex flex-col-reverse sm:flex-row `}>
-            <Link to="/userregistration">
+            <Link to="/login">
               <ContributeBtn importance="typed" text={t("log_btn")} />
             </Link>
-            <Link to="/businessregistration">
+            {/* <Link to="/businessregistration">
+              <ContributeBtn importance="primary" text={t("contribute_btn")} />
+            </Link> */}
+            <Link to="/choice">
               <ContributeBtn importance="primary" text={t("contribute_btn")} />
             </Link>
           </div>
