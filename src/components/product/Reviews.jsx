@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import { AiFillCloseCircle } from "react-icons/ai";
-import Stars from "./Stars";
+import { useTranslation } from "react-i18next";
+import Stars from "../Stars";
 
 // css
 import "./product.css";
@@ -49,6 +50,7 @@ const ReviewsModal = ({
   maxReviewsDisplay,
   setMaxReviewsDisplay,
   closeModal,
+  t = null,
 }) => {
   if (reviews.length === 0) return null;
 
@@ -58,12 +60,12 @@ const ReviewsModal = ({
     <div className="modal-overlay px-5 md:px-[5rem] lg:px-[8rem] xl:px-[10rem]">
       <div className="reviews-modal py-20 lg:px-[6rem] xl:px-[8rem]">
         <AiFillCloseCircle
-          className="text-white text-5xl lg:text-7xl absolute top-[3rem] right-[2rem]"
+          className="text-white text-5xl lg:text-7xl absolute top-[3rem] right-[2rem] cursor-pointer"
           onClick={closeModal}
         />
         <div className="text-center p-2">
           <h2 className="product-title">{title}</h2>
-          <p className="text-3xl text-black/[.55] font-bold">Reviews</p>
+          <p className="text-3xl text-black/[.55] font-bold">{t("reviews")}</p>
         </div>
         <div className="reviews-container">
           {reviews.slice(0, maxReviewsDisplay).map((review) => (
@@ -78,7 +80,7 @@ const ReviewsModal = ({
                 )
               }
             >
-              Load More
+              {t("show_more")}
             </Link>
           )}
           {maxReviewsDisplay > initialMaxReviewsDisplay && (
@@ -86,7 +88,7 @@ const ReviewsModal = ({
               className="block w-full text-center p-3 link"
               onClick={() => setMaxReviewsDisplay(initialMaxReviewsDisplay)}
             >
-              Show Less
+              {t("show_less")}
             </Link>
           )}
         </div>
@@ -96,11 +98,14 @@ const ReviewsModal = ({
 };
 
 const Reviews = ({ title = "Layer cake for birthdays", reviews = [] }) => {
+  const { t } = useTranslation("product");
   const initialMaxReviewsDisplay = 8;
   const [showReviews, setShowReviews] = useState(false);
   const [maxReviewsDisplay, setMaxReviewsDisplay] = useState(
     initialMaxReviewsDisplay
   );
+
+  const direction = t("direction");
 
   const showReviewsModal = () => {
     setShowReviews(true);
@@ -118,11 +123,14 @@ const Reviews = ({ title = "Layer cake for birthdays", reviews = [] }) => {
         <div>
           <div className="flex flex-col gap-6">
             <div className="mt-10 lg:mt-0">
-              <h2 className="product-title mb-1 md:mb-5 text-2xl lg:text-3xl xl:text-4xl">
-                Top Reviews
+              <h2
+                className="product-title mb-1 md:mb-5 text-2xl lg:text-3xl xl:text-4xl"
+                dir={direction}
+              >
+                {t("top_reviews")}
               </h2>
-              <p className="text-md text-[#666666]">
-                Swipe to see more reviews!
+              <p className="text-md text-[#666666]" dir={direction}>
+                {t("swipe_more")}
               </p>
             </div>
 
@@ -141,8 +149,7 @@ const Reviews = ({ title = "Layer cake for birthdays", reviews = [] }) => {
               className="link self-center text-sm"
               onClick={showReviewsModal}
             >
-              {" "}
-              See All{" "}
+              {` ${t("see_all")} `}
             </Link>
 
             {showReviews && (
@@ -153,6 +160,7 @@ const Reviews = ({ title = "Layer cake for birthdays", reviews = [] }) => {
                 initialMaxReviewsDisplay={initialMaxReviewsDisplay}
                 maxReviewsDisplay={maxReviewsDisplay}
                 setMaxReviewsDisplay={setMaxReviewsDisplay}
+                t={t}
               />
             )}
           </div>
@@ -162,7 +170,9 @@ const Reviews = ({ title = "Layer cake for birthdays", reviews = [] }) => {
           <h2 className="product-title mb-1 md:mb-5 text-2xl lg:text-3xl xl:text-4xl">
             Top Reviews
           </h2>
-          <p className="text-md text-[#666666]">There are no reviews yet, be the <b>first</b> to rate!</p>
+          <p className="text-md text-[#666666]">
+            There are no reviews yet, be the <b>first</b> to rate!
+          </p>
         </div>
       )}
     </>

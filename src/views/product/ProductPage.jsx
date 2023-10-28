@@ -3,6 +3,7 @@ import ProductCard from "../../components/product/ProductCard";
 import SuggestedProducts from "../../components/product/SuggestedProducts";
 import Ratings from "../../components/product/Ratings";
 import Reviews from "../../components/product/Reviews";
+import ReviewCard from "../../components/reviews/ReviewCard";
 import Footer from "../../components/Footer";
 import * as data from "./dummy-data";
 
@@ -19,6 +20,12 @@ const ProductPage = ({ id }) => {
           <Reviews title={data.title} reviews={data.reviews} />
         </div>
         <SuggestedProducts products={data.products} />
+
+        <div className="grid grid-cols-1 bg-white gap-3 lg:grid-cols-2">
+          {[...Array(8)].map((_) => (
+            <ReviewCard />
+          ))}
+        </div>
       </div>
       <Footer />
     </>

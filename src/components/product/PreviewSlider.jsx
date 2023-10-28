@@ -10,12 +10,19 @@ const breakpoints = {
     gap: "3rem",
   },
   1024: {
-    gap: "3rem",
+    gap: "2rem",
+    height: "200%",
+  },
+  768: {
+    gap: "1rem",
+    height: "200%",
   },
   640: {
     gap: "1rem",
+    height: "200%",
   },
-};
+}
+
 
 const PreviewSlider = ({
   images = [
@@ -79,23 +86,7 @@ const PreviewSlider = ({
           perMove: 5,
           speed: 5000,
           gap: "3rem",
-          breakpoints: {
-            1280: {
-              gap: "3rem",
-            },
-            1024: {
-              gap: "2rem",
-              height: "200%",
-            },
-            768: {
-              gap: "1rem",
-              height: "200%",
-            },
-            640: {
-              gap: "1rem",
-              height: "200%",
-            },
-          },
+          breakpoints: breakpoints
         }}
       >
         {images.map((image, index) => (
@@ -104,7 +95,7 @@ const PreviewSlider = ({
               key={`ps-img-${index}`}
               src={image}
               alt="preview product"
-              className="h-full w-full aspect-square rounded-full preview-slide"
+              className="h-full w-full aspect-square rounded-full preview-slide cursor-pointer"
             />
           </SplideSlide>
         ))}
@@ -112,7 +103,7 @@ const PreviewSlider = ({
       {imageClicked && (
         <div className="modal-overlay">
           <AiFillCloseCircle
-            className="text-white text-5xl lg:text-7xl absolute top-[3rem] right-[2rem]"
+            className="text-white text-5xl lg:text-7xl absolute top-[3rem] right-[2rem] cursor-pointer"
             onClick={hideImageOverlay}
           />
           <img
