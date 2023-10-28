@@ -13,7 +13,14 @@ import {
   ExclamationCircleIcon,
 } from "@heroicons/react/24/solid";
 
-const DateInput = ({ id, label, selectedDate, setFormData, errorMessage }) => {
+const DateInput = ({
+  id,
+  label,
+  selectedDate,
+  setFormData,
+  errorMessage,
+  type,
+}) => {
   const { t } = useTranslation("auth");
   const [startDate, setStartDate] = useState(selectedDate);
 
@@ -21,6 +28,8 @@ const DateInput = ({ id, label, selectedDate, setFormData, errorMessage }) => {
     setFormData((prev) => ({ ...prev, birthdate: startDate }));
   }, [startDate, setFormData]);
 
+  const bgClass = type === "white" ? "bgwhite" : "bginput";
+  const bgClassIcon = type === "white" ? "bgbeige" : "bg-white";
   return (
     <div className="md:w-120 w-64">
       <label htmlFor={id} className="input_label text-sm md:text-lg">
@@ -32,14 +41,16 @@ const DateInput = ({ id, label, selectedDate, setFormData, errorMessage }) => {
           selected={startDate}
           onChange={(date) => setStartDate(date)}
           dateFormat="MM/dd/yyyy"
-          className="bginput  text-sm md:text-lg rounded-xl px-4 py-2 md:w-120 w-64 h-12 outline-none"
+          className={`${bgClass}  text-sm md:text-lg rounded-xl px-4 py-2 md:w-120 w-64 h-12 outline-none`}
           id={id}
           placeholderText="MM/dd/yyyy"
           showMonthDropdown
           showYearDropdown
           dropdownMode="select"
         />
-        <div className="bg-white absolute right-2 top-3 md:top-1 rounded-full w-6 h-6 md:w-10 md:h-10 flex items-center justify-center">
+        <div
+          className={`${bgClassIcon} absolute right-2 top-3 md:top-1 rounded-full w-6 h-6 md:w-10 md:h-10 flex items-center justify-center`}
+        >
           <CalendarDaysIcon className="md:w-7 md:h-7 w-4 h-4 heart" />
         </div>
       </div>
@@ -53,7 +64,7 @@ const DateInput = ({ id, label, selectedDate, setFormData, errorMessage }) => {
   );
 };
 
-function PersonalInfo({ formData, setFormData, errors, setErrors }) {
+function PersonalInfo({ formData, setFormData, errors, setErrors, bgtype }) {
   const handleInputChange = (e, name) => {
     const value = e.target.value;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -75,6 +86,8 @@ function PersonalInfo({ formData, setFormData, errors, setErrors }) {
         console.error("There was a problem with the fetch operation:", error)
       );
   }, []);
+  const bgClass = bgtype === "white" ? "bgwhite" : "bginput";
+  const bgClassIcon = bgtype === "white" ? "bgbeige" : "bg-white";
   return (
     <>
       <div className=" flex flex-col items-center gap-3">
@@ -89,6 +102,7 @@ function PersonalInfo({ formData, setFormData, errors, setErrors }) {
           value={formData.fullname}
           onChange={(e) => handleInputChange(e, "fullname")}
           errorMessage={errors.fullname}
+          background={bgtype}
         />
         <div>
           <label htmlFor="select" className="input_label text-sm md:text-lg">
@@ -97,7 +111,7 @@ function PersonalInfo({ formData, setFormData, errors, setErrors }) {
           <div className="relative md:w-120 w-64">
             <select
               name="wilaya"
-              className="block cursor-pointer appearance-none w-full bginput text-sm md:text-lg rounded-xl px-4 py-2 pr-8 outline-none"
+              className={`block cursor-pointer appearance-none w-full ${bgClass} text-sm md:text-lg rounded-xl px-4 py-2 pr-8 outline-none`}
               value={formData.wilaya}
               onChange={(e) => handleInputChange(e, "wilaya")}
             >
@@ -110,7 +124,9 @@ function PersonalInfo({ formData, setFormData, errors, setErrors }) {
                 </option>
               ))}
             </select>
-            <div className="pointer-events-none absolute right-2 top-[5px] md:top-[1.5px] flex items-center justify-center px-2 rounded-full bg-white w-6 h-6 md:w-10 md:h-10">
+            <div
+              className={`pointer-events-none absolute right-2 top-[5px] md:top-[1.5px] flex items-center justify-center px-2 rounded-full ${bgClassIcon} w-6 h-6 md:w-10 md:h-10`}
+            >
               <ChevronDownIcon className="w-4 h-4 md:w-7 md:h-7 heart" />
             </div>
             {errors.wilaya && (
@@ -127,6 +143,7 @@ function PersonalInfo({ formData, setFormData, errors, setErrors }) {
           selectedDate={FormData.birthdate}
           setFormData={setFormData}
           errorMessage={errors.birthdate}
+          type={bgtype}
         />
       </div>
     </>

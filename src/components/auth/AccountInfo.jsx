@@ -23,7 +23,7 @@ function AccountInformation({
     setFormData((prev) => ({ ...prev, [name]: value }));
     setErrors((prev) => ({ ...prev, [name]: undefined }));
   };
-
+  const bgClass = accountType === "user" ? "white" : "";
   return (
     <>
       <div className=" flex flex-col items-center gap-3">
@@ -37,6 +37,7 @@ function AccountInformation({
           onChange={(e) => handleInputChange(e, "email")}
           name="email"
           errorMessage={errors.email}
+          background={bgClass}
         />
         <InputField
           type="password"
@@ -49,6 +50,7 @@ function AccountInformation({
           onChange={(e) => handleInputChange(e, "password")}
           name="password"
           errorMessage={errors.password}
+          background={bgClass}
         />
         <InputField
           type="password"
@@ -61,6 +63,7 @@ function AccountInformation({
           value={formData.confirmPassword}
           onChange={(e) => handleInputChange(e, "confirmPassword")}
           errorMessage={errors.passwordmatch}
+          background={bgClass}
         />
         {accountType === "business" && (
           <InputField

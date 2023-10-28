@@ -40,6 +40,15 @@
   background-color: rgba(245, 235, 224, 1);
   filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
 }
+
+.bgbeige {
+  background-color: rgba(245, 235, 224, 1);
+}
+
+.bgwhite {
+  background-color: rgb(255, 255, 255);
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+}
 .input_label {
   color: rgba(116, 70, 56, 1);
   font-family: Sunflower;
@@ -50,4 +59,45 @@
 .subtxt,
 .overlay {
   background-color: #ff9494;
+}
+
+.choice {
+  color: #ff9494;
+  font-family: Sunflower;
+  font-size: 26px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.circle-left {
+  background-image: url("../../public/images/business.png");
+  background-size: 102%;
+}
+.circle-right {
+  background-image: url("../../public/images/customer.png");
+  object-fit: cover;
+  background-size: 103.8%;
+}
+
+.loginbg {
+  background-color: #f9b7b8;
+}
+
+.signbtn {
+  color: #dd6969;
+  font-style: normal;
+  line-height: normal;
+  border-radius: 16px;
+  border: 2px solid #dd6969;
+  padding: 0.3rem 1.5rem;
+  transition: all 0.5s ease;
+}
+
+.signbtn:hover {
+  background-color: #dd6969;
+  color: white;
+  scale: 1.1;
+  font-weight: 500;
+  transition: all 0.5s ease;
 }

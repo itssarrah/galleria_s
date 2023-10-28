@@ -18,6 +18,7 @@ const InputField = ({
   onChange, // New prop
   name,
   errorMessage,
+  background,
 }) => {
   const [isPasswordVisible, setPasswordVisibility] = useState(false);
   const [CurrentIcon, setCurrentIcon] = useState(IconComponent);
@@ -28,7 +29,8 @@ const InputField = ({
       setCurrentIcon(isPasswordVisible ? EyeIcon : EyeSlashIcon);
     }
   };
-
+  const bgClass = background === "white" ? "bgwhite" : "bginput";
+  const bgClassIcon = background === "white" ? "bgbeige" : "bg-white";
   return (
     <div className="md:w-120 w-64">
       <label htmlFor={id} className={`input_label text-sm md:text-lg `}>
@@ -42,7 +44,7 @@ const InputField = ({
         )}
         <input
           name={name}
-          className={`bginput text-sm md:text-lg rounded-xl px-4 py-2 w-full ${
+          className={`${bgClass} text-sm md:text-lg rounded-xl px-4 py-2 w-full ${
             customh ? customh : "h-12"
           } outline-none ${prefix ? "pl-14" : "pl-4"}`}
           type={isPasswordVisible ? "text" : type}
@@ -53,7 +55,7 @@ const InputField = ({
           onChange={onChange} // Controlled input handler
         />
         <div
-          className={`bg-white absolute right-2 top-3 md:top-1 rounded-full w-6 h-6 md:w-10 md:h-10 flex items-center justify-center ${
+          className={`${bgClassIcon} absolute right-2 top-3 md:top-1 rounded-full w-6 h-6 md:w-10 md:h-10 flex items-center justify-center ${
             type === "password" ? "cursor-pointer" : ""
           }`}
           onClick={handleIconClick}

@@ -7,6 +7,8 @@ import "../../css/auth.css";
 import { BACKEND_URL } from "../../config";
 import axios from "axios";
 import { ImageInputOutput } from "./businessauth";
+import back from "../../assets/backgrounds/Asset 1.png";
+import back2 from "../../assets/backgrounds/Asset 2.png";
 
 const UserAuth = () => {
   const [errors, setErrors] = useState({});
@@ -137,6 +139,7 @@ const UserAuth = () => {
 
     runValidations();
   }, [formData]);
+  const [isRegistered, setIsRegistered] = useState(false);
 
   const submitFormData = async () => {
     const actualFormData = new FormData();
@@ -167,9 +170,7 @@ const UserAuth = () => {
         }
       );
       if (response.data.message === "Registration successful") {
-        console.log(response.data.message);
-      } else {
-        console.log(response.data.message);
+        setIsRegistered(true);
       }
     } catch (error) {
       console.error("There was an error sending the data", error);
@@ -187,11 +188,11 @@ const UserAuth = () => {
 
   return (
     <>
-      <h1 className="auth_header mx-auto pb-4 text-base md:text-2xl lg:text-4xl">
-        {t("auth_title")}
+      <h1 className="auth_header mt-2 mx-auto pb-4 text-base md:text-2xl lg:text-4xl">
+        {t("normalauth_title")}
       </h1>
-      <form>
-        <div className="image_input">
+      <form className="w-full flex flex-col md:flex-row justify-center md:gap-[10rem] gap-0 mt-6">
+        <div className="image_input scale-1 md:scale-[1.5] md:mt-[15rem] mt-0">
           <ImageInputOutput
             formData={formData}
             setFormData={setFormData}
@@ -199,30 +200,40 @@ const UserAuth = () => {
             errors={errors}
           />
         </div>
-        <AccountInformation
-          errors={errors}
-          formData={formData}
-          setFormData={setFormData}
-          setErrors={setErrors}
-          accountType="user"
-        />
-        <div className="py-4">
-          <PersonalInfo
+        <div>
+          <AccountInformation
             errors={errors}
             formData={formData}
             setFormData={setFormData}
             setErrors={setErrors}
+            accountType="user"
           />
-        </div>
-        <div className="flex w-3/12 items-center justify-around gap-1 mx-auto py-8">
-          <ContributeBtn
-            importance="primary"
-            text={t("finish_btn")}
-            onClick={submitFormData}
-            disabled={isNextDisabled}
-          />
+          <div className="py-4">
+            <PersonalInfo
+              errors={errors}
+              formData={formData}
+              setFormData={setFormData}
+              setErrors={setErrors}
+              bgtype="white"
+            />
+          </div>
+          {isLoading && <div>Loading...</div>}
+          {isRegistered && <div>Registration successful!</div>}
+          <div className="flex w-3/12 items-center justify-around gap-1 mx-auto py-8">
+            <ContributeBtn
+              importance="primary"
+              text={t("finish_btn")}
+              onClick={submitFormData}
+              disabled={isNextDisabled}
+            />
+          </div>
         </div>
       </form>
+      <img
+        src={back}
+        className="absolute rotate-[270deg] left-[-8rem] top-[50%] w-6/12 blur-sm lg:left-[-20rem] lg:scale-[0.75]"
+      />
+      <img src={back2} className="absolute bottom-0 right-0 z-[-1] blur-sm" />
     </>
   );
 };

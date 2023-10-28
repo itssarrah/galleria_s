@@ -84,7 +84,7 @@ const Footer = (props) => {
             <div className="flex">
               <MdEmail size={32} className="heart" />
               <h1 className="footer_txt text-base md:text-lg lg:text-2xl">
-                galleria@support.dz
+                galleria.dz.help@gmail.com
               </h1>
             </div>
           </div>
