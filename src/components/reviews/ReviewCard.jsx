@@ -24,7 +24,7 @@ const ReviewCard = ({
 }) => {
   const { t } = useTranslation("product");
   const [size, setSize] = useState();
-  const [showLess, setShowLess] = useState(true);
+  const [showFullText, setShowFullText] = useState(false);
 
   const direction = t("direction");
 
@@ -35,6 +35,8 @@ const ReviewCard = ({
   };
 
   const handleResize = () => setSize(textSizes[getClosestBreakpoint()]);
+  const changeTextSize = () =>
+    setShowFullText((prevShowFullText) => !prevShowFullText);
 
   useEffect(() => {
     handleResize();
@@ -50,36 +52,74 @@ const ReviewCard = ({
   return (
     <div
       className="rc
-    bg-[#FDDED2] rounded-2xl overflow-hidden 
-    flex flex-col max-w-[80%] md:flex-row lg:flex-col xl:flex-row xl:max-w-[100%]"
+      shadow-md
+      bg-[#FDDED2] rounded-2xl overflow-hidden 
+      flex flex-col max-w-[80%] 
+      md:flex-row 
+      lg:flex-col 
+      xl:flex-row 
+      xl:max-w-[100%]"
     >
-      <img
-        src={image}
-        alt="product"
-        className="w-full md:w-auto lg:w-full xl:w-auto xl:max-w-[40%]"
-      />
-      <div className="p-5 justify-between">
+      {!showFullText && (
+        <div
+          className="
+            overflow-hidden
+            min-w-[12rem]
+            md:w-auto 
+            lg:w-full 
+            xl:w-auto 
+            xl:max-w-[40%]"
+        >
+          <img
+            src={image}
+            alt="product"
+            className="
+              w-full h-full
+              transition-transform
+              ease-in-out delay-100
+              hover:scale-125"
+          />
+        </div>
+      )}
+      <div className="flex flex-col p-5 justify-between">
         <div>
           <h2 className="font-sofia font-bold text-xl">{title}</h2>
-          <div className="flex justify-between my-2 text-black/[.55]" dir={direction}>
+          <div
+            className="flex justify-between my-2 text-black/[.55]"
+            dir={direction}
+          >
             <span>
               {`${t("from")} `} <span className="underline">{seller}</span>
             </span>
             <span className="font-black text-[#7D5C3A] text-md">
               {parseFloat(price.toFixed(2))} {t("dzd")}
-            </span> 
+            </span>
           </div>
         </div>
         <div>
           <Stars average={stars} totalNumberOfStars={5} />
-          <p
-            className="bg-white py-3 px-2 my-2 rounded-md"
-            onClick={() => setShowLess((prevShowLess) => !prevShowLess)}
-          >
-            {showLess && description.length > size
-              ? description.slice(0, size) + "..."
-              : description}
-          </p>
+
+          {!showFullText && description.length > size ? (
+            <p className="bg-white py-3 px-2 my-2 rounded-md">
+              {`${description.slice(0, size)} ...`}{" "}
+              <span
+                className="font-bold text-sky-500 cursor-pointer"
+                onClick={changeTextSize}
+              >
+                {t("show_more")}
+              </span>
+            </p>
+          ) : (
+            <p className="bg-white py-3 px-2 my-2 rounded-md">
+              {description}{" "}
+              <span
+                className="font-bold text-sky-500 cursor-pointer"
+                onClick={changeTextSize}
+              >
+                {t("show_less")}
+              </span>
+            </p>
+          )}
         </div>
         <div className="grid w-full">
           <span className="justify-self-end text-black/[.55]">{date}</span>
