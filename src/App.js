@@ -9,6 +9,7 @@ import React from "react";
 import { Businessauth } from "./components/auth/businessauth.jsx";
 import Shop from "./views/shop/shopItemsSorted.jsx";
 import ProductPage from "./views/product/ProductPage.jsx";
+import UserAccountPage from "./views/userAccount/userAccountPage.jsx";
 
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./i18n";
@@ -29,7 +30,8 @@ function App() {
             ></Route>
 
             <Route path="/shop" element={<Shop />}></Route>
-            <Route path="/product" element={<ProductPage/>}></Route>
+            <Route path="/product" element={<ProductPage />}></Route>
+            <Route path="/user/:userId" element={<UserAccountPage />}></Route>
           </Routes>
         </div>
       </div>
