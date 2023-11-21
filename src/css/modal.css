@@ -4,6 +4,8 @@
 
 .modal {
   scroll-margin: 5rem;
-
-  @apply relative bg-[#fdded2] rounded-[25px] max-h-[50rem]
+  background-image: url("../assets/backgrounds/Asset\ 3.png");
+  background-repeat: no-repeat;
+  background-position: right top;
+  @apply relative bg-[#fdded2] rounded-[25px] max-h-[50rem];
 }

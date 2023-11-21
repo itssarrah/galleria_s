@@ -1,6 +1,7 @@
 import { UserAccountHero } from "../../components/userAccount/UserAccountHero";
 import { useParams } from "react-router-dom";
 import data from "./dummy";
+import "../../css/userAccount.css";
 import userPicture from "../../assets/images/PottyPot5.png";
 
 const UserAccountPage = () => {

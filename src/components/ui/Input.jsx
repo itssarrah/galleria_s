@@ -2,16 +2,18 @@ const Input = ({
   id = null,
   type = "text",
   value = "",
+  placeholder = "",
   imageURL = null,
   onClick = () => {},
   extra = {},
 }) => (
-  <div className="relative rounded-full overflow-hidden outline-none shadow-lg">
+  <div className="relative rounded-full overflow-hidden outline-none shadow-md">
     <input
       id={id}
       name={id}
       type={type}
-      value={value}
+      defaultValue={value}
+      placeholder={placeholder}
       className="px-5 py-3"
       {...extra}
     />
@@ -21,7 +23,7 @@ const Input = ({
         <img
           src={imageURL}
           alt="icon"
-          className="w-full hover:bg-[#FFEBEE] bg-[#F5EBE0] rounded-full aspect-square p-1"
+          className="max-w-[2.3rem] w-full hover:bg-[#FFEBEE] bg-[#F5EBE0] rounded-full aspect-square p-1"
         />
       </div>
     )}

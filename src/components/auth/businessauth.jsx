@@ -323,7 +323,7 @@ const Businessauth = () => {
         </div>
         <div className="bg-white rounded-lg w-10/12 mx-auto ">
           <ProgressBar step={formStep} />
-          {formStep == 0 && (
+          {formStep === 0 && (
             <section className="accinfo pt-24">
               <AccountInformation
                 formData={formData}
@@ -331,17 +331,17 @@ const Businessauth = () => {
               />
             </section>
           )}
-          {formStep == 1 && (
+          {formStep === 1 && (
             <section className="persoinfo pt-24">
               <PersonalInfo formData={formData} setFormData={setFormData} />
             </section>
           )}
-          {formStep == 2 && (
+          {formStep === 2 && (
             <section className="bizinfo pt-24">
               <Businessinfo formData={formData} setFormData={setFormData} />
             </section>
           )}
-          {formStep == 3 && (
+          {formStep === 3 && (
             <section className="flex flex-col items-center congrats pt-28">
               <h1 className="auth_header text-lg md:text-4xl ">
                 <Trans
