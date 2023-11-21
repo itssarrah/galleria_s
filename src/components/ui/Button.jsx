@@ -1,6 +1,6 @@
-const Button = ({ text, className = "", onClick = () => {}, extra }) => (
+const Button = ({ text, className = "user-btns", onClick = () => {}, extra }) => (
   <button
-    className={`p-2 rounded-[8px] w-fit m-auto shadow-xl ${className}`}
+    className={`py-2 px-5 rounded-full w-fit m-auto shadow-lg ${className}`}
     onClick={onClick}
     {...extra}
   >

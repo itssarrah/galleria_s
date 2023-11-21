@@ -1,0 +1,7 @@
+@import "tailwindcss/base";
+@import "tailwindcss/utilities";
+@import "tailwindcss/components";
+
+.input-container {
+  @apply relative rounded-full overflow-hidden shadow-md;
+}
