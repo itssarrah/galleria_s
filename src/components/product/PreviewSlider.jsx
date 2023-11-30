@@ -3,7 +3,7 @@ import { Splide, SplideSlide } from "@splidejs/react-splide";
 import { AiFillCloseCircle } from "react-icons/ai";
 
 // css
-import "./product.css";
+import "../../css/product.css";
 
 const breakpoints = {
   1280: {

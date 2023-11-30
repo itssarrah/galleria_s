@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Card } from "../Landingpage";
 import { Link } from "react-router-dom";
 
-import "./product.css";
+import "../../css/product.css";
 import { useTranslation } from "react-i18next";
 
 const SuggestedProducts = ({ products = [] }) => {

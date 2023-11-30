@@ -1,0 +1,7 @@
+@import "tailwindcss/base";
+@import "tailwindcss/utilities";
+@import "tailwindcss/components";
+
+.icon-bg {
+  @apply m-1 absolute right-0 top-0 bottom-0 flex justify-center items-center rounded-full bg-[#F5EBE0]  aspect-square;
+}

@@ -6,7 +6,7 @@ import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { useTranslation } from "react-i18next";
 
 // css imports
-import "./product.css";
+import "../../css/product.css";
 
 const ProductCard = ({
   itemUrl = "/images/carditem.png",

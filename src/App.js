@@ -9,6 +9,7 @@ import React from "react";
 import { Businessauth } from "./components/auth/businessauth.jsx";
 import Shop from "./views/shop/shopItemsSorted.jsx";
 import ProductPage from "./views/product/ProductPage.jsx";
+import UserAccountPage from "./views/userAccount/userAccountPage.jsx";
 
 import {
   BrowserRouter as Router,
@@ -48,7 +49,28 @@ function MainContent() {
 function App() {
   return (
     <Router>
-      <MainContent />
+
+      <div className="App">
+        <Nav />
+        <BackgroundAsset position="top-left" />
+        <BackgroundAssetTwo position="top-right" />
+        <div className="content">
+          <Routes>
+            <Route path="/" element={<LandingPage />}></Route>
+            <Route
+              path="/businessregistration"
+              element={<Businessauth />}
+            ></Route>
+
+            <Route path="/shop" element={<Shop />}></Route>
+            <Route path="/product" element={<ProductPage />}></Route>
+            <Route path="/user/:userId" element={<UserAccountPage />}></Route>
+          </Routes>
+        </div>
+      </div>
+
+      
+
     </Router>
   );
 }

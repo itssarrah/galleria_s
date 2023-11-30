@@ -3,7 +3,7 @@ import Stars from "../Stars";
 import { AiFillStar } from "react-icons/ai";
 
 // css
-import "./product.css";
+import "../../css/product.css";
 import { useTranslation } from "react-i18next";
 
 const calculateAverage = (ratings, totalRatings) => {

@@ -1,0 +1,14 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+.avatar-container {
+  @apply aspect-square 
+        rounded-full 
+        overflow-hidden
+        object-cover;
+}
+
+.user-btns {
+  @apply hover:bg-[#FF94A0] bg-[#FF9494] text-white rounded-[16px] px-5;
+}

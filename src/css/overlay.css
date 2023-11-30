@@ -1,0 +1,8 @@
+@import "tailwindcss/base";
+@import "tailwindcss/utilities";
+@import "tailwindcss/components";
+
+.overlay {
+  background-color: rgba(0, 0, 0, 0.25);
+  @apply fixed z-50 top-0 left-0 flex flex-col justify-center items-center w-full h-full;
+}
