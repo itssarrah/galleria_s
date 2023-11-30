@@ -1,15 +1,21 @@
 import React from "react";
-import { Nav } from "../../components/navbar";
-import Body from "../../components/shop/Hero";
+
+import navbar from "../../components/navbar"
+import Hero from "../../components/shop/Hero"
 import Footer from "../../components/Footer";
+import Body from "../../components/shop/Body";
+    
 
 const Shop = () => {
-  return (
-    <div className="overflow-hidden">
-      <Nav />
-      <Body />
-      <Footer />
-    </div>
-  );
-};
-export default Shop;
+    return (
+        <div className="overflow-hidden">
+            <navbar/>
+            <Hero/>
+            <Body/>
+            <Footer/>
+        </div>
+    )
+}
+export default Shop
+
+

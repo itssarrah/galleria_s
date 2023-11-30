@@ -1,10 +1,12 @@
 {
   "fbk_title": "Votre Opinion",
-  "fbk_subtitle": "Comment a été votre expérience sur le site ?",
+  "fbk_subtitle": "Comment a été votre expérience sur le site ? (en anonyme)",
   "fbk_placeholder": "C'était Super ..",
   "fbk_btn": "Envoyer",
   "abt_title": "à propos",
   "contact_title": "Contact",
   "follow_title": "Suivez nous",
-  "abt_desc": "Galleria ou معرضي est une platforme numérique qui a pour but de rassembler les petits business algériens dans un lieu esthétique où l’on peut faire du shopping tranquillement  !"
+  "abt_desc": "Galleria ou معرضي est une platforme numérique qui a pour but de rassembler les petits business algériens dans un lieu esthétique où l’on peut faire du shopping tranquillement  !",
+  "confirmationMessage": "Votre Opinion a été envoyé avec succès !",
+  "errorSubmittingFeedback": "Une erreur s'est produite lors de l'envoi d'Opinion :( "
 }
