@@ -20,7 +20,7 @@ const ReviewCard = ({
 }) => {
   return (
     <div
-      className={`review-card flex flex-col gap-5 justify-around ${className}`}
+      className={`review-card flex flex-col gap-5 justify-around shadow-md ${className}`}
     >
       <div className="flex gap-3 items-center">
         <img
@@ -136,7 +136,7 @@ const Reviews = ({ title = "Layer cake for birthdays", reviews = [] }) => {
 
             <Splide>
               {reviews.map((review, index) => (
-                <SplideSlide key={`ss-${index}`}>
+                <SplideSlide key={`ss-${index}`} className="p-3">
                   <ReviewCard
                     key={`ss-rc-${index}`}
                     {...review}
