@@ -34,12 +34,14 @@ function MainContent() {
       <div className="content">
         <Routes>
           <Route path="/" element={<LandingPage />} />
+
           <Route path="/businessregistration" element={<Businessauth />} />
           <Route path="/userregistration" element={<UserAuth />} />
           <Route path="/shop" element={<Shop />} />
           <Route path="/product" element={<ProductPage />} />
           <Route path="/choice" element={<Choice />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/user/:userId" element={<UserAccountPage />}></Route>
         </Routes>
       </div>
     </div>
@@ -49,28 +51,7 @@ function MainContent() {
 function App() {
   return (
     <Router>
-
-      <div className="App">
-        <Nav />
-        <BackgroundAsset position="top-left" />
-        <BackgroundAssetTwo position="top-right" />
-        <div className="content">
-          <Routes>
-            <Route path="/" element={<LandingPage />}></Route>
-            <Route
-              path="/businessregistration"
-              element={<Businessauth />}
-            ></Route>
-
-            <Route path="/shop" element={<Shop />}></Route>
-            <Route path="/product" element={<ProductPage />}></Route>
-            <Route path="/user/:userId" element={<UserAccountPage />}></Route>
-          </Routes>
-        </div>
-      </div>
-
-      
-
+      <MainContent />
     </Router>
   );
 }

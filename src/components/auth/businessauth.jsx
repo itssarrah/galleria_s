@@ -525,14 +525,14 @@ function ProgressBar({ step }) {
     default:
       widthClass = "w-full";
   }
+  //${widthClass}
   return (
     <>
-      <div className="mt-16 w-10/12 h-1 bgline mx-auto relative rounded-full">
-        {" "}
-        <div className={`overlay absolute h-1 ${widthClass}`}></div>
+      <div className="mt-16 w-10/12 h-1 bgline mx-auto relative rounded-full ">
+        <div className={`bgoverlay absolute h-1  ${widthClass}`}></div>
         <div>
           <div
-            className={`w-12 h-12 absolute rounded-full bgprogress top-[-20px] flex items-center justify-center text-white text-lg font-bold`}
+            className={`w-12 h-12 absolute rounded-full bgprogress top-[-20px] flex items-center justify-center text-white  text-lg font-bold`}
           >
             {step > 0 ? <CheckIcon className="w-7 h-7" /> : "1"}
           </div>
@@ -543,8 +543,8 @@ function ProgressBar({ step }) {
         </div>
         <div>
           <div
-            className={`w-12 h-12  absolute rounded-full  top-[-20px] left-0 right-0 m-auto flex items-center justify-center }text-white text-lg font-bold text-white ${
-              step > 0 ? "bgprogress" : "bgdefault"
+            className={`w-12 h-12  absolute rounded-full  top-[-20px] left-0 right-0 m-auto flex items-center justify-center } text-lg font-bold  ${
+              step > 0 ? "bgprogress text-white" : "bgdefault"
             }`}
           >
             {step > 1 ? <CheckIcon className="w-7 h-7" /> : "2"}
@@ -555,8 +555,8 @@ function ProgressBar({ step }) {
         </div>
         <div>
           <div
-            className={`w-12 h-12  absolute rounded-full top-[-20px]  right-0 flex items-center justify-center text-white text-lg font-bold ${
-              step > 1 ? "bgprogress" : "bgdefault"
+            className={`w-12 h-12  absolute rounded-full top-[-20px]  right-0 flex items-center justify-center  text-lg font-bold ${
+              step > 1 ? "bgprogress text-white" : "bgdefault"
             } `}
           >
             {step > 2 ? <CheckIcon className="w-7 h-7" /> : "3"}
