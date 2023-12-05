@@ -28,7 +28,12 @@ export const UserAccountHero = ({
       <div className="px-10 pt-5 flex flex-col justify-between h-full">
         <div>
           <div className="relative rounded-full overflow-hidden outline-none shadow-md">
-            <input type="email" value={userEmail} className="px-5 py-3" readOnly />
+            <input
+              type="email"
+              value={userEmail}
+              className="px-5 py-3"
+              readOnly
+            />
             <div className="icon-bg">
               <img
                 src={DuoTonePenIcon}
@@ -41,6 +46,10 @@ export const UserAccountHero = ({
           <p className="p-4 mb-2 text-lg">
             <MdOutlineMail className="text-[#FF9494] inline-block mr-2" />
             {userEmail}
+          </p>
+          <p className="p-4 mb-2 text-lg">
+            <MdOutlineMail className="text-[#FF9494] inline-block mr-2" />
+            {userName} !
           </p>
         </div>
 
