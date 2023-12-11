@@ -11,6 +11,10 @@ import Shop from "./views/shop/shopItemsSorted.jsx";
 import ProductPage from "./views/product/ProductPage.jsx";
 import UserAccountPage from "./views/userAccount/userAccountPage.jsx";
 
+import UserWishlist from "./components/userAccount/UserWishlist.jsx";
+import UserFeedback from "./components/userAccount/UserFeedback.jsx";
+import UserFavoriteBiz from "./components/userAccount/UserFavoriteBiz.jsx";
+
 import {
   BrowserRouter as Router,
   Route,
@@ -34,14 +38,19 @@ function MainContent() {
       <div className="content">
         <Routes>
           <Route path="/" element={<LandingPage />} />
-
           <Route path="/businessregistration" element={<Businessauth />} />
           <Route path="/userregistration" element={<UserAuth />} />
           <Route path="/shop" element={<Shop />} />
           <Route path="/product" element={<ProductPage />} />
           <Route path="/choice" element={<Choice />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/user/:userId" element={<UserAccountPage />}></Route>
+          {/* <Route path="/user/:userId" element={<UserAccountPage />}></Route> */}
+          // Inside App component
+          <Route path="/user/:userId" element={<UserAccountPage />}>
+            <Route index element={<UserWishlist />} />
+            <Route path="fav-biz" element={<UserFavoriteBiz />} />
+            <Route path="feedback" element={<UserFeedback />} />
+          </Route>
         </Routes>
       </div>
     </div>

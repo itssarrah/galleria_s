@@ -3,14 +3,18 @@ import { UserAccountHero } from "../../components/userAccount/UserAccountHero";
 import { useParams } from "react-router-dom";
 import axios from "axios"; // Import axios for making API requests
 import "../../css/userAccount.css";
-
+import UserAccountBar from "../../components/userAccount/UserAccountBar";
 import { BACKEND_URL } from "../../config";
+import UserWishlist from "../../components/userAccount/UserWishlist";
+
+import UserFavoriteBiz from "../../components/userAccount/UserFavoriteBiz";
+import UserFeedback from "../../components/userAccount/UserFeedback";
 
 const UserAccountPage = () => {
   const { userId } = useParams();
   const [userData, setUserData] = useState({});
   const [loading, setLoading] = useState(true);
-
+  const [activeTab, setActiveTab] = useState("WishList");
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -26,6 +30,10 @@ const UserAccountPage = () => {
     fetchUserData();
   }, [userId]);
 
+  const handleTabClick = (tab) => {
+    setActiveTab(tab);
+  };
+
   if (loading) {
     return <p>Loading...</p>;
   }
@@ -33,14 +41,23 @@ const UserAccountPage = () => {
   console.log("User Picture URL:", userData.userPictureURL);
 
   return (
-    <div className="flex justify-around w-full">
-      <UserAccountHero
-        userId={userId}
-        userName={userData.userName}
-        userEmail={userData.userEmail}
-        userPictureURL={userData.userPictureURL}
-      />
-    </div>
+    <>
+      <div className="md:flex md:justify-center block">
+        <UserAccountHero
+          userId={userId}
+          userName={userData.userName}
+          userEmail={userData.userEmail}
+          userPictureURL={userData.userPictureURL}
+        />
+      </div>
+
+      <UserAccountBar activeTab={activeTab} handleTabClick={handleTabClick} />
+
+      {/* Conditional rendering based on the active tab */}
+      {activeTab === "WishList" && <UserWishlist />}
+      {activeTab === "FavoriteBiz" && <UserFavoriteBiz />}
+      {activeTab === "Feedback" && <UserFeedback />}
+    </>
   );
 };
 
