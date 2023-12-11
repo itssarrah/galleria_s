@@ -16,8 +16,8 @@ export const UserAccountHero = ({
   const closeModal = () => setShowModal(false);
 
   return (
-    <div className="flex flex-col w-auto gap-5 p-10 md:flex-row md:text-xl">
-      <div className="flex flex-col justify-center gap-1">
+    <div className="flex flex-col w-auto gap-5 p-10 md:flex-row md:text-xl items-center  ">
+      <div className="flex flex-col justify-center gap-2">
         <AvatarImage
           imageURL={userPictureURL}
           className="w-[10rem] md:w-[12rem] m-auto shadow-md"
@@ -25,10 +25,15 @@ export const UserAccountHero = ({
         <Button text="edit" className="user-btns rounded-full px-5" />
       </div>
 
-      <div className="px-10 pt-5 flex flex-col justify-between h-full">
+      <div className="px-8 md:px-12 pt-5 flex flex-col justify-between h-full">
         <div>
           <div className="relative rounded-full overflow-hidden outline-none shadow-md">
-            <input type="email" value={userEmail} className="px-5 py-3" readOnly />
+            <input
+              type="text"
+              value={userName}
+              className="px-5 py-3 text-sm md:text-lg lg:text-xl outline-none"
+              readOnly
+            />
             <div className="icon-bg">
               <img
                 src={DuoTonePenIcon}
@@ -38,14 +43,14 @@ export const UserAccountHero = ({
             </div>
           </div>
 
-          <p className="p-4 mb-2 text-lg">
+          <p className="p-4 mb-2 text-sm md:text-lg">
             <MdOutlineMail className="text-[#FF9494] inline-block mr-2" />
             {userEmail}
           </p>
         </div>
 
         <Button
-          text="edit personal information"
+          text="Edit personal information"
           className="user-btns mb-0 rounded-full px-5"
           onClick={openModal}
         />

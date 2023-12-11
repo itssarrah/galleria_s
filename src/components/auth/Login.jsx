@@ -8,11 +8,11 @@ import axios from "axios";
 import { EyeIcon, EnvelopeIcon } from "@heroicons/react/24/solid";
 import Footer from "../../components/Footer";
 import { Link } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
 function Login() {
   const [errors, setErrors] = useState({});
   const { t } = useTranslation("auth");
-
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -32,7 +32,18 @@ function Login() {
 
       if (response.data.status === "success") {
         console.log("Logged in successfully");
-        // handle further logic, like redirecting to a dashboard
+
+        const userId = response.data.user_id;
+
+        // Check the user type
+        if (response.data.type === "user") {
+          // Regular user
+          navigate(`/user/${userId}`);
+        } else if (response.data.type === "business") {
+          // Business user
+          const businessId = response.data.business_id;
+          navigate(`/business/${businessId}`);
+        }
       } else {
         setErrors({ general: response.data.message });
         console.log(response.data.message);

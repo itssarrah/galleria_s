@@ -101,7 +101,7 @@ const ReviewCard = ({
 
           {!showFullText && description.length > size ? (
             <p className="bg-white py-3 px-2 my-2 rounded-md">
-              {`${description.slice(0, size)} ...`}{" "}
+              {`${description.slice(0, size / 2)} ...`}{" "}
               <span
                 className="font-bold text-sky-500 cursor-pointer"
                 onClick={changeTextSize}

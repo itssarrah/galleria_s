@@ -694,4 +694,4 @@ const LandingPage = () => {
   );
 };
 
-export { LandingPage, TrendingItems, Card };
+export { LandingPage, TrendingItems, Card, ShopCard };
