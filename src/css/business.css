@@ -1,0 +1,13 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+.business-profile-hero {
+  @apply 
+  flex flex-col items-center
+  bg-business w-[110%] h-[40rem] bg-cover bg-no-repeat bg-center my-10;
+}
+
+.business-profile-stats {
+  @apply flex items-center justify-center h-[4rem] w-[70%] font-sunflower bg-white/[.55] mt-[-7%];
+}

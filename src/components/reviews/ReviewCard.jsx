@@ -63,9 +63,11 @@ const ReviewCard = ({
       {!showFullText && (
         <div
           className="
+            object-cover
             overflow-hidden
             min-w-[12rem]
             md:w-auto 
+            md:aspect-video
             lg:w-full 
             xl:w-auto 
             xl:max-w-[40%]"

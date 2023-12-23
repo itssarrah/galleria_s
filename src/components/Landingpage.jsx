@@ -27,7 +27,7 @@ const Card = ({
     ? Math.round((1 - parseFloat(salePrice) / parseFloat(basePrice)) * 100)
     : 0;
   return (
-    <div className="min-h-full relative w-32 sm:w-44 md:w-56 lg:w-64 h-full">
+    <div className="min-h-fit relative w-32 sm:w-44 md:w-56 lg:w-64">
       <div className="cardcontainer">
         <img src={itemUrl} alt="Item" className="rounded-3xl px-2 py-2" />
         {isOnSale && (

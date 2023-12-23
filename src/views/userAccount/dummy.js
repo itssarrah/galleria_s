@@ -3,7 +3,6 @@ const data =[
     userName: "Woahhsxrrx",
     userEmail: "woahhsxrrx@gmail.com",
   },
-
   {
     userName: "Maida",
     userEmail: "maida@gmail.com",

@@ -18,6 +18,9 @@ module.exports = {
       backgroundColor: {
         primary: "#ff9494", // Replace '#123456' with your desired color
       },
+      backgroundImage: {
+        "business": "url('/src/assets/backgrounds/business-account-bg.png')"
+      }
     },
   },
   plugins: [],
