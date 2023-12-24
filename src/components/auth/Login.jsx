@@ -33,23 +33,39 @@ function Login() {
       if (response.data.status === "success") {
         console.log("Logged in successfully");
 
-        const userId = response.data.user_id;
+        const token = response.data.token;
+        console.log("Received token:", token);
+        localStorage.setItem("authToken", token);
 
-        // Check the user type
-        if (response.data.type === "user") {
-          // Regular user
-          navigate(`/user/${userId}`);
-        } else if (response.data.type === "business") {
-          // Business user
-          const businessId = response.data.business_id;
-          navigate(`/business/${businessId}`);
+        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+        try {
+          const userResponse = await axios.get(
+            `${BACKEND_URL}api/current_user`
+          );
+
+          if (userResponse.data.user_type === "user") {
+            navigate("/profile", { state: userResponse.data });
+          } else if (userResponse.data.user_type === "business") {
+            navigate("/businessprofile", { state: userResponse.data });
+          } else {
+            console.error("Invalid user type in the response");
+          }
+        } catch (error) {
+          if (error.response.status === 401) {
+            console.error(
+              "Invalid or expired token. Redirecting to login page."
+            );
+          } else {
+            console.error("Error fetching user details:", error);
+          }
         }
       } else {
         setErrors({ general: response.data.message });
-        console.log(response.data.message);
+        console.error(response.data);
       }
-    } catch (error) {
-      console.error("Error during login:", error);
+    } catch (loginError) {
+      console.error("Error during login:", loginError);
     }
   };
 

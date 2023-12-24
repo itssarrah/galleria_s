@@ -9,6 +9,7 @@ import React from "react";
 import { Businessauth } from "./components/auth/businessauth.jsx";
 import Shop from "./views/shop/shopItemsSorted.jsx";
 import ProductPage from "./views/product/ProductPage.jsx";
+import AddProduct from "./views/product/addProduct.jsx";
 import UserAccountPage from "./views/userAccount/userAccountPage.jsx";
 
 import UserWishlist from "./components/userAccount/UserWishlist.jsx";
@@ -32,7 +33,8 @@ function MainContent() {
 
   return (
     <div className="App">
-      {location.pathname !== "/choice" && <Nav />}
+      {location.pathname !== "/choice" &&
+        location.pathname !== "/addproduct" && <Nav />}
       <BackgroundAsset position="top-left" />
       <BackgroundAssetTwo position="top-right" />
       <div className="content">
@@ -44,9 +46,10 @@ function MainContent() {
           <Route path="/product" element={<ProductPage />} />
           <Route path="/choice" element={<Choice />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/addproduct" element={<AddProduct />} />
           {/* <Route path="/user/:userId" element={<UserAccountPage />}></Route> */}
           // Inside App component
-          <Route path="/user/:userId" element={<UserAccountPage />}>
+          <Route path="/profile" element={<UserAccountPage />}>
             <Route index element={<UserWishlist />} />
             <Route path="fav-biz" element={<UserFavoriteBiz />} />
             <Route path="feedback" element={<UserFeedback />} />

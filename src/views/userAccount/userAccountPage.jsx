@@ -1,25 +1,40 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, startTransition } from "react";
 import { UserAccountHero } from "../../components/userAccount/UserAccountHero";
-import { useParams } from "react-router-dom";
-import axios from "axios"; // Import axios for making API requests
+import { useParams, useLocation, Navigate } from "react-router-dom"; // Import useLocation
+import axios from "axios";
 import "../../css/userAccount.css";
 import UserAccountBar from "../../components/userAccount/UserAccountBar";
 import { BACKEND_URL } from "../../config";
 import UserWishlist from "../../components/userAccount/UserWishlist";
-
 import UserFavoriteBiz from "../../components/userAccount/UserFavoriteBiz";
 import UserFeedback from "../../components/userAccount/UserFeedback";
+import { useNavigate } from "react-router-dom";
 
 const UserAccountPage = () => {
   const { userId } = useParams();
+  const navigate = useNavigate();
+
+  const location = useLocation(); // Use useLocation hook to access location
   const [userData, setUserData] = useState({});
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("WishList");
+
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get(`${BACKEND_URL}api/user/${userId}`); // Replace with your actual endpoint
-        setUserData(response.data); // Assuming the response is in JSON format
+        const token = localStorage.getItem("authToken");
+        if (!token) {
+          console.error("Token not found. Redirecting to login page.");
+          navigate("/login");
+          return;
+        }
+
+        const response = await axios.get(`${BACKEND_URL}api/user/profile`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setUserData(response.data);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -28,7 +43,7 @@ const UserAccountPage = () => {
     };
 
     fetchUserData();
-  }, [userId]);
+  }, [location.state, userId]);
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
