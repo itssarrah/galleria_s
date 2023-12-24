@@ -1,6 +1,6 @@
 import React, { useState, useEffect, startTransition } from "react";
 import { UserAccountHero } from "../../components/userAccount/UserAccountHero";
-import { useParams, useLocation, Navigate } from "react-router-dom"; // Import useLocation
+import { useParams, useLocation } from "react-router-dom"; // Import useLocation
 import axios from "axios";
 import "../../css/userAccount.css";
 import UserAccountBar from "../../components/userAccount/UserAccountBar";
@@ -19,34 +19,39 @@ const UserAccountPage = () => {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("WishList");
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const token = localStorage.getItem("authToken");
-        if (!token) {
-          console.error("Token not found. Redirecting to login page.");
-          navigate("/login");
-          return;
-        }
-
-        const response = await axios.get(`${BACKEND_URL}api/user/profile`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setUserData(response.data);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-        setLoading(false);
+  const fetchData = async () => {
+    try {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        console.error("Token not found. Redirecting to login page.");
+        navigate("/login");
+        return;
       }
-    };
 
-    fetchUserData();
-  }, [location.state, userId]);
+      const response = await axios.get(`${BACKEND_URL}api/user/profile`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setUserData(response.data);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+      navigate(-1);
+    }
+  };
+
+  useEffect(() => {
+    startTransition(() => {
+      fetchData();
+    });
+  }, [location.state, userId, navigate]);
 
   const handleTabClick = (tab) => {
-    setActiveTab(tab);
+    startTransition(() => {
+      setActiveTab(tab);
+    });
   };
 
   if (loading) {

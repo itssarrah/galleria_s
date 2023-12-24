@@ -16,6 +16,8 @@ import UserWishlist from "./components/userAccount/UserWishlist.jsx";
 import UserFeedback from "./components/userAccount/UserFeedback.jsx";
 import UserFavoriteBiz from "./components/userAccount/UserFavoriteBiz.jsx";
 
+import BusinessesProfile from "./views/Profile/BusinessProfile.jsx";
+
 import {
   BrowserRouter as Router,
   Route,
@@ -45,6 +47,7 @@ function MainContent() {
           <Route path="/shop" element={<Shop />} />
           <Route path="/product" element={<ProductPage />} />
           <Route path="/choice" element={<Choice />} />
+          <Route path="/businessprofile" element={<BusinessesProfile />} />
           <Route path="/login" element={<Login />} />
           <Route path="/addproduct" element={<AddProduct />} />
           {/* <Route path="/user/:userId" element={<UserAccountPage />}></Route> */}
