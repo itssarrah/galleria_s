@@ -2,7 +2,9 @@ import AvatarImage from "../AvatarImage";
 import IconList from "../ui/IconList";
 import { MdLocationPin, MdStar, MdPhone, MdOutlineEmail } from "react-icons/md";
 import { BsCurrencyDollar } from "react-icons/bs";
+import { TbPencilMinus } from "react-icons/tb";
 import Elevated from "./Elevated";
+import { IconButton } from "../ui/IconButton";
 import "../../css/business.css";
 
 const BusinessProfileDetails = ({
@@ -33,12 +35,19 @@ const BusinessProfileDetails = ({
             </div>
             <p className="font-bold">{email}</p>
           </Elevated>
-          <IconList items={info} iconClassName="bg-white">
-            <MdLocationPin className="text-white text-2xl" />
-            <MdPhone className="text-white text-2xl" />
-            <MdStar className="text-white text-2xl" />
-            <BsCurrencyDollar className="text-white text-2xl" />
-          </IconList>
+          <div className="relative">
+            <button className="text-white bg-[#F1979A] absolute top-0 right-0 m-1 flex items-center p-1 rounded-xl">
+              <TbPencilMinus />
+              Edit
+            </button>
+
+            <IconList items={info} iconClassName="bg-white">
+              <MdLocationPin className="text-white text-2xl" />
+              <MdPhone className="text-white text-2xl" />
+              <MdStar className="text-white text-2xl" />
+              <BsCurrencyDollar className="text-white text-2xl" />
+            </IconList>
+          </div>
         </div>
       </div>
     </div>

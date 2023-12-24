@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import "../../css/product.css";
 import { useTranslation } from "react-i18next";
 
-const SuggestedProducts = ({ products = [] }) => {
+const ProductsContainer = ({ products = [], browseMore = true }) => {
   const { t } = useTranslation("product");
   const initialMaxProductDisplay = 8;
   const productsCount = products.length;
@@ -19,13 +19,15 @@ const SuggestedProducts = ({ products = [] }) => {
   return (
     <div className="flex flex-col justify-center align-center">
       <div>
-        <h2
-          className="product-title pb-5 mb-1 md:mb-5 text-2xl lg:text-3xl xl:text-4xl"
-          dir={direction}
-        >
-          {`${t("browse_more")}: `}
-        </h2>
-        <div className="grid grid-cols-2 sm:grid-cols-3 2xl:grid-cols-4 3xl:grid-cols-5 gap-y-[2rem]">
+        {browseMore && (
+          <h2
+            className="product-title pb-5 mb-1 md:mb-5 text-2xl lg:text-3xl xl:text-4xl"
+            dir={direction}
+          >
+            {`${t("browse_more")}: `}
+          </h2>
+        )}
+        <div className="grid grid-cols-2 sm:grid-cols-3 2xl:grid-cols-4 3xl:grid-cols-5 gap-y-[2rem] gap-x-10">
           {products.slice(0, maxProductDisplay).map((product, index) => (
             <div className="w-5rem">
               <Card key={index} {...product} />
@@ -58,4 +60,4 @@ const SuggestedProducts = ({ products = [] }) => {
   );
 };
 
-export default SuggestedProducts;
+export default ProductsContainer;

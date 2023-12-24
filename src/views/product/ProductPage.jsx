@@ -1,14 +1,13 @@
 import React from "react";
 import ProductCard from "../../components/product/ProductCard";
-import SuggestedProducts from "../../components/product/SuggestedProducts";
 import Ratings from "../../components/product/Ratings";
 import Reviews from "../../components/product/Reviews";
-import ReviewCard from "../../components/reviews/ReviewCard";
 import Footer from "../../components/Footer";
 import * as data from "./dummy-data";
 
 // css
 import "./product-page.css";
+import ProductsContainer from "../../components/product/ProductsContainer";
 
 const ProductPage = ({ id }) => {
   return (
@@ -19,7 +18,7 @@ const ProductPage = ({ id }) => {
           <Ratings ratings={data.ratings} />
           <Reviews title={data.title} reviews={data.reviews} />
         </div>
-        <SuggestedProducts products={data.products} />
+        <ProductsContainer products={data.products} />
       </div>
       <Footer />
     </>
