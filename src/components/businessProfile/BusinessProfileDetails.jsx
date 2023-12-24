@@ -26,27 +26,28 @@ const BusinessProfileDetails = ({
   return (
     <div className="business-profile-hero">
       <div className="m-auto flex gap-10 w-[30rem] justify-center">
-        <AvatarImage imageURL={imageURL} className="w-[20rem]" />
+        <AvatarImage imageURL={imageURL} className="w-[25rem]" />
         <div className="flex flex-col gap-3 w-full">
-          <h1 className="font-sofia font-thin text-6xl mb-5">{userName}</h1>
+          <h1 className="font-sofia font-thin text-7xl mb-5">{userName}</h1>
           <Elevated>
             <div className="bg-white rounded-full p-1">
               <MdOutlineEmail color="#F1979A" className="text-2xl" />
             </div>
-            <p className="font-bold">{email}</p>
+            <p className="font-bold text-xl">{email}</p>
           </Elevated>
           <div className="relative">
             <button className="text-white bg-[#F1979A] absolute top-0 right-0 m-1 flex items-center p-1 rounded-xl">
               <TbPencilMinus />
               Edit
             </button>
-
-            <IconList items={info} iconClassName="bg-white">
-              <MdLocationPin className="text-white text-2xl" />
-              <MdPhone className="text-white text-2xl" />
-              <MdStar className="text-white text-2xl" />
-              <BsCurrencyDollar className="text-white text-2xl" />
-            </IconList>
+            <div className="text-xl">
+              <IconList items={info} iconClassName="bg-white">
+                <MdLocationPin className="text-white text-2xl" />
+                <MdPhone className="text-white text-2xl" />
+                <MdStar className="text-white text-2xl" />
+                <BsCurrencyDollar className="text-white text-2xl" />
+              </IconList>
+            </div>
           </div>
         </div>
       </div>
