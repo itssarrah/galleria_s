@@ -1,4 +1,4 @@
-import "../../css/overlay.css";
+import "../../css/ui/overlay.css";
 
 const Overlay = ({ children }) => <div className="overlay">{children}</div>;
 

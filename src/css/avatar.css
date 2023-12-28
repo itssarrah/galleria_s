@@ -3,10 +3,7 @@
 @import "tailwindcss/utilities";
 
 .avatar-container {
-  @apply aspect-square 
-        rounded-full 
-        overflow-hidden
-        object-cover;
+  @apply object-cover;
 }
 
 .user-btns {

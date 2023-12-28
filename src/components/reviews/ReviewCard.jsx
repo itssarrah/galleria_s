@@ -53,8 +53,11 @@ const ReviewCard = ({
     <div
       className="rc
       shadow-md
+      mx-auto
       bg-[#FDDED2] rounded-2xl overflow-hidden 
-      flex flex-col max-w-[80%] 
+      flex flex-col
+      max-w-full
+      sm:max-w-[80%]
       md:flex-row 
       lg:flex-col 
       xl:flex-row 
@@ -63,7 +66,9 @@ const ReviewCard = ({
       {!showFullText && (
         <div
           className="
+            object-cover
             overflow-hidden
+            aspect-video
             min-w-[12rem]
             md:w-auto 
             lg:w-full 

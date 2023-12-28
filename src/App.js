@@ -29,6 +29,10 @@ import "./i18n";
 import UserAuth from "./components/auth/userauth.jsx";
 import Choice from "./components/auth/Choice.jsx";
 import Login from "./components/auth/Login.jsx";
+import BusinessesProfile from "./views/Profile/BusinessProfile.jsx";
+import ItemsOnSale from "./components/businessProfile/ItemsOnSale.jsx";
+import Insights from "./components/businessProfile/Insights.jsx";
+import FeedbackAndReviews from "./components/businessProfile/FeedbackAndReviews.jsx";
 
 // Create an instance of QueryClient
 const queryClient = new QueryClient();
@@ -59,6 +63,11 @@ function MainContent() {
             <Route index element={<UserWishlist />} />
             <Route path="fav-biz" element={<UserFavoriteBiz />} />
             <Route path="feedback" element={<UserFeedback />} />
+          </Route>
+          <Route path="/business/:id" element={<BusinessesProfile />}>
+            <Route index element={<ItemsOnSale />} />
+            <Route path="insights" element={<Insights />} />
+            <Route path="feedback" element={<FeedbackAndReviews />} />
           </Route>
         </Routes>
       </div>

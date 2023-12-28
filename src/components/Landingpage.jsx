@@ -4,7 +4,6 @@ import "../css/Landingpage.css";
 import { ContributeBtn } from "./navbar";
 import bgasset from "../assets/images/landingpage_asset2.png";
 import rightasset from "../assets/images/landingpage_asset1.png";
-
 import "@splidejs/splide/dist/css/splide.min.css";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import { MdLocationOn, MdLocalPhone, MdStar } from "react-icons/md";
