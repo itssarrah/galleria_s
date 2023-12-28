@@ -21,24 +21,11 @@ const breakpoints = {
     gap: "1rem",
     height: "200%",
   },
-}
+};
 
-
-const PreviewSlider = ({
-  images = [
-    "/images/carditem.png",
-    "/images/logo.png",
-    "/images/logo.png",
-    "/images/logo.png",
-    "/images/logo.png",
-    "/images/logo.png",
-    "/images/logo.png",
-    "/images/logo.png",
-  ],
-}) => {
+const PreviewSlider = ({ images }) => {
   const [imageClicked, setImageClicked] = useState(false);
   const [clickedImageSrc, setClickedImageSrc] = useState("");
-
 
   const showImageOverlay = (event) => {
     setClickedImageSrc(event.target.src);
@@ -59,7 +46,6 @@ const PreviewSlider = ({
       });
     });
 
-
     return () => {
       slideElements.forEach((slide) => {
         slide.removeEventListener("click", (event) => {
@@ -68,25 +54,26 @@ const PreviewSlider = ({
       });
     };
   }, []);
+  const perPage = images.length >= 5 ? 5 : images.length;
 
   return (
     <>
       <Splide
-        className="h-2/4 py-8"
+        className="h-1/4 pb-2 py-8 mx-auto lg:mx-0 w-full lg:w-[80%]"
         options={{
-          type: "loop",
-          perPage: 5.5,
-          width: "100%",
+          // type: "loop",
+          perPage: perPage,
+
           height: "100%",
           arrows: false,
           pagination: false,
           autoplay: true,
           interval: 5000,
           pauseOnHover: true,
-          perMove: 5,
+          perMove: perPage,
           speed: 5000,
           gap: "3rem",
-          breakpoints: breakpoints
+          breakpoints: breakpoints,
         }}
       >
         {images.map((image, index) => (
@@ -95,7 +82,7 @@ const PreviewSlider = ({
               key={`ps-img-${index}`}
               src={image}
               alt="preview product"
-              className="h-full w-full aspect-square rounded-full preview-slide cursor-pointer"
+              className="h-full w-full aspect-square rounded-full preview-slide cursor-pointer object-cover"
             />
           </SplideSlide>
         ))}
@@ -103,7 +90,7 @@ const PreviewSlider = ({
       {imageClicked && (
         <div className="modal-overlay">
           <AiFillCloseCircle
-            className="text-white text-5xl lg:text-7xl absolute top-[3rem] right-[2rem] cursor-pointer"
+            className="text-white text-5xl lg:text-7xl absolute top-[3rem] right-[2rem] cursor-pointer z-[10000]"
             onClick={hideImageOverlay}
           />
           <img

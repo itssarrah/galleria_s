@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import logo from "../assets/images/logo_typo.png";
 import fixedLogo from "../assets/images/logo_nav_fixed.png";
 import "../css/navbar.css";
@@ -7,6 +7,8 @@ import { Bars3BottomRightIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
+import { BACKEND_URL } from "../config";
+import { useQuery, useMutation } from "react-query";
 
 function ContributeBtn({ text, importance = "primary", onClick, disabled }) {
   let classNames;
@@ -82,6 +84,54 @@ function Nav() {
     };
   }, []);
 
+  const [userAuthorized, setUserAuthorized] = useState(false);
+  const [userProfileImage, setUserProfileImage] = useState(null);
+  const [userType, setUserType] = useState(null);
+
+  const { data: userData, isSuccess: isUserDataSuccess } = useQuery(
+    "currentUser",
+    async () => {
+      try {
+        const token = localStorage.getItem("authToken");
+        if (!token) {
+          setUserAuthorized(false);
+          return null; // Return null if user is not authenticated
+        }
+
+        const response = await fetch(`${BACKEND_URL}api/current_user`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error("Error fetching user data");
+        }
+
+        const data = await response.json();
+        return data;
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        return null;
+      }
+    },
+    {
+      enabled: !!localStorage.getItem("authToken"),
+    }
+  );
+
+  useEffect(() => {
+    if (isUserDataSuccess && userData) {
+      const currentUserType = userData.user_type;
+      setUserType(currentUserType);
+      setUserAuthorized(true);
+
+      const currentUserImage =
+        BACKEND_URL + "storage/" + userData.profile_image;
+      setUserProfileImage(currentUserImage);
+    }
+  }, [isUserDataSuccess, userData]);
+
   return (
     <nav
       className={`flex ${
@@ -143,17 +193,40 @@ function Nav() {
           </div>
         </li>
         <li>
-          <div className={`flex flex-col-reverse sm:flex-row `}>
-            <Link to="/login">
-              <ContributeBtn importance="typed" text={t("log_btn")} />
+          {userAuthorized && userType === "user" && (
+            <Link to="/profile">
+              <img
+                src={userProfileImage}
+                alt="User Profile"
+                className="rounded-full h-10 w-10 object-cover"
+              />
             </Link>
-            {/* <Link to="/businessregistration">
+          )}
+          {userAuthorized && userType === "business" && (
+            <Link to="/businessprofile">
+              <img
+                src={userProfileImage}
+                alt="Business Profile"
+                className="rounded-full h-10 w-10 object-cover"
+              />
+            </Link>
+          )}
+          {!userAuthorized && (
+            <div className={`flex flex-col-reverse sm:flex-row `}>
+              <Link to="/login">
+                <ContributeBtn importance="typed" text={t("log_btn")} />
+              </Link>
+              {/* <Link to="/businessregistration">
               <ContributeBtn importance="primary" text={t("contribute_btn")} />
             </Link> */}
-            <Link to="/choice">
-              <ContributeBtn importance="primary" text={t("contribute_btn")} />
-            </Link>
-          </div>
+              <Link to="/choice">
+                <ContributeBtn
+                  importance="primary"
+                  text={t("contribute_btn")}
+                />
+              </Link>
+            </div>
+          )}
         </li>
       </ul>
     </nav>

@@ -51,6 +51,7 @@ function Login() {
           } else {
             console.error("Invalid user type in the response");
           }
+          window.location.reload();
         } catch (error) {
           if (error.response.status === 401) {
             console.error(

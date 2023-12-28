@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import { BACKEND_URL } from "../../config";
+import UserWishlist from "../../components/userAccount/UserWishlist";
 
 const BusinessProfile = () => {
   const location = useLocation();
@@ -52,6 +53,8 @@ const BusinessProfile = () => {
         {/* Display business information based on businessData */}
         <p>Business Name: {businessData.businessName}</p>
         <p>Business Email: {businessData.businessEmail}</p>
+
+        <UserWishlist />
         {/* Add more fields as needed */}
       </div>
       {/* Add other components or UI elements as needed */}

@@ -4,7 +4,7 @@ import "../css/Landingpage.css";
 import { ContributeBtn } from "./navbar";
 import bgasset from "../assets/images/landingpage_asset2.png";
 import rightasset from "../assets/images/landingpage_asset1.png";
-import { MdFavorite, MdFavoriteBorder } from "react-icons/md";
+
 import "@splidejs/splide/dist/css/splide.min.css";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import { MdLocationOn, MdLocalPhone, MdStar } from "react-icons/md";
@@ -12,126 +12,14 @@ import Footer from "./Footer";
 import { useTranslation, Trans } from "react-i18next";
 import Faq from "react-faq-component";
 import { useEffect, useState } from "react";
+import axios from "axios";
+import { BACKEND_URL } from "../config";
+import { useQuery } from "react-query";
 
-const Card = ({
-  itemUrl = "/images/carditem.png",
-  sellerUrl = "/images/cardseller.png",
-  title = "Pink Hapiness",
-  basePrice = "1000.00",
-  salePrice = "500.00",
-  isOnSale = true,
-  isLiked = false,
-  seller = "SweetyPie",
-}) => {
-  const discountPercentage = isOnSale
-    ? Math.round((1 - parseFloat(salePrice) / parseFloat(basePrice)) * 100)
-    : 0;
-  return (
-    <div className="min-h-full relative w-32 sm:w-44 md:w-56 lg:w-64 h-full">
-      <div className="cardcontainer">
-        <img src={itemUrl} alt="Item" className="rounded-3xl px-2 py-2" />
-        {isOnSale && (
-          <img
-            src="/images/cardasset1.png"
-            alt="asset"
-            className="absolute  cardasset"
-          />
-        )}
-        {isOnSale && (
-          <h1 className="absolute cardtxt">-{discountPercentage}%</h1>
-        )}
-        <div className="flex w-full justify-between px-2">
-          <div>
-            <h1 className="item_title text-sm md:text-base lg:text-lg">
-              {title}
-            </h1>
-            <div className="flex space-x-2">
-              <h1
-                className={`${
-                  isOnSale ? "sale_price" : "base_price"
-                } text-xs md:text-base lg:text-lg`}
-              >
-                {basePrice} DA
-              </h1>
-              {isOnSale && (
-                <h1 className="new_price text-xs md:text-base lg:text-lg">
-                  {salePrice} DA
-                </h1>
-              )}
-            </div>
-          </div>
-          {isLiked ? (
-            <MdFavorite className="heart text-3xl" />
-          ) : (
-            <MdFavoriteBorder className="heart text-3xl " />
-          )}
-        </div>
-      </div>
-      <div className="circle w-full h-full">
-        <h1 className="text-xs sm:text-sm md:text-base lg:text-lg px-2">By</h1>
-        <div className="pb-4">
-          <img
-            alt="seller image"
-            src={sellerUrl}
-            className="w-8 h-8 rounded-full sm:w-10 sm:h-10 md:w-16 lg:w-24 md:h-16 lg:h-24 mx-auto"
-          />
-          <h1 className="seller_txt text-xs sm:text-sm md:text-base lg:text-lg text-center	">
-            {seller}
-          </h1>
-        </div>
-      </div>
-    </div>
-  );
-};
+import TeamCard from "./cards/TeamCard";
+import ShopCard from "./cards/ShopCard";
 
-const ShopCard = ({
-  imageUrl = "https://i.pinimg.com/236x/54/bb/7f/54bb7f2ceeeef406e9ab2ac08ac549d7.jpg",
-  title = "Bloom Perfume",
-  likes = 233,
-  isLiked = false,
-  location = "Bejaia",
-  phoneNumber = "5 56 78 99 17",
-  rating = "4.2",
-}) => {
-  return (
-    <>
-      <div className="cursor-pointer shopcardcontainer w-44 md:w-52 lg:w-56 rounded-b-3xl rounded-t-lg relative">
-        <img className="shopimg rounded-t-lg" src={imageUrl} alt="Shop Image" />
-        <div>
-          <div className="shopinfo rounded-b-3xl flex w-full px-2 justify-between pt-2 items-center">
-            <h1 className="shopname text-sm md:text-base lg:text-lg">
-              {title}
-            </h1>
-            <div>
-              {isLiked ? (
-                <MdFavorite className="shopheart text-3xl" />
-              ) : (
-                <MdFavoriteBorder className="shopheart text-3xl " />
-              )}
-              <h1 className="shoplikes text-sm md:text-base lg:text-lg font-bold">
-                {likes}
-              </h1>
-            </div>
-          </div>
-          <div className="additional-text space-y-2 ">
-            <div className="w-full flex items-center">
-              <MdLocationOn className="shopicon text-3xl" />
-              <h1>{location}</h1>
-            </div>
-            <div className="w-full flex items-center">
-              <MdLocalPhone className="shopicon text-3xl" />
-              <h1>+213{phoneNumber}</h1>
-            </div>
-            <div className="w-full flex items-center">
-              <MdStar className="shopicon text-3xl" />
-              {rating} out of 5
-            </div>
-          </div>
-        </div>
-      </div>
-    </>
-  );
-};
+import TrendingItems from "./Landing/TrendingItems";
 
 const ShopCardSlider = () => {
   return (
@@ -320,99 +208,6 @@ const TrendingShops = (props) => {
   );
 };
 
-const TrendingItems = (props) => {
-  const { t } = useTranslation("homepage");
-  return (
-    <div {...props}>
-      <div className="pb-12">
-        <h1 className="primary_txt">{t("items_header")}</h1>
-        <h2 className="secondary_txt">{t("items_subheader")}</h2>
-      </div>
-      <Splide
-        className="mx-auto "
-        options={{
-          type: "loop",
-          gap: "1rem",
-          width: "75%",
-          perPage: 4,
-          perMove: 1,
-          autoplay: true,
-          interval: 2000,
-          pauseOnHover: true,
-          speed: 2500,
-          breakpoints: {
-            640: {
-              perPage: 2,
-              autoplay: false,
-              width: "100%",
-            },
-            1280: {
-              perPage: 2,
-            },
-            1440: {
-              perPage: 3,
-            },
-            435: {
-              perPage: 1,
-              gap: "0.1rem",
-            },
-          },
-        }}
-      >
-        <SplideSlide className="flex justify-center items-center h-full">
-          <Card
-            itemUrl="https://i.pinimg.com/236x/15/9f/fe/159ffe8950c40cf3772ea9aaa2b4707a.jpg"
-            sellerUrl="https://i.pinimg.com/236x/c9/2f/f8/c92ff81bf52804cd4adbe0f36ae519e7.jpg"
-            title="Beige combo"
-            basePrice="970.00"
-            isOnSale={false}
-            isLiked={false}
-            seller="CozyJewels"
-          />
-        </SplideSlide>
-        <SplideSlide className="flex justify-center items-center h-full">
-          <Card
-            itemUrl="https://i.pinimg.com/236x/d3/79/e1/d379e14e2be8b11ffb8981e555b04dbb.jpg"
-            sellerUrl="https://i.pinimg.com/236x/c9/2f/f8/c92ff81bf52804cd4adbe0f36ae519e7.jpg"
-            title="Sunnies trio"
-            basePrice="2970.00"
-            salePrice="2500.00"
-            isOnSale={true}
-            isLiked={true}
-            seller="CozyJewels"
-          />
-        </SplideSlide>
-        <SplideSlide className="flex justify-center items-center h-full">
-          <Card
-            itemUrl="https://i.pinimg.com/236x/b7/4e/ff/b74efffdbede2e482cad12bed2d9a75a.jpg"
-            sellerUrl="https://i.pinimg.com/236x/7f/ea/4c/7fea4c8cd25ec60d360a927ddf45290f.jpg"
-            title="Butterfly heaven"
-            basePrice="990.00"
-            isOnSale={false}
-            isLiked={true}
-            seller="Heavenly"
-          />
-        </SplideSlide>
-        <SplideSlide className="flex justify-center items-center h-full">
-          <Card
-            itemUrl="https://i.pinimg.com/236x/3b/7c/04/3b7c049360ca7983362ee19ba1453d6a.jpg"
-            sellerUrl="https://i.pinimg.com/236x/52/61/47/526147daeabbdc27ef514e879afbcd13.jpg"
-            title="Saddle bag"
-            basePrice="1500.00"
-            isOnSale={true}
-            salePrice="1200.00"
-            isLiked={false}
-            seller="Amore Co."
-          />
-        </SplideSlide>
-        <SplideSlide className="flex justify-center items-center h-full">
-          <Card />
-        </SplideSlide>
-      </Splide>
-    </div>
-  );
-};
-
 const Hero = () => {
   const { t } = useTranslation("homepage");
   const { i18n } = useTranslation();
@@ -470,17 +265,6 @@ const Hero = () => {
   );
 };
 
-const LandingPageOfficial = () => {
-  return (
-    <>
-      <Hero />
-      <TrendingItems className="w-full px-10 pt-12" />
-      <TrendingShops className="w-full px-10 pt-12 " />
-      <Footer />
-    </>
-  );
-};
-
 function useData() {
   const { t } = useTranslation("homepage");
   return {
@@ -532,23 +316,6 @@ const Renderfaq = () => {
       <div className={`flex justify-around items-start ${flexDirection}`}>
         <Faq data={data} styles={styles} config={config} />
         <img className="w-4/12 hidden md:block" src="/images/ask.png" />
-      </div>
-    </>
-  );
-};
-
-const TeamCard = ({ name, role, source }) => {
-  return (
-    <>
-      <div className="flex flex-col items-center Team_container mx-auto my-8 mb-14">
-        <img
-          src={source}
-          className="rounded-full w-[150px] h-[150px] avatar mt-12 object-cover"
-        />
-        <div className="eclipse_one"></div>
-        <div className="eclipse_two"></div>
-        <h1 className="feedback_txt md:text-5xl pt-4 text-4xl">{name}</h1>
-        <h1 className="team_sub w-10/12 text-xl lg:text-2xl pt-2">{role}</h1>
       </div>
     </>
   );
@@ -679,13 +446,14 @@ const Team = () => {
 
 const LandingPage = () => {
   const { t } = useTranslation("homepage");
+
   return (
     <>
       <Hero />
       <h1 className="slogan text-base sm:text-lg md:text-2xl lg:text-4xl pt-8 text-center opacity-60">
         {t("title_coming")}
       </h1>
-      <TrendingItems className="w-full px-10 pt-12" />
+      <TrendingItems />
       <TrendingShops className="w-full px-10 pt-12 " />
       <Renderfaq />
       <Team />
@@ -694,4 +462,4 @@ const LandingPage = () => {
   );
 };
 
-export { LandingPage, TrendingItems, Card, ShopCard };
+export { LandingPage };

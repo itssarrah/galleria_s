@@ -1,3 +1,6 @@
+// Import necessary modules
+import React from "react";
+import { QueryClient, QueryClientProvider } from "react-query";
 import { Nav } from "./components/navbar.jsx";
 import { LandingPage } from "./components/Landingpage.jsx";
 import {
@@ -5,7 +8,6 @@ import {
   BackgroundAssetTwo,
 } from "./components/background.jsx";
 import "./App.css";
-import React from "react";
 import { Businessauth } from "./components/auth/businessauth.jsx";
 import Shop from "./views/shop/shopItemsSorted.jsx";
 import ProductPage from "./views/product/ProductPage.jsx";
@@ -15,9 +17,7 @@ import UserAccountPage from "./views/userAccount/userAccountPage.jsx";
 import UserWishlist from "./components/userAccount/UserWishlist.jsx";
 import UserFeedback from "./components/userAccount/UserFeedback.jsx";
 import UserFavoriteBiz from "./components/userAccount/UserFavoriteBiz.jsx";
-
 import BusinessesProfile from "./views/Profile/BusinessProfile.jsx";
-
 import {
   BrowserRouter as Router,
   Route,
@@ -29,6 +29,9 @@ import "./i18n";
 import UserAuth from "./components/auth/userauth.jsx";
 import Choice from "./components/auth/Choice.jsx";
 import Login from "./components/auth/Login.jsx";
+
+// Create an instance of QueryClient
+const queryClient = new QueryClient();
 
 function MainContent() {
   const location = useLocation();
@@ -45,13 +48,13 @@ function MainContent() {
           <Route path="/businessregistration" element={<Businessauth />} />
           <Route path="/userregistration" element={<UserAuth />} />
           <Route path="/shop" element={<Shop />} />
-          <Route path="/product" element={<ProductPage />} />
+          <Route path="/product/:productId" element={<ProductPage />} />
           <Route path="/choice" element={<Choice />} />
           <Route path="/businessprofile" element={<BusinessesProfile />} />
           <Route path="/login" element={<Login />} />
           <Route path="/addproduct" element={<AddProduct />} />
           {/* <Route path="/user/:userId" element={<UserAccountPage />}></Route> */}
-          // Inside App component
+          {/* Inside App component */}
           <Route path="/profile" element={<UserAccountPage />}>
             <Route index element={<UserWishlist />} />
             <Route path="fav-biz" element={<UserFavoriteBiz />} />
@@ -65,9 +68,11 @@ function MainContent() {
 
 function App() {
   return (
-    <Router>
-      <MainContent />
-    </Router>
+    <QueryClientProvider client={queryClient}>
+      <Router>
+        <MainContent />
+      </Router>
+    </QueryClientProvider>
   );
 }
 

@@ -8,11 +8,16 @@ import ProductDiscount from "../../components/product/productDiscount";
 import { BACKEND_URL } from "../../config";
 import ImageMultipleInput from "../../components/product/ImageMultipleInput";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 import { useTranslation, Trans } from "react-i18next";
 
 function AddProduct() {
   const { t } = useTranslation("auth");
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [userType, setUserType] = useState(null);
   const [formData, setFormData] = useState({
     product_name: "",
     product_description: "",
@@ -27,6 +32,44 @@ function AddProduct() {
 
   const [isFinishDisabled, setIsFinishDisabled] = useState(true);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = localStorage.getItem("authToken");
+        if (!token) {
+          setError("Token not found. Redirecting to login page.");
+          setLoading(false);
+          return;
+        }
+
+        const response = await axios.get(`${BACKEND_URL}api/current_user`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const currentUserType = response.data.user_type;
+        setUserType(currentUserType);
+
+        if (currentUserType !== "business") {
+          setError("User is not a business. Redirecting to unauthorized page.");
+          setLoading(false);
+          navigate(-1);
+          return;
+        }
+
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        setError("Error fetching user data. Redirecting to login page.");
+        setLoading(false);
+        navigate("/login");
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const validateForm = () => {
     let errorList = {};
 
@@ -40,6 +83,9 @@ function AddProduct() {
 
     if (formData.product_name.trim().length < 5) {
       errorList.product_name = "Product name should be at least 5 characters.";
+    }
+    if (formData.product_name.trim().length > 20) {
+      errorList.product_name = "Product name should not exceed 20 characters.";
     }
 
     if (formData.images.length === 0) {
@@ -88,7 +134,14 @@ function AddProduct() {
 
     const productPrice = parseFloat(formData.product_price);
     const salePrice = parseFloat(formData.sale_price);
+    if (isNaN(productPrice) || productPrice <= 100 || productPrice >= 99999) {
+      errorList.product_price =
+        "Product price should be between 100 and 99999.";
+    }
 
+    if (isNaN(salePrice) || salePrice <= 100 || salePrice >= 99999) {
+      errorList.sale_price = "Sale price should be between 100 and 99999.";
+    }
     if (
       !isNaN(productPrice) &&
       !isNaN(salePrice) &&
@@ -129,7 +182,14 @@ function AddProduct() {
         form.append(`categories[${index}]`, category);
       });
 
-      const response = await axios.post(`${BACKEND_URL}api/addproduct`, form);
+      const token = localStorage.getItem("authToken");
+
+      const response = await axios.post(`${BACKEND_URL}api/addproduct`, form, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data", // Make sure to include this header for FormData
+        },
+      });
 
       console.log("Product submitted successfully:", response.data);
       setIsFormSubmitted(true);
@@ -137,6 +197,16 @@ function AddProduct() {
       console.error("Error submitting product:", error);
     }
   };
+
+  if (loading) {
+    // You can render a loading state while waiting for the user type
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    // You can render an error message if there was an issue fetching user data
+    return <div>Error: {error}</div>;
+  }
 
   return (
     <>
