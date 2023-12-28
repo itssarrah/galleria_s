@@ -33,14 +33,20 @@
   width: fit-content;
   height: fit-content;
   font-weight: bolder;
+}
+
+.bg-yes {
   background-image: url("../assets/images/product_asset1.png");
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
+  width: fit-content;
+  height: fit-content;
 }
 
 .product-price > span {
-  color: white;
+  color: #000;
+  font-weight: bold;
   text-align: center;
   display: inline-block;
   width: 100%;
@@ -61,7 +67,6 @@
 
 .heart-icon {
   color: #7d5c3a;
-  margin-top: 1rem;
 }
 
 /* SuggestedProducts */
@@ -193,4 +198,113 @@
 
 .reviews-container::-webkit-scrollbar {
   display: none; /* Safari and Chrome */
+}
+
+/* expansion panel in product details*/
+.expansion-panel {
+  border-radius: 25px;
+  overflow: hidden;
+  max-height: 70px;
+  transition: all 0.3s ease;
+  margin-bottom: 10px;
+  background-color: #fff;
+}
+
+.expansion-panel.expanded {
+  max-height: 100vh;
+  transition: all 0.3s ease;
+}
+
+.expansion-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  cursor: pointer;
+
+  transition: all 0.3s ease;
+}
+
+.expansion-panel-content {
+  padding: 10px;
+}
+
+.arrow {
+  border: solid #000;
+  border-width: 0 2px 2px 0;
+  display: inline-block;
+  padding: 3px;
+  transition: transform 0.3s;
+}
+
+.up {
+  transform: rotate(-135deg);
+}
+
+.down {
+  transform: rotate(45deg);
+}
+.arrow {
+  scale: 1.5;
+}
+.expan_title {
+  color: #7d5c3a;
+  font-family: Sunflower;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.chipbg {
+  background-color: #fdded2;
+  border-radius: 10rem;
+}
+
+.brownbg {
+  color: red;
+}
+
+.label-button-up {
+  color: #000;
+  font-family: Jost;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+
+  border: 3px solid #ff9494;
+  transition: all 0.3s ease-in-out;
+}
+.label-button-up:hover {
+  color: #fff;
+  background-color: #ff9494;
+  transition: all 0.3s ease-in-out;
+}
+
+.product-price {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.on-sale .original-price {
+  text-decoration: line-through;
+  color: #666; /* Change this to your desired color for the original price */
+}
+
+.on-sale .sale-price {
+  color: #ff69b4; /* Change this to your desired color for the sale price */
+}
+
+.bag_btn {
+  background-color: #dd6969;
+  border-radius: 30px;
+  color: #fff;
+  font-family: "Jost";
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.bag_btn:hover {
+  background-color: #c55c5c;
+  transition: all 0.3s ease;
 }

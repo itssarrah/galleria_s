@@ -132,7 +132,7 @@ const Businessauth = () => {
       errorList.password = t("pass_special_error");
     }
     // Phone Number Verification
-    if (!/^[\d]{9}$/.test(formData.phone)) {
+    if (!/^[\d]{10}$/.test(formData.phone)) {
       errorList.phone = t("phone_error");
     }
     // Password Length Verification

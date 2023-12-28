@@ -1,7 +1,8 @@
 import React from "react";
 import Filter from "../shop/Filter";
 import Categories from "../shop/Categories";
-import { ShopCard } from "../Landingpage";
+
+import ShopCard from "../cards/ShopCard";
 
 function UserFavoriteBiz() {
   return (

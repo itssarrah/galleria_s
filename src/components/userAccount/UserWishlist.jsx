@@ -1,84 +1,69 @@
 import React from "react";
+import { useQuery } from "react-query";
 import Filter from "../shop/Filter";
 import Categories from "../shop/Categories";
-import { Card } from "../Landingpage";
+import { BACKEND_URL } from "../../config";
+import ItemCard from "../cards/ItemCard";
+
 function UserWishlist() {
+  const {
+    data: likedProducts = [],
+    isLoading,
+    isError,
+  } = useQuery(
+    "likedProducts",
+    async () => {
+      const token = localStorage.getItem("authToken");
+
+      const response = await fetch(`${BACKEND_URL}api/get-liked-products`, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch liked products");
+      }
+
+      const data = await response.json();
+      return data.likedProducts;
+    },
+    {
+      staleTime: 10000,
+    }
+  );
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  if (isError) {
+    return <p>Error fetching liked products</p>;
+  }
+
   return (
-    <div className="flex items-start w-full  ">
+    <div className="flex items-start w-full">
       <Filter type="false" />
-      <div className="w-fit overflow-x-hidden flex flex-col  pt-8 ">
+      <div className="w-screen min-h-screen overflow-x-hidden flex flex-col pt-8">
         <Categories />
         <div className="mt-12 flex flex-wrap gap-10 lg:gap-16 justify-center">
-          <Card
-            itemUrl="https://i.pinimg.com/236x/3b/7c/04/3b7c049360ca7983362ee19ba1453d6a.jpg"
-            sellerUrl="https://i.pinimg.com/236x/52/61/47/526147daeabbdc27ef514e879afbcd13.jpg"
-            title="Saddle bag"
-            basePrice="1500.00"
-            isOnSale={true}
-            salePrice="1200.00"
-            isLiked={false}
-            seller="Amore Co."
-          />
-          <Card
-            itemUrl="https://i.pinimg.com/236x/3b/7c/04/3b7c049360ca7983362ee19ba1453d6a.jpg"
-            sellerUrl="https://i.pinimg.com/236x/52/61/47/526147daeabbdc27ef514e879afbcd13.jpg"
-            title="Saddle bag"
-            basePrice="1500.00"
-            isOnSale={true}
-            salePrice="1200.00"
-            isLiked={false}
-            seller="Amore Co."
-          />
-          <Card
-            itemUrl="https://i.pinimg.com/236x/3b/7c/04/3b7c049360ca7983362ee19ba1453d6a.jpg"
-            sellerUrl="https://i.pinimg.com/236x/52/61/47/526147daeabbdc27ef514e879afbcd13.jpg"
-            title="Saddle bag"
-            basePrice="1500.00"
-            isOnSale={true}
-            salePrice="1200.00"
-            isLiked={false}
-            seller="Amore Co."
-          />
-          <Card
-            itemUrl="https://i.pinimg.com/236x/3b/7c/04/3b7c049360ca7983362ee19ba1453d6a.jpg"
-            sellerUrl="https://i.pinimg.com/236x/52/61/47/526147daeabbdc27ef514e879afbcd13.jpg"
-            title="Saddle bag"
-            basePrice="1500.00"
-            isOnSale={true}
-            salePrice="1200.00"
-            isLiked={false}
-            seller="Amore Co."
-          />
-          <Card
-            itemUrl="https://i.pinimg.com/236x/3b/7c/04/3b7c049360ca7983362ee19ba1453d6a.jpg"
-            sellerUrl="https://i.pinimg.com/236x/52/61/47/526147daeabbdc27ef514e879afbcd13.jpg"
-            title="Saddle bag"
-            basePrice="1500.00"
-            isOnSale={true}
-            salePrice="1200.00"
-            isLiked={false}
-            seller="Amore Co."
-          />
-          <Card
-            itemUrl="https://i.pinimg.com/236x/3b/7c/04/3b7c049360ca7983362ee19ba1453d6a.jpg"
-            sellerUrl="https://i.pinimg.com/236x/52/61/47/526147daeabbdc27ef514e879afbcd13.jpg"
-            title="Saddle bag"
-            basePrice="1500.00"
-            isOnSale={true}
-            salePrice="1200.00"
-            isLiked={false}
-            seller="Amore Co."
-          />
-          <Card
-            itemUrl="https://i.pinimg.com/236x/3b/7c/04/3b7c049360ca7983362ee19ba1453d6a.jpg"
-            sellerUrl="https://i.pinimg.com/236x/52/61/47/526147daeabbdc27ef514e879afbcd13.jpg"
-            title="Saddle bag"
-            basePrice="1500.00"
-            isOnSale={true}
-            salePrice="1200.00"
-            isLiked={false}
-            seller="Amore Co."
-          />
+          {likedProducts.map((product) => (
+            <ItemCard
+              key={product.id} // Make sure to include a unique key for each mapped item
+              itemUrl={`${BACKEND_URL}storage/${product.images[0].url}`}
+              sellerUrl={`${BACKEND_URL}storage/${product.business.image}`}
+              title={product.product_name}
+              basePrice={product.product_price}
+              salePrice={product.sale_price}
+              isOnSale={product.isOnSale}
+              isLiked={product.isLiked}
+              seller={product.business.businessname}
+              productId={product.id}
+            />
+          ))}
         </div>
       </div>
     </div>

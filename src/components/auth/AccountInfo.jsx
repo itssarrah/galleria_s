@@ -72,7 +72,7 @@ function AccountInformation({
             name="phone"
             placeholder="00 00 00 00"
             IconComponent={PhoneIcon}
-            maxl={9}
+            maxl={10}
             label={t("phone")}
             prefix="+213"
             value={formData.phone}

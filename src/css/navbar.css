@@ -72,16 +72,16 @@
 
 nav {
   width: 100%;
-  z-index: 999999999;
+  z-index: 1000;
 }
 
 nav ul {
-  z-index: 999999999;
+  z-index: 1000;
 }
 
 .bgnav {
   background-color: #fdfdfdd2;
-  z-index: 999999999;
+  z-index: 1000;
 }
 
 nav img {

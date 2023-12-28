@@ -85,9 +85,17 @@
   border-bottom-left-radius: 50%;
   border-bottom-right-radius: 50%;
 }
+.circle_item {
+  border-bottom-left-radius: 50%;
+  border-bottom-right-radius: 50%;
+  background-color: white;
+}
 
 .cardcontainer {
   background-color: white;
+  /* background-image: url("../assets/images/cardbg.png");
+  background-size: 100%;
+  background-repeat: no-repeat; */
 }
 
 .cardtxt {

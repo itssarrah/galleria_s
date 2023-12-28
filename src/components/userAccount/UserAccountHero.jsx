@@ -4,7 +4,10 @@ import AvatarImage from "../AvatarImage";
 import Button from "../ui/Button";
 import { MdOutlineMail } from "react-icons/md";
 import EditPersonalInfo from "./EditPersonalInfo";
-
+import { ContributeBtn } from "../navbar";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { BACKEND_URL } from "../../config";
 export const UserAccountHero = ({
   userId,
   userPictureURL,
@@ -14,6 +17,24 @@ export const UserAccountHero = ({
   const [showModal, setShowModal] = useState(false);
   const openModal = () => setShowModal(true);
   const closeModal = () => setShowModal(false);
+  const navigate = useNavigate();
+  const handleLogout = async () => {
+    try {
+      const token = localStorage.getItem("authToken");
+
+      await axios.post(`${BACKEND_URL}api/logout`, null, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      localStorage.removeItem("authToken");
+      window.location.reload();
+      navigate("/login");
+      console.log("Logout successful");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
 
   return (
     <div className="flex flex-col w-auto gap-5 p-10 md:flex-row md:text-xl items-center  ">
@@ -34,7 +55,7 @@ export const UserAccountHero = ({
               className="px-5 py-3 text-sm md:text-lg lg:text-xl outline-none"
               readOnly
             />
-            <div className="icon-bg">
+            <div className="icon-bg cursor-pointer" onClick={openModal}>
               <img
                 src={DuoTonePenIcon}
                 alt="icon"
@@ -54,9 +75,19 @@ export const UserAccountHero = ({
           className="user-btns mb-0 rounded-full px-5"
           onClick={openModal}
         />
+        <button
+          className="underline text-red-600 font-sunflower mt-4"
+          onClick={handleLogout}
+        >
+          Log out
+        </button>
       </div>
       {showModal && (
-        <EditPersonalInfo userEmail={userEmail} closeModal={closeModal} />
+        <EditPersonalInfo
+          userName={userName}
+          userEmail={userEmail}
+          closeModal={closeModal}
+        />
       )}
     </div>
   );

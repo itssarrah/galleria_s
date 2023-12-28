@@ -13,3 +13,11 @@
 .modal-open {
   overflow: hidden;
 }
+
+.product_header {
+  color: #000;
+  font-family: Sofia;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
