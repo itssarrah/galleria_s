@@ -1,4 +1,4 @@
-import "../../css/input.css";
+import "../../css/ui/input.css";
 import { IconButton } from "./IconButton";
 
 export const InputWrapper = ({

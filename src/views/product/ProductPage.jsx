@@ -6,7 +6,6 @@ import { useParams } from "react-router-dom";
 import { BACKEND_URL } from "../../config";
 import "./product-page.css";
 import * as data from "./dummy-data";
-import SuggestedProducts from "../../components/product/SuggestedProducts";
 import Ratings from "../../components/product/Ratings";
 import Reviews from "../../components/product/Reviews";
 
@@ -72,7 +71,7 @@ const ProductPage = () => {
           <Ratings ratings={data.ratings} />
           <Reviews title={data.title} reviews={data.reviews} />
         </div>
-        <SuggestedProducts products={data.products} />
+        <ProductsContainer products={data.products} />
       </div>
 
       <Footer />
