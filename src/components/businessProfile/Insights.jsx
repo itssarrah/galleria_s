@@ -3,8 +3,19 @@ import { CustomAreaChart, CustomBarChart } from "./Charts";
 import DropdownList from "../ui/DropdownList";
 import TabBar from "../ui/TabBar";
 
+const getSummary = (data, xKey, yKey) => {
+  if (yKey === "bestSeller") {
+    return data.reduce((a, b) => (a[yKey] < b[yKey] ? b : a))[xKey];
+  }
+
+  let total = 0;
+  data.forEach((i) => (total += i[yKey]));
+  return total;
+};
+
 const Insights = ({ data }) => {
   const [graphFor, setGraphFor] = useState("sales");
+  const [summary, setSummary] = useState("");
 
   const sales = {
     data: data.sales,
@@ -12,6 +23,7 @@ const Insights = ({ data }) => {
     unit: "",
     xKey: "x",
     yKey: "sales",
+    summary: "Total Sales of the week: ",
   };
 
   const profit = {
@@ -20,6 +32,7 @@ const Insights = ({ data }) => {
     unit: "DZD",
     xKey: "x",
     yKey: "profit",
+    summary: "Total Profit of the week: ",
   };
 
   const bestSeller = {
@@ -29,6 +42,7 @@ const Insights = ({ data }) => {
     isBarChart: true,
     xKey: "x",
     yKey: "bestSeller",
+    summary: "Best Seller of the week: ",
   };
 
   const typeToData = {
@@ -40,13 +54,21 @@ const Insights = ({ data }) => {
   const [graphInfo, setGraphInfo] = useState(sales);
   useEffect(() => {
     setGraphInfo(typeToData[graphFor]);
+
+    let _summary = typeToData[graphFor].summary;
+    _summary += `${getSummary(
+      typeToData[graphFor].data,
+      typeToData[graphFor].xKey,
+      typeToData[graphFor].yKey
+    )}.`;
+    setSummary(_summary);
   }, [graphFor]);
 
   const handleTabClick = (graph) => setGraphFor(graph);
 
   return (
     <div>
-      <div className="w-screen bg-white my-12 h-24 flex justify-around items-center">
+      <div className="w-full bg-white my-12 h-24 flex justify-around items-center">
         <DropdownList options={["Last week"]} />
         <div>
           <TabBar
@@ -59,13 +81,14 @@ const Insights = ({ data }) => {
           />
         </div>
       </div>
-      <div className="flex justify-center p-10 w-full h-full">
-        {graphInfo.isBarChart ? (
-          <CustomBarChart {...graphInfo} />
-        ) : (
-          <CustomAreaChart {...graphInfo} />
-        )}
-      </div>
+
+      {graphInfo.isBarChart ? (
+        <CustomBarChart {...graphInfo} />
+      ) : (
+        <CustomAreaChart {...graphInfo} />
+      )}
+
+      <p className="text-center"> {summary} </p>
     </div>
   );
 };

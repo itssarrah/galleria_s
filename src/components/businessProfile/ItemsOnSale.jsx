@@ -1,8 +1,12 @@
 import ProductsContainer from "../product/ProductsContainer";
 
-const ItemsOnSale = ({ products = [] }) => (
+const ItemsOnSale = ({ products = [], editable = false }) => (
   <div className="w-full">
-    <ProductsContainer products={products} browseMore={false} />
+    <ProductsContainer
+      products={products}
+      browseMore={false}
+      editable={editable}
+    />
   </div>
 );
 

@@ -9,15 +9,6 @@ import Insights from "../../components/businessProfile/Insights";
 import FeedbackAndReviews from "../../components/businessProfile/FeedbackAndReviews";
 import Footer from "../../components/Footer";
 
-import {
-  ResponsiveContainer,
-  AreaChart,
-  Area,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
-
 const renderTab = (id, activeTab, tabItems) => {
   switch (activeTab) {
     case tabItems[1]:
@@ -31,7 +22,7 @@ const renderTab = (id, activeTab, tabItems) => {
     default:
       return (
         <div className="px-20 mx-auto">
-          <ItemsOnSale products={data[id].products} />
+          <ItemsOnSale products={data[id].products} editable={true} />
         </div>
       );
   }
@@ -48,7 +39,7 @@ const BusinessesProfile = () => {
   return (
     <>
       <div className="w-full">
-        <div className="pr-20 mx-auto">
+        <div className="mx-auto">
           <BusinessProfileDetails {...profileData} />
           <BusinessProfileStats
             likes={20000}
@@ -64,7 +55,11 @@ const BusinessesProfile = () => {
           activeClassName="text-[#FF9494] bg-none"
         />
 
-        <startTransition>{renderTab(id, activeTab, tabItems)}</startTransition>
+        <div className="flex flex-col items-center justify-center">
+          <startTransition className="w-full">
+            {renderTab(id, activeTab, tabItems)}
+          </startTransition>
+        </div>
       </div>
       <Footer />
     </>

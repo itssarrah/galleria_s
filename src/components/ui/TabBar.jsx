@@ -1,5 +1,5 @@
 import React from "react";
-import "../../css/tab.css";
+import "../../css/ui/tab.css";
 import "../../css/userAccount.css";
 
 function TabBar({
@@ -15,7 +15,7 @@ function TabBar({
       {items.map((item) => (
         <h1
           className={`tab-bar ${
-            item == activeTab ? activeClassName : inactiveClassName
+            item === activeTab ? activeClassName : inactiveClassName
           } ${className}`}
           onClick={() => handleTabClick(item)}
         >

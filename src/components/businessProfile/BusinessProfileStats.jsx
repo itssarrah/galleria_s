@@ -22,7 +22,7 @@ const BusinessProfileStats = ({ date, likes = 0, sales = 0 }) => {
     <div className="business-profile-stats mx-auto">
       <IconList
         items={stats}
-        className="text-[#FF9494] text-xl flex flex-row gap-10 w-fit m-auto"
+        className="text-[#FF9494] text-xl flex flex-col md:flex-row gap-10 w-fit m-auto"
       >
         <CiCalendar />
         <FaHeart />

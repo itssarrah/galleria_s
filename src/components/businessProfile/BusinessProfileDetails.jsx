@@ -4,7 +4,6 @@ import { MdLocationPin, MdStar, MdPhone, MdOutlineEmail } from "react-icons/md";
 import { BsCurrencyDollar } from "react-icons/bs";
 import { TbPencilMinus } from "react-icons/tb";
 import Elevated from "./Elevated";
-import { IconButton } from "../ui/IconButton";
 import "../../css/business.css";
 
 const BusinessProfileDetails = ({
@@ -25,10 +24,10 @@ const BusinessProfileDetails = ({
   ];
   return (
     <div className="business-profile-hero">
-      <div className="m-auto flex gap-10 w-[30rem] justify-center">
-        <AvatarImage imageURL={imageURL} className="w-[25rem]" />
+      <div className="flex flex-col md:flex-row gap-10 w-[80%] max-w-[30rem] justify-center items-center">
+        <AvatarImage imageURL={imageURL} className="w-[200px] md:w-[25rem]" />
         <div className="flex flex-col gap-3 w-full">
-          <h1 className="font-sofia font-thin text-7xl mb-5">{userName}</h1>
+          <h1 className="font-sofia font-thin text-5xl md:text-7xl mb-5 text-center">{userName}</h1>
           <Elevated>
             <div className="bg-white rounded-full p-1">
               <MdOutlineEmail color="#F1979A" className="text-2xl" />

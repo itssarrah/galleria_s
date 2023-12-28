@@ -5,6 +5,7 @@ import { ContributeBtn } from "./navbar";
 import bgasset from "../assets/images/landingpage_asset2.png";
 import rightasset from "../assets/images/landingpage_asset1.png";
 import { MdFavorite, MdFavoriteBorder } from "react-icons/md";
+import { TbPencilMinus } from "react-icons/tb";
 import "@splidejs/splide/dist/css/splide.min.css";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import { MdLocationOn, MdLocalPhone, MdStar } from "react-icons/md";
@@ -22,12 +23,13 @@ const Card = ({
   isOnSale = true,
   isLiked = false,
   seller = "SweetyPie",
+  editable = false,
 }) => {
   const discountPercentage = isOnSale
     ? Math.round((1 - parseFloat(salePrice) / parseFloat(basePrice)) * 100)
     : 0;
   return (
-    <div className="min-h-fit relative w-32 sm:w-44 md:w-56 lg:w-64">
+    <div className="min-h-fit relative w-32 sm:w-44 md:w-56 lg:w-64 mx-auto">
       <div className="cardcontainer">
         <img src={itemUrl} alt="Item" className="rounded-3xl px-2 py-2" />
         {isOnSale && (
@@ -60,7 +62,9 @@ const Card = ({
               )}
             </div>
           </div>
-          {isLiked ? (
+          {editable ? (
+            <TbPencilMinus className="text-3xl heart" />
+          ) : isLiked ? (
             <MdFavorite className="heart text-3xl" />
           ) : (
             <MdFavoriteBorder className="heart text-3xl " />

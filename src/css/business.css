@@ -5,9 +5,11 @@
 .business-profile-hero {
   @apply 
   flex flex-col items-center
-  bg-business w-[110%] h-[40rem] bg-cover bg-no-repeat bg-center my-10;
+  py-5
+  md:py-20
+  bg-business w-full h-[40rem] bg-cover bg-no-repeat bg-center my-10;
 }
 
 .business-profile-stats {
-  @apply flex items-center justify-center h-[4rem] w-[70%] font-sunflower bg-white/[.55] mt-[-7%];
+  @apply flex items-center justify-center h-fit py-5 w-[70%] font-sunflower bg-white/[.55] mt-[-7%];
 }

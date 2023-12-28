@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import "../../css/product.css";
 import { useTranslation } from "react-i18next";
 
-const ProductsContainer = ({ products = [], browseMore = true }) => {
+const ProductsContainer = ({ products = [], browseMore = true, editable=false }) => {
   const { t } = useTranslation("product");
   const initialMaxProductDisplay = 8;
   const productsCount = products.length;
@@ -27,10 +27,10 @@ const ProductsContainer = ({ products = [], browseMore = true }) => {
             {`${t("browse_more")}: `}
           </h2>
         )}
-        <div className="grid grid-cols-2 sm:grid-cols-3 2xl:grid-cols-4 3xl:grid-cols-5 gap-y-[2rem] gap-x-10">
+        <div className="grid grid-cols-1 sm:grid-cols-3 2xl:grid-cols-4 3xl:grid-cols-5 gap-y-[2rem] gap-x-10">
           {products.slice(0, maxProductDisplay).map((product, index) => (
             <div className="w-5rem">
-              <Card key={index} {...product} />
+              <Card key={index} {...product} editable={editable} />
             </div>
           ))}
         </div>

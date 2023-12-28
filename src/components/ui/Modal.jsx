@@ -1,4 +1,4 @@
-import "../../css/modal.css";
+import "../../css/ui/modal.css";
 import { AiFillCloseCircle } from "react-icons/ai";
 
 const Modal = ({ children, closeModal = () => {} }) => (
