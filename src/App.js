@@ -17,7 +17,7 @@ import UserAccountPage from "./views/userAccount/userAccountPage.jsx";
 import UserWishlist from "./components/userAccount/UserWishlist.jsx";
 import UserFeedback from "./components/userAccount/UserFeedback.jsx";
 import UserFavoriteBiz from "./components/userAccount/UserFavoriteBiz.jsx";
-import BusinessesProfile from "./views/Profile/BusinessProfile.jsx";
+
 import {
   BrowserRouter as Router,
   Route,
