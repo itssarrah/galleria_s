@@ -20,6 +20,7 @@ const DateInput = ({
   setFormData,
   errorMessage,
   type,
+  isBusiness,
 }) => {
   const { t } = useTranslation("auth");
   const [startDate, setStartDate] = useState(selectedDate);
@@ -30,6 +31,9 @@ const DateInput = ({
 
   const bgClass = type === "white" ? "bgwhite" : "bginput";
   const bgClassIcon = type === "white" ? "bgbeige" : "bg-white";
+  if (!isBusiness) {
+    return null;
+  }
   return (
     <div className="md:w-120 w-64">
       <label htmlFor={id} className="input_label text-sm md:text-lg">
@@ -64,7 +68,14 @@ const DateInput = ({
   );
 };
 
-function PersonalInfo({ formData, setFormData, errors, setErrors, bgtype }) {
+function PersonalInfo({
+  formData,
+  setFormData,
+  errors,
+  setErrors,
+  bgtype,
+  accountType,
+}) {
   const handleInputChange = (e, name) => {
     const value = e.target.value;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -88,6 +99,8 @@ function PersonalInfo({ formData, setFormData, errors, setErrors, bgtype }) {
   }, []);
   const bgClass = bgtype === "white" ? "bgwhite" : "bginput";
   const bgClassIcon = bgtype === "white" ? "bgbeige" : "bg-white";
+  const isBusiness = accountType === "business";
+
   return (
     <>
       <div className=" flex flex-col items-center gap-3">
@@ -137,14 +150,17 @@ function PersonalInfo({ formData, setFormData, errors, setErrors, bgtype }) {
             )}
           </div>
         </div>
-        <DateInput
-          id="birthdate"
-          label={t("birthdate")}
-          selectedDate={FormData.birthdate}
-          setFormData={setFormData}
-          errorMessage={errors.birthdate}
-          type={bgtype}
-        />
+        {isBusiness && (
+          <DateInput
+            id="birthdate"
+            label={t("birthdate")}
+            selectedDate={formData.birthdate}
+            setFormData={setFormData}
+            errorMessage={errors.birthdate}
+            type={bgtype}
+            isBusiness={isBusiness}
+          />
+        )}
       </div>
     </>
   );

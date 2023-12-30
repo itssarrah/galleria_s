@@ -69,7 +69,7 @@ const UserAuth = () => {
     confirmPassword: "",
     fullname: "",
     wilaya: "",
-    birthdate: null,
+    phone: "",
   });
   const [selectedIds, setSelectedIds] = useState([]);
   const handleSelectedIdsChange = (newSelectedIds) => {
@@ -101,6 +101,18 @@ const UserAuth = () => {
     } catch (error) {
       console.error("Error checking email:", error);
       errorList.email = t("error_checking_email");
+    }
+    try {
+      const response = await axios.get(
+        `${BACKEND_URL}api/check-phone?phone=${formData.phone}`
+      );
+
+      if (response.data.exists) {
+        errorList.phone = t("phone_already_exists_error");
+      }
+    } catch (error) {
+      console.error("Error checking email:", error);
+      errorList.phone = t("error_checking_email");
     }
 
     // Password Verification
@@ -137,14 +149,6 @@ const UserAuth = () => {
       errorList.confirmPassword = t("empty_error");
     }
 
-    if (formData.birthdate) {
-      const selectedYear = formData.birthdate.getFullYear();
-      const currentYear = new Date().getFullYear();
-      if (currentYear - selectedYear < 13) {
-        errorList.birthdate = t("birth_error");
-      }
-    }
-
     if (formData.fullname.length < 3) {
       errorList.fullname = t("name_length_error");
     }
@@ -161,8 +165,8 @@ const UserAuth = () => {
       errorList.wilaya = t("empty_error");
     }
 
-    if (!formData.birthdate) {
-      errorList.birthdate = t("empty_error");
+    if (!formData.phone) {
+      errorList.phone = t("empty_error");
     }
 
     // const fileInput = document.getElementById("fileInput");
@@ -207,8 +211,6 @@ const UserAuth = () => {
       actualFormData.append(key, formData[key]);
     }
 
-    const formattedDate = formData.birthdate.toISOString().split("T")[0];
-    actualFormData.set("birthdate", formattedDate);
     actualFormData.set("password_confirmation", formData.confirmPassword);
 
     // Append interests as an array
@@ -286,6 +288,7 @@ const UserAuth = () => {
                   setFormData={setFormData}
                   setErrors={setErrors}
                   bgtype="white"
+                  accountType="user"
                 />
               </div>
             </div>

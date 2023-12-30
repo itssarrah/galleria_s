@@ -4,7 +4,7 @@ import AvatarImage from "../AvatarImage";
 import Button from "../ui/Button";
 import { MdOutlineMail } from "react-icons/md";
 import EditPersonalInfo from "./EditPersonalInfo";
-import { ContributeBtn } from "../navbar";
+
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { BACKEND_URL } from "../../config";

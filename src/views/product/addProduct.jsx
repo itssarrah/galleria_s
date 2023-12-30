@@ -134,20 +134,25 @@ function AddProduct() {
 
     const productPrice = parseFloat(formData.product_price);
     const salePrice = parseFloat(formData.sale_price);
+
     if (isNaN(productPrice) || productPrice <= 100 || productPrice >= 99999) {
       errorList.product_price =
         "Product price should be between 100 and 99999.";
     }
 
-    if (isNaN(salePrice) || salePrice <= 100 || salePrice >= 99999) {
-      errorList.sale_price = "Sale price should be between 100 and 99999.";
-    }
-    if (
-      !isNaN(productPrice) &&
-      !isNaN(salePrice) &&
-      productPrice <= salePrice
-    ) {
-      errorList.sale_price = "Sale price should be Less than Product price.";
+    if (formData.sale_price !== "") {
+      // Check if sale_price is entered
+      if (isNaN(salePrice) || salePrice <= 100 || salePrice >= 99999) {
+        errorList.sale_price = "Sale price should be between 100 and 99999.";
+      }
+
+      if (
+        !isNaN(productPrice) &&
+        !isNaN(salePrice) &&
+        productPrice <= salePrice
+      ) {
+        errorList.sale_price = "Sale price should be less than Product price.";
+      }
     }
 
     setErrors(errorList);

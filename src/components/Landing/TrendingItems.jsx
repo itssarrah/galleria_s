@@ -9,13 +9,13 @@ import { useQuery } from "react-query";
 import axios from "axios";
 import { ClipLoader } from "react-spinners";
 
+const fetchProducts = async () => {
+  const response = await axios.get(`${BACKEND_URL}api/products`);
+  return response.data.data;
+};
+
 const TrendingItems = () => {
   const { t } = useTranslation("homepage");
-
-  const fetchProducts = async () => {
-    const response = await axios.get(`${BACKEND_URL}api/products`);
-    return response.data.data;
-  };
 
   const {
     data: products = [],
@@ -98,4 +98,4 @@ const TrendingItems = () => {
   );
 };
 
-export default TrendingItems;
+export { TrendingItems, fetchProducts };

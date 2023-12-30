@@ -61,7 +61,7 @@ const ReviewCard = ({
       md:flex-row 
       lg:flex-col 
       xl:flex-row 
-      xl:max-w-[100%]"
+      xl:max-w-[100%] "
     >
       {!showFullText && (
         <div
@@ -82,7 +82,7 @@ const ReviewCard = ({
               w-full h-full
               transition-transform
               ease-in-out delay-100
-              hover:scale-125"
+              hover:scale-125 object-cover cursor-pointer"
           />
         </div>
       )}
@@ -115,7 +115,7 @@ const ReviewCard = ({
               </span>
             </p>
           ) : (
-            <p className="bg-white py-3 px-2 my-2 rounded-md">
+            <p className="bg-white py-3 px-2 my-2 rounded-md ">
               {description}{" "}
               <span
                 className="font-bold text-sky-500 cursor-pointer"

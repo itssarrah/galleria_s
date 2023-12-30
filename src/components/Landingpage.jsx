@@ -18,7 +18,7 @@ import { useQuery } from "react-query";
 import TeamCard from "./cards/TeamCard";
 import ShopCard from "./cards/ShopCard";
 
-import TrendingItems from "./Landing/TrendingItems";
+import { TrendingItems } from "./Landing/TrendingItems";
 
 const ShopCardSlider = () => {
   return (

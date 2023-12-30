@@ -72,7 +72,7 @@ const ProductPage = () => {
           <Ratings ratings={data.ratings} />
           <Reviews title={data.title} reviews={data.reviews} />
         </div>
-        <ProductsContainer products={data.products} />
+        {/* <ProductsContainer products={data.products} /> */}
       </div>
 
       <Footer />

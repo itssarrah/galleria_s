@@ -1,9 +1,11 @@
 import "../css/avatar.css";
 
-const AvatarImage = ({ imageURL, className='w-[10rem]'}) => (
-
-  <div className={`avatar-container ${className}`}>
-    <img src={imageURL} className="aspect-square w-full rounded-full" />
+const AvatarImage = ({ imageURL, className }) => (
+  <div className={`avatar-container `}>
+    <img
+      src={imageURL}
+      className={`object-cover aspect-square ${className} rounded-full`}
+    />
   </div>
 );
 

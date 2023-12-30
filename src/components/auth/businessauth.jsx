@@ -117,6 +117,18 @@ const Businessauth = () => {
       console.error("Error checking email:", error);
       errorList.email = t("error_checking_email");
     }
+    try {
+      const response = await axios.get(
+        `${BACKEND_URL}api/check-phone?phone=${formData.phone}`
+      );
+
+      if (response.data.exists) {
+        errorList.phone = t("phone_already_exists_error");
+      }
+    } catch (error) {
+      console.error("Error checking email:", error);
+      errorList.phone = t("error_checking_email");
+    }
 
     // Password Verification
     if (formData.password !== formData.confirmPassword) {
@@ -378,6 +390,7 @@ const Businessauth = () => {
                 formData={formData}
                 setFormData={setFormData}
                 setErrors={setErrors}
+                accountType="business"
               />
             </section>
           )}

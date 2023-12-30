@@ -8,7 +8,15 @@ import ItemCard from "../cards/ItemCard";
 import "../../css/product.css";
 import { useTranslation } from "react-i18next";
 
-const ProductsContainer = ({ products = [], browseMore = true, editable=false }) => {
+import { BACKEND_URL } from "../../config";
+
+const ProductsContainer = ({
+  products = [],
+  seller,
+  seller_image,
+  browseMore = true,
+  editable = false,
+}) => {
   const { t } = useTranslation("product");
   const initialMaxProductDisplay = 8;
   const productsCount = products.length;
@@ -29,10 +37,23 @@ const ProductsContainer = ({ products = [], browseMore = true, editable=false })
             {`${t("browse_more")}: `}
           </h2>
         )}
-        <div className="grid grid-cols-1 sm:grid-cols-3 2xl:grid-cols-4 3xl:grid-cols-5 gap-y-[2rem] gap-x-10">
+        {/* <div className="grid grid-cols-1 sm:grid-cols-3 2xl:grid-cols-4 3xl:grid-cols-5 gap-y-[2rem] gap-x-10"> */}
+        <div className=" flex flex-wrap gap-10 lg:gap-16 justify-center">
           {products.slice(0, maxProductDisplay).map((product, index) => (
             <div className="w-5rem">
-              <ItemCard key={index} {...product} editable={editable} />
+              <ItemCard
+                key={index}
+                itemUrl={`${BACKEND_URL}storage/${product.images[0].url}`}
+                sellerUrl={`${BACKEND_URL}storage/${seller_image}`}
+                title={product.product_name}
+                basePrice={product.product_price}
+                salePrice={product.sale_price}
+                isOnSale={product.isOnSale}
+                isLiked={product.isLiked}
+                seller={seller}
+                productId={product.id}
+                editable={editable}
+              />
             </div>
           ))}
         </div>
