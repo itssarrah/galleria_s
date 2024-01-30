@@ -37,7 +37,7 @@ const BusinessProfile = () => {
   const renderTab = (id, activeTab, tabItems) => {
     switch (activeTab) {
       case tabItems[1]:
-        return <Insights data={data[id]} />;
+        return <Insights data={data[0]} />;
       case tabItems[2]:
         return (
           <div className="px-20 mx-auto">
