@@ -7,7 +7,6 @@ import rightasset from "../assets/images/landingpage_asset1.png";
 import "@splidejs/splide/dist/css/splide.min.css";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import { MdLocationOn, MdLocalPhone, MdStar } from "react-icons/md";
-import Footer from "./Footer";
 import { useTranslation, Trans } from "react-i18next";
 import Faq from "react-faq-component";
 import { useEffect, useState } from "react";
@@ -456,7 +455,6 @@ const LandingPage = () => {
       <TrendingShops className="w-full px-10 pt-12 " />
       <Renderfaq />
       <Team />
-      <Footer />
     </>
   );
 };

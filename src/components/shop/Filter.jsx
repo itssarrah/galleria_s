@@ -1,8 +1,19 @@
+/* eslint-disable */
+
 import React, { useState, useRef, useEffect } from "react";
 import MultiRangeSlider from "./MultiRangeSlider";
 import filterIcon from "../../assets/icons/filter.svg";
+import { useForm } from "react-hook-form";
+
+const wilayasList = [
+  { name: "Adrar" },
+  { name: "Chlef" },
+  { name: "Laghouat" },
+];
 
 const Filter = ({ type }) => {
+  const { register, handleSubmit, watch } = useForm();
+
   const [showFilter, setShowFilter] = useState(false);
   const [isFixed, setIsFixed] = useState(false);
   const toggleFilter = () => {
@@ -41,7 +52,6 @@ const Filter = ({ type }) => {
     { name: "Adrar" },
     { name: "Chlef" },
     { name: "Laghouat" },
-    // Add more wilayas as needed
   ];
   const initialCategories = [
     {
@@ -93,8 +103,18 @@ const Filter = ({ type }) => {
     setSearchResults(filteredWilayas);
   };
 
+  useEffect(() => {
+    const subscription = watch(handleSubmit(onSubmit));
+    return () => subscription.unsubscribe();
+  }, [handleSubmit, watch]);
+
+  function onSubmit(data) {
+    console.log("shiiiiit");
+    console.log(data);
+  }
+
   return (
-    <div className="relative">
+    <form onSubmit={handleSubmit(onSubmit)} className="">
       <button
         className="xl:hidden fixed left-4 bottom-8   px-4 py-2  z-[11] flex items-center"
         onClick={toggleFilter}
@@ -132,6 +152,8 @@ const Filter = ({ type }) => {
                 id="small business"
                 name="format"
                 value="Small business"
+                {...register("sm-buisness")}
+                onChange={handleSubmit(onSubmit)}
               />
               <label>
                 <span className="text-black text-opacity-[70%] font-sunflower text-[18px] text-left">
@@ -141,11 +163,13 @@ const Filter = ({ type }) => {
             </div>
             <div className="flex flex-row gap-[8px] mt-2">
               <input
+                onChange={handleSubmit(onSubmit)}
                 className="relative float-left ml-[1.5rem] mr-1 mt-0.5 h-5 w-5 appearance-none rounded-full border-2 border-solid border-[rgb(255,148,148)] before:pointer-events-none before:absolute before:h-4 before:w-4 before:scale-0 before:rounded-full before:bg-transparent before:opacity-0 before:shadow-[0px_0px_0px_13px_transparent] before:content-[''] after:absolute after:z-[1] after:block after:h-4 after:w-4 after:rounded-full after:content-[''] checked:border-primary checked:before:opacity-[0.16] checked:after:absolute checked:after:left-1/2 checked:after:top-1/2 checked:after:h-[0.625rem] checked:after:w-[0.625rem] checked:after:rounded-full checked:after:border-primary checked:after:bg-primary checked:after:content-[''] checked:after:[transform:translate(-50%,-50%)] hover:cursor-pointer hover:before:opacity-[0.04] hover:before:shadow-[0px_0px_0px_13px_rgba(0,0,0,0.6)] focus:shadow-none focus:outline-none focus:ring-0 focus:before:scale-100 focus:before:opacity-[0.12] focus:before:shadow-[0px_0px_0px_13px_rgba(0,0,0,0.6)] focus:before:transition-[box-shadow_0.2s,transform_0.2s] checked:focus:border-primary checked:focus:before:scale-100 checked:focus:before:shadow-[0px_0px_0px_13px_#3b71ca] checked:focus:before:transition-[box-shadow_0.2s,transform_0.2s] dark:border-[#FF9494] dark:checked:border-primary dark:checked:after:border-primary dark:checked:after:bg-primary  dark:checked:focus:border-primary dark:checked:focus:before:shadow-[0px_0px_0px_13px_#FF9494]"
                 type="radio"
                 id="items"
                 name="format"
                 value="items/products"
+                {...register("items")}
               />
               <label>
                 <span className="text-black text-opacity-[70%] font-sunflower text-[18px] text-left">
@@ -201,6 +225,7 @@ const Filter = ({ type }) => {
             <div className="search-input-container">
               <div className="relative flex flex-row items-start justify-center ">
                 <input
+                  {...register("wilayas")}
                   type="search"
                   list="wilayas"
                   placeholder="type..."
@@ -234,7 +259,7 @@ const Filter = ({ type }) => {
           )}
         </div>
       </div>
-    </div>
+    </form>
   );
 };
 export default Filter;
