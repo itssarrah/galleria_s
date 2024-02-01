@@ -33,6 +33,7 @@ import BusinessesProfile from "./views/Profile/BusinessProfile.jsx";
 import ItemsOnSale from "./components/businessProfile/ItemsOnSale.jsx";
 import Insights from "./components/businessProfile/Insights.jsx";
 import FeedbackAndReviews from "./components/businessProfile/FeedbackAndReviews.jsx";
+import ChatPage from "./views/chat/ChatPage.jsx";
 
 // Create an instance of QueryClient
 const queryClient = new QueryClient();
@@ -69,6 +70,7 @@ function MainContent() {
             <Route path="insights" element={<Insights />} />
             <Route path="feedback" element={<FeedbackAndReviews />} />
           </Route>
+          <Route path={"/chat"} element={<ChatPage/>} />
         </Routes>
       </div>
     </div>
