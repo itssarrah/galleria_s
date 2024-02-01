@@ -1,6 +1,19 @@
 .slider {
   position: relative;
+<<<<<<< HEAD
   width: 200px;
+=======
+  width: 100%;
+}
+
+.min {
+  position: absolute;
+  left: 0;
+}
+.max {
+  position: absolute;
+  right: 0;
+>>>>>>> a9a40f42dba8d42f92fff34ac5863b6abe7e354f
 }
 
 .slider__track,
@@ -21,7 +34,6 @@
   z-index: 2;
 }
 
-/* Removing the default appearance */
 .thumb,
 .thumb::-webkit-slider-thumb {
   -webkit-appearance: none;
@@ -44,12 +56,14 @@
   z-index: 4;
 }
 
-/* For Chrome browsers */
 .thumb::-webkit-slider-thumb {
   background-color: #744638;
   border: none;
   border-radius: 50%;
+<<<<<<< HEAD
 
+=======
+>>>>>>> a9a40f42dba8d42f92fff34ac5863b6abe7e354f
   cursor: pointer;
   height: 18px;
   width: 18px;
@@ -58,7 +72,6 @@
   position: relative;
 }
 
-/* For Firefox browsers */
 .thumb::-moz-range-thumb {
   background-color: #744638;
   border: none;
@@ -82,8 +95,112 @@
 
 .slider__right-value {
   left: 160px;
+<<<<<<< HEAD
+}
+.value {
+  position: relative;
+  margin-bottom: 37%;
+=======
+>>>>>>> a9a40f42dba8d42f92fff34ac5863b6abe7e354f
 }
 .value {
   position: relative;
   margin-bottom: 37%;
 }
+
+/* 
+.slider {
+  position: relative;
+  width: 200px;
+}
+
+.slider__track,
+.slider__range,
+.slider__left-value,
+.slider__right-value {
+  position: absolute;
+}
+
+.slider__track,
+.slider__range {
+  border-radius: 3px;
+  height: 5px;
+}
+
+.slider__track {
+  background-color: #ff9494;
+  width: 100%;
+  z-index: 1;
+}
+
+.slider__range {
+  background-color: #744638;
+  z-index: 2;
+}
+
+.slider__left-value,
+.slider__right-value {
+  color: #dee2e6;
+  font-size: 12px;
+  margin-top: 20px;
+}
+
+.slider__left-value {
+  left: 6px;
+}
+
+.slider__right-value {
+  right: -4px;
+}
+
+.thumb,
+.thumb::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.thumb {
+  pointer-events: none;
+  position: absolute;
+  height: 0;
+  width: 200px;
+  outline: none;
+}
+
+.thumb--zindex-3 {
+  z-index: 3;
+}
+
+.thumb--zindex-4 {
+  z-index: 4;
+}
+
+.thumb--zindex-5 {
+  z-index: 5;
+}
+
+.thumb::-webkit-slider-thumb {
+  background-color: #744638;
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0 0 1px 1px #ced4da;
+  cursor: pointer;
+  height: 18px;
+  width: 18px;
+  margin-top: 4px;
+  pointer-events: all;
+  position: relative;
+}
+
+.thumb::-moz-range-thumb {
+  background-color: #744638;
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0 0 1px 1px #ced4da;
+  cursor: pointer;
+  height: 18px;
+  width: 18px;
+  margin-top: 4px;
+  pointer-events: all;
+  position: relative;
+} */

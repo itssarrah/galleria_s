@@ -68,7 +68,7 @@ function Nav() {
   const location = useLocation();
   const isRegistrationPage = location.pathname === "/businessregistration";
 
-  React.useEffect(() => {
+  useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY >= 350) {
         setIsFixed(true);
@@ -134,10 +134,10 @@ function Nav() {
 
   return (
     <nav
-      className={`flex ${
+      className={` flex ${
         i18n.language === "ar" ? "sm:flex-row-reverse" : "sm:flex-row"
       } items-start sm:items-center  pt-2 sm:px-8 sm:justify-between px-0 flex-col p-4 z-[100] ${
-        !isRegistrationPage && isFixed ? "fixed top-0 bgnav sm:mt-0" : " "
+        !isRegistrationPage && isFixed ? "sticky top-0 bgnav sm:mt-0" : " "
       } ${isOpen ? "bg-white" : ""}`}
     >
       <Link to="/">

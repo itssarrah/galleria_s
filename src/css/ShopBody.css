@@ -1,0 +1,14 @@
+.body {
+  display: flex;
+  /* background-color: red; */
+  /* display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-columns: 20rem 1fr; */
+  position: relative;
+
+  & > div:last-child {
+    background-color: red;
+    /* grid-column: /-1; */
+    flex-grow: 1;
+  }
+}

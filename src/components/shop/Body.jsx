@@ -2,13 +2,17 @@ import React from "react";
 import Filter from "./Filter";
 import Categories from "./Categories";
 import { useState } from "react";
-import SearchIcon from "../../assets/icons/searchIcon";
 import { fetchProducts } from "../Landing/TrendingItems";
 import { useQuery } from "react-query";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import "@splidejs/splide/dist/css/splide.min.css";
 import ItemCard from "../cards/ItemCard";
 import { BACKEND_URL } from "../../config";
+import Search from "./Search";
+
+import "../../css/ShopBody.css";
+import Filter1 from "./Filter1";
+
 const Body = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -26,26 +30,18 @@ const Body = () => {
   });
 
   return (
-    <div className="w-full flex flex-row">
-      <Filter />
-      <div className="w-full">
-        <div className="flex justify-center">
-          <input
-            type="text"
-            placeholder="Search..."
-            value={searchTerm}
-            onChange={handleSearch}
-            className=" border border-main__pink rounded-full py-3 px-[20px] w-3/4 shadow-md mb-4"
-          />
-          <button
-            className="relative  h-5 w-10 rounded-full bg-main__pink text-white flex items-start  cursor-pointer right-12 bottom-1"
-            onClick={() => {
-              setSearchTerm("");
-            }}
-          >
-            <SearchIcon className="h-5 w-5" />
-          </button>
-        </div>
+    // <div className="body w-full flex flex-row">
+    <div className="body ">
+      {/* <Filter /> */}
+      <Filter1 />
+
+      <div>
+        {/* <div className="w-full"> */}
+        <Search
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          handleSearch={handleSearch}
+        />
         <Categories searchTerm={searchTerm} />
         <div className="mt-10">
           <h1 className="font-sofia text-lg md:text-3xl pl-8">
