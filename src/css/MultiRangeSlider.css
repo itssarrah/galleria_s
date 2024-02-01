@@ -1,8 +1,5 @@
 .slider {
   position: relative;
-<<<<<<< HEAD
-  width: 200px;
-=======
   width: 100%;
 }
 
@@ -13,7 +10,6 @@
 .max {
   position: absolute;
   right: 0;
->>>>>>> a9a40f42dba8d42f92fff34ac5863b6abe7e354f
 }
 
 .slider__track,
@@ -60,10 +56,6 @@
   background-color: #744638;
   border: none;
   border-radius: 50%;
-<<<<<<< HEAD
-
-=======
->>>>>>> a9a40f42dba8d42f92fff34ac5863b6abe7e354f
   cursor: pointer;
   height: 18px;
   width: 18px;
@@ -95,13 +87,6 @@
 
 .slider__right-value {
   left: 160px;
-<<<<<<< HEAD
-}
-.value {
-  position: relative;
-  margin-bottom: 37%;
-=======
->>>>>>> a9a40f42dba8d42f92fff34ac5863b6abe7e354f
 }
 .value {
   position: relative;

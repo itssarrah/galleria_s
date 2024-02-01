@@ -6,12 +6,7 @@ import bgasset from "../assets/images/landingpage_asset2.png";
 import rightasset from "../assets/images/landingpage_asset1.png";
 import "@splidejs/splide/dist/css/splide.min.css";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
-<<<<<<< HEAD
 
-import Footer from "./Footer";
-=======
-import { MdLocationOn, MdLocalPhone, MdStar } from "react-icons/md";
->>>>>>> a9a40f42dba8d42f92fff34ac5863b6abe7e354f
 import { useTranslation, Trans } from "react-i18next";
 import Faq from "react-faq-component";
 
