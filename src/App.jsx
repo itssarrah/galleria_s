@@ -1,7 +1,5 @@
-// Import necessary modules
 import React from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { Nav } from "./components/navbar.jsx";
 import { LandingPage } from "./components/Landingpage.jsx";
 import {
   BackgroundAsset,
@@ -18,14 +16,9 @@ import UserWishlist from "./components/userAccount/UserWishlist.jsx";
 import UserFeedback from "./components/userAccount/UserFeedback.jsx";
 import UserFavoriteBiz from "./components/userAccount/UserFavoriteBiz.jsx";
 
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  useLocation,
-} from "react-router-dom";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 
-import "./i18n";
+import "./i18n.js";
 import UserAuth from "./components/auth/userauth.jsx";
 import Choice from "./components/auth/Choice.jsx";
 import Login from "./components/auth/Login.jsx";
@@ -34,25 +27,27 @@ import ItemsOnSale from "./components/businessProfile/ItemsOnSale.jsx";
 import Insights from "./components/businessProfile/Insights.jsx";
 import FeedbackAndReviews from "./components/businessProfile/FeedbackAndReviews.jsx";
 import ChatPage from "./views/chat/ChatPage.jsx";
+import AppLayout from "./components/ui/AppLayout.jsx";
 
-// Create an instance of QueryClient
 const queryClient = new QueryClient();
 
 function MainContent() {
-  const location = useLocation();
-
   return (
     <div className="App">
-      {location.pathname !== "/choice" &&
-        location.pathname !== "/addproduct" && <Nav />}
       <BackgroundAsset position="top-left" />
       <BackgroundAssetTwo position="top-right" />
-      <div className="content">
+      {/* <div className="content"> */}
+
+      <BrowserRouter>
         <Routes>
-          <Route path="/" element={<LandingPage />} />
+          <Route element={<AppLayout />}>
+            <Route index element={<Navigate replace to="home" />} />
+
+            <Route path="/home" element={<LandingPage />} />
+            <Route path="/shop" element={<Shop />} />
+          </Route>
           <Route path="/businessregistration" element={<Businessauth />} />
           <Route path="/userregistration" element={<UserAuth />} />
-          <Route path="/shop" element={<Shop />} />
           <Route path="/product/:productId" element={<ProductPage />} />
           <Route path="/choice" element={<Choice />} />
           <Route path="/businessprofile" element={<BusinessesProfile />} />
@@ -70,9 +65,10 @@ function MainContent() {
             <Route path="insights" element={<Insights />} />
             <Route path="feedback" element={<FeedbackAndReviews />} />
           </Route>
-          <Route path={"/chat"} element={<ChatPage/>} />
+          <Route path={"/chat"} element={<ChatPage />} />
         </Routes>
-      </div>
+      </BrowserRouter>
+      {/* </div> */}
     </div>
   );
 }
@@ -80,9 +76,7 @@ function MainContent() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <Router>
-        <MainContent />
-      </Router>
+      <MainContent />
     </QueryClientProvider>
   );
 }
