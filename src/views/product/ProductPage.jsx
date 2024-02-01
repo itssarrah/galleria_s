@@ -8,7 +8,6 @@ import "./product-page.css";
 import * as data from "./dummy-data";
 import Ratings from "../../components/product/Ratings";
 import Reviews from "../../components/product/Reviews";
-import ProductsContainer from "../../components/product/ProductsContainer";
 
 const fetchProduct = async (productId) => {
   const response = await fetch(`${BACKEND_URL}api/product/${productId}`);
@@ -16,7 +15,7 @@ const fetchProduct = async (productId) => {
     throw new Error("Error fetching product data");
   }
   const data = await response.json();
-  console.log("Product Data:", data); // Log the response data
+  console.log("Product Data:", data);
   return data.data;
 };
 

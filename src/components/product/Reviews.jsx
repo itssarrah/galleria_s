@@ -122,18 +122,25 @@ const Reviews = ({ title = "Layer cake for birthdays", reviews = [] }) => {
       {reviews.length > 0 ? (
         <div>
           <div className="flex flex-col gap-6">
-            <div className="mt-10 lg:mt-0">
-              <h2
-                className="product-title mb-1 md:mb-5 text-2xl lg:text-3xl xl:text-4xl"
-                dir={direction}
-              >
-                {t("top_reviews")}
-              </h2>
-              <p className="text-md text-[#666666]" dir={direction}>
-                {t("swipe_more")}
-              </p>
+            <div className="flex items-center w-full justify-between">
+              <div className="mt-10 lg:mt-0">
+                <h2
+                  className="product-title mb-1 md:mb-5 text-2xl lg:text-3xl xl:text-4xl"
+                  dir={direction}
+                >
+                  {t("top_reviews")}
+                </h2>
+                <p className="text-md text-[#666666]" dir={direction}>
+                  {t("swipe_more")}
+                </p>
+              </div>
+              <button className=" hidden md:block py-2 px-4 bg-[#DD6969] font-jost text-white rounded-xl ">
+                + Add Review
+              </button>
+              <button className="block md:hidden py-2 px-4 bg-[#DD6969] font-jost text-white rounded-xl ">
+                + Add
+              </button>
             </div>
-
             <Splide>
               {reviews.map((review, index) => (
                 <SplideSlide key={`ss-${index}`} className="p-3">

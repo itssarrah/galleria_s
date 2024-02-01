@@ -40,7 +40,7 @@ function ShopCard({
             </div>
             <div className="w-full flex items-center">
               <MdLocalPhone className="shopicon text-3xl" />
-              <h1>+213{phoneNumber}</h1>
+              <h1>+213-{phoneNumber}</h1>
             </div>
             <div className="w-full flex items-center">
               <MdStar className="shopicon text-3xl" />
