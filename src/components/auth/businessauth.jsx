@@ -110,9 +110,13 @@ const Businessauth = () => {
         `${BACKEND_URL}api/check-email?email=${formData.email}`
       );
 
+      console.log(response.data);
+      console.log(response);
+
       if (response.data.exists) {
         errorList.email = t("email_already_exists_error");
       }
+      console.log("checked email");
     } catch (error) {
       console.error("Error checking email:", error);
       errorList.email = t("error_checking_email");
