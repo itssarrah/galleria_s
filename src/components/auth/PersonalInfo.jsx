@@ -83,22 +83,7 @@ function PersonalInfo({
   };
   const { t } = useTranslation("auth");
   const [wilayas, setWilayas] = useState([]);
-
   const { i18n } = useTranslation();
-
-  // useEffect(() => {
-  //   fetch(`${BACKEND_URL}api/wilayas`)
-  //     .then((response) => {
-  //       if (!response.ok) {
-  //         throw new Error("Network response was not ok");
-  //       }
-  //       return response.json();
-  //     })
-  //     .then((data) => setWilayas(data))
-  //     .catch((error) =>
-  //       console.error("There was a problem with the fetch operation:", error)
-  //     );
-  // }, []);
   useEffect(() => {
     fetch(`${BACKEND_URL}api/wilayas`)
       .then((response) => {
@@ -107,18 +92,11 @@ function PersonalInfo({
         }
         return response.json();
       })
-      .then((data) => {
-        console.log("Wilayas data:", data); // Log the response data
-        setWilayas(data);
-      })
+      .then((data) => setWilayas(data))
       .catch((error) =>
         console.error("There was a problem with the fetch operation:", error)
       );
   }, []);
-
-  // Add this after the useEffect to log the state
-  console.log("Wilayas state:", wilayas);
-
   const bgClass = bgtype === "white" ? "bgwhite" : "bginput";
   const bgClassIcon = bgtype === "white" ? "bgbeige" : "bg-white";
   const isBusiness = accountType === "business";

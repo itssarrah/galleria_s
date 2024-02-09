@@ -73,8 +73,6 @@ const ProductPage = () => {
         </div>
         {/* <ProductsContainer products={data.products} /> */}
       </div>
-
-      <Footer />
     </>
   );
 };

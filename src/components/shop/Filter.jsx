@@ -160,7 +160,7 @@ const Filter = ({ type }) => {
         }`}
       >
         <p className="text-center text-[30px] font-sunflower text-[rgb(255,148,148)] font-bold mt-12">
-          FILTER
+          FILTER here
         </p>
         <div className="flex flex-col items-start justify-start px-2 py-8 gap-[20px]">
           <Format type={type} formData={formData} setFormData={setFormData} />

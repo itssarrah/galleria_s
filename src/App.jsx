@@ -36,6 +36,7 @@ function MainContent() {
     <div className="App">
       <BackgroundAsset position="top-left" />
       <BackgroundAssetTwo position="top-right" />
+
       {/* <div className="content"> */}
 
       <BrowserRouter>
@@ -45,13 +46,15 @@ function MainContent() {
 
             <Route path="/home" element={<LandingPage />} />
             <Route path="/shop" element={<Shop />} />
+            <Route path="/product/:productId" element={<ProductPage />} />
+            <Route path="/businessprofile" element={<BusinessesProfile />} />
+            <Route path="/login" element={<Login />} />
           </Route>
           <Route path="/businessregistration" element={<Businessauth />} />
           <Route path="/userregistration" element={<UserAuth />} />
-          <Route path="/product/:productId" element={<ProductPage />} />
+
           <Route path="/choice" element={<Choice />} />
-          <Route path="/businessprofile" element={<BusinessesProfile />} />
-          <Route path="/login" element={<Login />} />
+
           <Route path="/addproduct" element={<AddProduct />} />
           {/* <Route path="/user/:userId" element={<UserAccountPage />}></Route> */}
           {/* Inside App component */}

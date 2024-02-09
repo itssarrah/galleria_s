@@ -12,12 +12,12 @@ function TrendingShops(props) {
     isLoading,
     isError,
   } = useQuery("topCategoriesAndBusinesses", async () => {
-    const response = await fetch(
-      `${BACKEND_URL}api/top-categories-and-businesses`
-    );
-    const data = await response.json();
-    console.log(data);
-    return data;
+    // const response = await fetch(
+    //   `${BACKEND_URL}api/top-businesses-by-category`
+    // );
+    // const data = await response.json();
+    // console.log(data);
+    // return data;
   });
 
   if (isLoading) {

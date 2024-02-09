@@ -105,7 +105,7 @@ function Filter1() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="filtre">
       <p className="text-center text-[30px] font-sunflower text-[rgb(255,148,148)] font-bold mt-12">
-        FILTER
+        FILTER here
       </p>
       <div className={` format flex-col gap-3`}>
         <p className="text-black font-sofia text-[22px] text-left">Format :</p>
