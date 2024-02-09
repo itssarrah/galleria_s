@@ -2,39 +2,25 @@ import React, { useState, useRef, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
 import classnames from "classnames";
 import "../../css/MultiRangeSlider.css";
-import "../../css/Filtre.css";
 
-const MultiRangeSlider = ({
-  min,
-  max,
-  onChange,
-  register,
-  // handleSubmit,
-  // onSubmit,
-}) => {
+const MultiRangeSlider = ({ min, max, onChange }) => {
   // Creating the state variables
   const [minVal, setMinVal] = useState(min);
   const [maxVal, setMaxVal] = useState(max);
 
+  // Creating the refs
   const minValRef = useRef(null);
   const maxValRef = useRef(null);
   const range = useRef(null);
 
-  const { ref: minRefCallback, ...minRest } = register("min");
-  const { ref: maxRefCallback, ...maxRest } = register("max");
-
   // Convert to percentage
   const getPercent = useCallback(
-    (value) => ((value - min) / (max - min)) * 100,
+    (value) => Math.round(((value - min) / (max - min)) * 100),
     [min, max]
   );
 
+  // Set width of the range to decrease from the left side
   useEffect(() => {
-    setMinVal(min);
-    setMaxVal(max);
-  }, [min, max]);
-
-  const updateSlider = () => {
     if (maxValRef.current) {
       const minPercent = getPercent(minVal);
       const maxPercent = getPercent(+maxValRef.current.value);
@@ -44,7 +30,10 @@ const MultiRangeSlider = ({
         range.current.style.width = `${maxPercent - minPercent}%`;
       }
     }
+  }, [minVal, max, maxValRef, range, getPercent]);
 
+  // Set width of the range to decrease from the right side
+  useEffect(() => {
     if (minValRef.current) {
       const minPercent = getPercent(+minValRef.current.value);
       const maxPercent = getPercent(maxVal);
@@ -53,9 +42,12 @@ const MultiRangeSlider = ({
         range.current.style.width = `${maxPercent - minPercent}%`;
       }
     }
+  }, [min, maxVal, minValRef, range, getPercent]);
 
+  // Get min and max values when their state changes
+  useEffect(() => {
     onChange({ min: minVal, max: maxVal });
-  };
+  }, [minVal, maxVal, onChange]);
 
   return (
     <>
@@ -65,51 +57,39 @@ const MultiRangeSlider = ({
           min={min}
           max={max}
           value={minVal}
-          {...minRest}
-          ref={(e) => {
-            minRefCallback(e);
-            minValRef.current = e;
-          }}
+          ref={minValRef}
           onChange={(event) => {
             const value = Math.min(+event.target.value, maxVal - 1);
             setMinVal(value);
-            updateSlider();
             event.target.value = value.toString();
-            // handleSubmit(onSubmit)();
           }}
-          className={classnames(" min thumb thumb--zindex-3", {
-            " thumb--zindex-5": minVal > max - 100,
+          className={classnames("thumb thumb--zindex-3", {
+            "thumb--zindex-5": minVal > max - 100,
           })}
-          name="minPrice"
         />
         <input
           type="range"
           min={min}
           max={max}
           value={maxVal}
-          {...maxRest}
-          ref={(e) => {
-            maxRefCallback(e);
-            maxValRef.current = e;
-          }}
+          ref={maxValRef}
           onChange={(event) => {
             const value = Math.max(+event.target.value, minVal + 1);
             setMaxVal(value);
-            updateSlider();
+            event.target.value = value.toString();
           }}
           className="thumb thumb--zindex-4"
-          name="maxPrice"
         />
       </div>
       <div className="slider">
         <div className="slider__track" />
         <div ref={range} className="slider__range" />
       </div>
-      <div className=" price-values flex flex-row justify-between w-full">
+      <div className=" flex flex-row justify-between w-full">
         <div className="slider__left-value bg-[#FF9494] h-full w-fit  py-1 px-2 rounded-xl font-sofia text-sm md:text-base xl:text-lg font-medium">
           {minVal}da
         </div>
-        <div className="slider__right-value bg-[#FF9494] h-full w-fit py-1 px-2 rounded-xl font-jost text-sm md:text-base xl:text-lg font-medium">
+        <div className="slider__right-value bg-[#FF9494] h-full w-fit py-1 px-2 rounded-xl font-sofia text-sm md:text-base xl:text-lg font-medium">
           {maxVal}da{" "}
         </div>
       </div>
@@ -117,6 +97,7 @@ const MultiRangeSlider = ({
   );
 };
 
+// Define PropTypes outside the component
 MultiRangeSlider.propTypes = {
   min: PropTypes.number.isRequired,
   max: PropTypes.number.isRequired,

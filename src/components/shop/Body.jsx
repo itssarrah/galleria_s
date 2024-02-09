@@ -33,7 +33,7 @@ const Body = () => {
     // <div className="body w-full flex flex-row">
     <div className="body ">
       {/* <Filter /> */}
-      <Filter1 />
+      <Filter />
 
       <div>
         {/* <div className="w-full"> */}
