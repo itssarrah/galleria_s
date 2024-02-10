@@ -62,7 +62,7 @@ const ProductPage = () => {
             }
             images={product.images}
             description={product.product_description}
-            location={product.business.wilaya}
+            location={product.business.wilaya.name}
             phoneNumber={product.business.phone}
             seller={product.business.businessname}
           />

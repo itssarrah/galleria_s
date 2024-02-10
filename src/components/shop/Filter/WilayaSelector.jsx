@@ -30,11 +30,13 @@ function WilayaSelector({
     }
   };
 
-  const removeWilaya = (indexToRemove) => {
+  const removeWilaya = (e, indexToRemove) => {
+    e.preventDefault(); // Prevent default behavior
     setSelectedWilayas((prevSelectedWilayas) =>
       prevSelectedWilayas.filter((_, index) => index !== indexToRemove)
     );
   };
+
   return (
     <>
       <p className="text-black font-sofia text-[22px] text-left">Wilaya :</p>
@@ -82,7 +84,7 @@ function WilayaSelector({
                   <span className="text-gray-700 mr-2">{wilaya}</span>
                   <button
                     className="text-[#744638] font-bold focus:outline-none"
-                    onClick={() => removeWilaya(index)}
+                    onClick={(e) => removeWilaya(e, index)}
                   >
                     x
                   </button>

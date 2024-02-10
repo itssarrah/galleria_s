@@ -7,25 +7,78 @@ import useWilayas from "../../api/wilayas";
 import WilayaSelector from "./Filter/WilayaSelector";
 import FormatSelector from "./Filter/FormatSelector";
 import CategorySelector from "./Filter/CategorySelector";
+import { BACKEND_URL } from "../../config";
+import useBusinessesWithCategoryCount from "../../api/businessesWithCategoryCount";
 
-const Filter = ({ type, setFilteredProducts, products }) => {
+const Filter = ({
+  type,
+  setFilteredProducts,
+  products,
+  setSelectedFormat,
+  selectedFormat,
+}) => {
   const [showFilter, setShowFilter] = useState(false);
   const [isFixed, setIsFixed] = useState(false);
-  const { data: categoriesData, isLoading, isError } = useCategorieCount();
+  const {
+    data: categoriesData,
+    isLoading: isCategoriesLoading,
+    isError: isCategoriesError,
+  } = useCategorieCount();
+  const {
+    data: businessesData,
+    isLoading: isBusinessesLoading,
+    isError: isBusinessesError,
+  } = useBusinessesWithCategoryCount();
+  const timerRef = useRef(null);
+
+  const handlePriceChange = ({ min, max }) => {
+    // Clear the previous timer
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
+
+    // Set a new timer to update the price range after 500 milliseconds
+    timerRef.current = setTimeout(() => {
+      // Check if the new price range is different from the previous one
+      if (min !== priceRange.min || max !== priceRange.max) {
+        setPriceRange({ min, max });
+      }
+    }, 500);
+  };
 
   useEffect(() => {
-    if (isError) {
-      console.log("err");
+    if (selectedFormat === "Small business") {
+      if (isBusinessesError) {
+        console.log("Error fetching businesses:", isBusinessesError);
+      }
+      if (businessesData && businessesData.length > 0) {
+        // Process business data to extract category names
+        const businessCategoryNames = businessesData.map((business) => ({
+          name: business.category_name,
+          num_search: business.count,
+        }));
+        setCategories(businessCategoryNames);
+      }
+    } else {
+      if (isCategoriesError) {
+        console.log("Error fetching categories:", isCategoriesError);
+      }
+      if (categoriesData && categoriesData.length > 0) {
+        // Process categories data to extract category names
+        const categoryNames = categoriesData.map((category) => ({
+          name: category.en_name,
+          num_search: category.products_count,
+        }));
+        setCategories(categoryNames);
+      }
     }
-    if (categoriesData && categoriesData.length > 0) {
-      // Extract the category names from the data and set them in the state
-      const categoryNames = categoriesData.map((category) => ({
-        name: category.en_name, // Assuming you want to use English names
-        num_search: category.products_count, // Assuming this property exists in your category data
-      }));
-      setCategories(categoryNames);
-    }
-  }, [categoriesData]);
+  }, [
+    selectedFormat,
+    categoriesData,
+    businessesData,
+    isCategoriesError,
+    isBusinessesError,
+  ]);
 
   const { data: wilayasData, isWilayaLoading, isWilayaError } = useWilayas();
   const [wilayas, setWilayas] = useState(null);
@@ -56,9 +109,9 @@ const Filter = ({ type, setFilteredProducts, products }) => {
   //end
   //@Formdata
   const [formData, setFormData] = useState(new FormData());
-  const [selectedFormat, setSelectedFormat] = useState("items/products");
+  // const [selectedFormat, setSelectedFormat] = useState("items/products");
   const [selectedCategories, setSelectedCategories] = useState([]);
-  const [priceRange, setPriceRange] = useState({ min: 0, max: 1000 });
+  const [priceRange, setPriceRange] = useState({ min: 0, max: 10000 });
   const [categories, setCategories] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
   const [selectedWilayas, setSelectedWilayas] = useState([]);
@@ -90,7 +143,7 @@ const Filter = ({ type, setFilteredProducts, products }) => {
 
           console.log("Form Data:", formData); // Log the form data
 
-          const response = await fetch("your_backend_endpoint", {
+          const response = await fetch(`${BACKEND_URL}api/filter`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -101,8 +154,8 @@ const Filter = ({ type, setFilteredProducts, products }) => {
           if (!response.ok) {
             throw new Error("Failed to fetch filtered products");
           }
-
           const data = await response.json();
+          console.log(data);
           setFilteredProducts(data); // Assuming the response contains filtered products
         } catch (error) {
           console.error("Error fetching filtered products:", error);
@@ -199,8 +252,9 @@ const Filter = ({ type, setFilteredProducts, products }) => {
             </p>
             <MultiRangeSlider
               min={0}
-              max={1000}
-              onChange={({ min, max }) => console.log(max, min)}
+              max={10000}
+              onChange={handlePriceChange}
+              //onChange={({ min, max }) => console.log(max, min)}
               // onChange={({ min, max }) => setPriceRange({ min, max })}
             />
             <WilayaSelector

@@ -14,6 +14,7 @@ import SearchIcon from "../../assets/icons/searchIcon";
 const Body = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredProducts, setFilteredProducts] = useState([]);
+  const [selectedFormat, setSelectedFormat] = useState("items/products");
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
@@ -29,22 +30,23 @@ const Body = () => {
   });
 
   useEffect(() => {
-    // Initialize filteredProducts with all products
-    setFilteredProducts(products);
-  }, [products]);
-  // useEffect(() => {
-  //   // Apply additional filtering based on searchTerm, if needed
-  //   // For example: filter products based on product name containing the searchTerm
-  //   const filteredBySearchTerm = products.filter((product) =>
-  //     product.product_name.toLowerCase().includes(searchTerm.toLowerCase())
-  //   );
-  //   setFilteredProducts(filteredBySearchTerm);
-  // }, [searchTerm, allProducts]);
+    // Check if products is initialized before setting filteredProducts
+    if (Array.isArray(products) && products.length > 0) {
+      if (selectedFormat === "items/products") {
+        setFilteredProducts(products);
+      }
+    }
+  }, [products, selectedFormat]);
 
   return (
     <>
       <div className="w-full flex flex-row">
-        <Filter setFilteredProducts={setFilteredProducts} products={products} />
+        <Filter
+          setFilteredProducts={setFilteredProducts}
+          products={products}
+          setSelectedFormat={setSelectedFormat}
+          selectedFormat={selectedFormat}
+        />
         <div className="w-full lg:pl-0 xl:pl-8">
           <div className="flex justify-center">
             <input
@@ -65,60 +67,67 @@ const Body = () => {
           </div>
           <Categories searchTerm={searchTerm} />
 
-          <div className="mt-10">
-            <h1 className="font-sofia text-lg md:text-3xl pl-8">
-              Featured Products
-            </h1>
-            <Splide
-              className="mx-auto"
-              options={{
-                //   type: "loop",
-                gap: "1rem",
-                perPage: 5,
-                perMove: 1,
-                autoplay: true,
-                interval: 2000,
-                pauseOnHover: true,
-                speed: 2500,
-                arrows: false,
-                pagination: false,
-                breakpoints: {
-                  640: {
-                    perPage: 2,
-                    autoplay: false,
-                    gap: "0.1rem",
+          {selectedFormat === "items/products" ? (
+            <div className="mt-10">
+              <h1 className="font-sofia text-lg md:text-3xl pl-8">
+                Featured Products
+              </h1>
+              <Splide
+                className="mx-auto"
+                options={{
+                  //   type: "loop",
+                  gap: "1rem",
+                  perPage: 5,
+                  perMove: 1,
+                  autoplay: true,
+                  interval: 2000,
+                  pauseOnHover: true,
+                  speed: 2500,
+                  arrows: false,
+                  pagination: false,
+                  breakpoints: {
+                    640: {
+                      perPage: 2,
+                      autoplay: false,
+                      gap: "0.1rem",
+                    },
+                    1000: {
+                      perPage: 3,
+                      gap: "0.1rem",
+                    },
+                    1424: {
+                      perPage: 4,
+                    },
+                    435: {
+                      perPage: 2.5,
+                      gap: "0.1rem",
+                    },
                   },
-                  1000: {
-                    perPage: 3,
-                    gap: "0.1rem",
-                  },
-                  1424: {
-                    perPage: 4,
-                  },
-                  435: {
-                    perPage: 2.5,
-                    gap: "0.1rem",
-                  },
-                },
-              }}
-            >
-              {filteredProducts.map((product) => (
-                <SplideSlide key={product.id} className="h-[56vh] md:h-[70vh] ">
-                  <ItemCard
-                    itemUrl={`${BACKEND_URL}storage/${product.images[0].url}`}
-                    sellerUrl={`${BACKEND_URL}storage/${product.business.image}`}
-                    title={product.product_name}
-                    basePrice={product.product_price}
-                    salePrice={product.sale_price}
-                    isOnSale={product.isOnSale}
-                    isLiked={product.isLiked}
-                    seller={product.business.businessname}
-                    productId={product.id}
-                  />
-                </SplideSlide>
-              ))}
-            </Splide>
-          </div>
+                }}
+              >
+                {filteredProducts.map((product) => (
+                  <SplideSlide
+                    key={product.id}
+                    className="h-[56vh] md:h-[70vh] "
+                  >
+                    <ItemCard
+                      itemUrl={`${BACKEND_URL}storage/${product.images[0].url}`}
+                      sellerUrl={`${BACKEND_URL}storage/${product.business.image}`}
+                      title={product.product_name}
+                      basePrice={product.product_price}
+                      salePrice={product.sale_price}
+                      isOnSale={product.isOnSale}
+                      isLiked={product.isLiked}
+                      seller={product.business.businessname}
+                      productId={product.id}
+                    />
+                  </SplideSlide>
+                ))}
+              </Splide>
+            </div>
+          ) : (
+            <div>shop</div>
+          )}
         </div>
       </div>
     </>
