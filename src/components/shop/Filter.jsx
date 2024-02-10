@@ -16,6 +16,7 @@ const Filter = ({
   products,
   setSelectedFormat,
   selectedFormat,
+  setBusinesses,
 }) => {
   const [showFilter, setShowFilter] = useState(false);
   const [isFixed, setIsFixed] = useState(false);
@@ -47,24 +48,29 @@ const Filter = ({
   };
 
   useEffect(() => {
+    console.log("hi format is changing RESET", selectedFormat);
+    setSelectedCategories([]);
+    setSelectedWilayas([]);
+    setPriceRange({ min: 0, max: 10000 });
+
     if (selectedFormat === "Small business") {
       if (isBusinessesError) {
         console.log("Error fetching businesses:", isBusinessesError);
       }
-      if (businessesData && businessesData.length > 0) {
-        // Process business data to extract category names
-        const businessCategoryNames = businessesData.map((business) => ({
-          name: business.category_name,
-          num_search: business.count,
+      if (businessesData) {
+        const businessCategoryNames = Object.entries(
+          businessesData.categories_with_counts
+        ).map(([name, num_search]) => ({
+          name: name,
+          num_search: num_search,
         }));
         setCategories(businessCategoryNames);
       }
-    } else {
+    } else if (selectedFormat === "items/products") {
       if (isCategoriesError) {
         console.log("Error fetching categories:", isCategoriesError);
       }
       if (categoriesData && categoriesData.length > 0) {
-        // Process categories data to extract category names
         const categoryNames = categoriesData.map((category) => ({
           name: category.en_name,
           num_search: category.products_count,
@@ -72,13 +78,7 @@ const Filter = ({
         setCategories(categoryNames);
       }
     }
-  }, [
-    selectedFormat,
-    categoriesData,
-    businessesData,
-    isCategoriesError,
-    isBusinessesError,
-  ]);
+  }, [selectedFormat, categoriesData, businessesData]);
 
   const { data: wilayasData, isWilayaLoading, isWilayaError } = useWilayas();
   const [wilayas, setWilayas] = useState(null);
@@ -117,55 +117,60 @@ const Filter = ({
   const [selectedWilayas, setSelectedWilayas] = useState([]);
   const searchInputRef = useRef(null);
 
-  // useEffect(() => {
-  //   const newFormData = new FormData();
-  //   newFormData.append("format", selectedFormat);
-  //   newFormData.append("categories", selectedCategories.join(","));
-  //   newFormData.append("minPrice", priceRange.min);
-  //   newFormData.append("maxPrice", priceRange.max);
-  //   newFormData.append("wilayas", selectedWilayas.join(","));
-  //   console.log(selectedCategories);
-  //   setFormData(newFormData);
-  // }, [selectedFormat, selectedCategories, priceRange, selectedWilayas]);
-
   useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      // Perform API call here based on selected criteria
-      const fetchData = async () => {
-        try {
-          const formData = {
-            format: selectedFormat,
-            categories: selectedCategories.join(","),
-            minPrice: priceRange.min,
-            maxPrice: priceRange.max,
-            wilayas: selectedWilayas.join(","),
-          };
+    const fetchData = async () => {
+      try {
+        const formData = {
+          format: selectedFormat,
+          categories: selectedCategories.join(","),
+          minPrice: priceRange.min,
+          maxPrice: priceRange.max,
+          wilayas: selectedWilayas.join(","),
+        };
 
-          console.log("Form Data:", formData); // Log the form data
+        console.log("Form Data:", formData); // Log the form data
 
-          const response = await fetch(`${BACKEND_URL}api/filter`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(formData),
-          });
+        const response = await fetch(`${BACKEND_URL}api/filter`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        });
 
-          if (!response.ok) {
-            throw new Error("Failed to fetch filtered products");
-          }
-          const data = await response.json();
-          console.log(data);
-          setFilteredProducts(data); // Assuming the response contains filtered products
-        } catch (error) {
-          console.error("Error fetching filtered products:", error);
+        if (!response.ok) {
+          throw new Error("Failed to fetch filtered data");
         }
-      };
+        const data = await response.json();
 
-      fetchData();
-    }, 500); // Delay of 500 milliseconds
+        // Ensure data is an array before setting filteredProducts or filteredBusinesses
+        if (selectedFormat === "items/products") {
+          if (Array.isArray(data)) {
+            setFilteredProducts(data);
+          } else {
+            console.error("Fetched data is not an array:", data);
+            setFilteredProducts([]); // Set to empty array if data is not an array
+          }
+        } else if (selectedFormat === "Small business") {
+          console.log(data.data);
+          if (Array.isArray(data.data)) {
+            setBusinesses(data.data);
+          } else {
+            console.error("Fetched data is not an array:", data);
+            setBusinesses([]); // Set to empty array if data is not an array
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching filtered data:", error);
+        if (selectedFormat === "items/products") {
+          setFilteredProducts([]); // Set to empty array if fetching fails
+        } else if (selectedFormat === "small business") {
+          setBusinesses([]); // Set to empty array if fetching fails
+        }
+      }
+    };
 
-    return () => clearTimeout(timeoutId); // Cleanup on unmount or re-render
+    fetchData();
   }, [selectedFormat, selectedCategories, priceRange, selectedWilayas]);
 
   //@categories

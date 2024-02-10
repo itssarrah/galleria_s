@@ -12,7 +12,7 @@ const fetchCategories = async () => {
 };
 
 const useCategorieCount = () => {
-  return useQuery("categories", fetchCategories, {
+  return useQuery("categoriesCount", fetchCategories, {
     method: "GET",
     staleTime: 120000,
     cacheTime: 3600000,
