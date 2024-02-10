@@ -13,10 +13,29 @@ html {
   scroll-behavior: smooth;
 }
 
+.filter-container::-webkit-scrollbar {
+  width: 0; /* Remove scrollbar space */
+}
+
+.filter-container {
+  overflow-y: scroll; /* Enable vertical scrolling */
+  scrollbar-width: none; /* Hide scrollbar for Firefox */
+}
+
+/* Optional: Customize scrollbar appearance for webkit browsers */
+.filter-container::-webkit-scrollbar-track {
+  background: transparent; /* Track background color */
+}
+
+.filter-container::-webkit-scrollbar-thumb {
+  background-color: transparent; /* Thumb color */
+  border: none; /* Remove thumb border */
+}
+
 /* Hide scrollbar for Chrome, Safari, and Opera */
-/* ::-webkit-scrollbar {
+::-webkit-scrollbar {
   display: none;
-} */
+}
 
 /* Hide scrollbar for IE and Edge */
 

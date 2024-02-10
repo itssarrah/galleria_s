@@ -1,16 +1,137 @@
 import React, { useState, useRef, useEffect } from "react";
-import MultiRangeSlider from "./MultiRangeSlider";
+import MultiRangeSlider from "./MultiRangeSlider/MultiRangeSlider";
 import filterIcon from "../../assets/icons/filter.svg";
+import "../../App.css";
+import useCategorieCount from "../../api/categoriesWithCount";
+import useWilayas from "../../api/wilayas";
+import WilayaSelector from "./Filter/WilayaSelector";
+import FormatSelector from "./Filter/FormatSelector";
+import CategorySelector from "./Filter/CategorySelector";
 
-const Filter = ({ type }) => {
+const Filter = ({ type, setFilteredProducts, products }) => {
   const [showFilter, setShowFilter] = useState(false);
   const [isFixed, setIsFixed] = useState(false);
+  const { data: categoriesData, isLoading, isError } = useCategorieCount();
+
+  useEffect(() => {
+    if (isError) {
+      console.log("err");
+    }
+    if (categoriesData && categoriesData.length > 0) {
+      // Extract the category names from the data and set them in the state
+      const categoryNames = categoriesData.map((category) => ({
+        name: category.en_name, // Assuming you want to use English names
+        num_search: category.products_count, // Assuming this property exists in your category data
+      }));
+      setCategories(categoryNames);
+    }
+  }, [categoriesData]);
+
+  const { data: wilayasData, isWilayaLoading, isWilayaError } = useWilayas();
+  const [wilayas, setWilayas] = useState(null);
+  useEffect(() => {
+    if (isWilayaError) {
+      console.log("Error fetching wilayas:", isWilayaError);
+    }
+    if (wilayasData && wilayasData.length > 0) {
+      // Extract the wilaya names from the data and set them in the state
+      const wilayaNames = wilayasData.map((wilaya) => ({
+        name: wilaya.name,
+      }));
+      setWilayas(wilayaNames); // Assuming you have a state variable to hold wilayas
+    }
+  }, [wilayasData, isWilayaError]);
+
   const toggleFilter = () => {
     setShowFilter(!showFilter);
   };
 
+  // Wilayas list fetched from API or static
+  const wilayasList = wilayas || [
+    { name: "Adrar" },
+    { name: "Chlef" },
+    { name: "Laghouat" },
+  ];
+
+  //end
+  //@Formdata
+  const [formData, setFormData] = useState(new FormData());
+  const [selectedFormat, setSelectedFormat] = useState("items/products");
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [priceRange, setPriceRange] = useState({ min: 0, max: 1000 });
+  const [categories, setCategories] = useState([]);
+  const [searchResults, setSearchResults] = useState([]);
+  const [selectedWilayas, setSelectedWilayas] = useState([]);
+  const searchInputRef = useRef(null);
+
+  // useEffect(() => {
+  //   const newFormData = new FormData();
+  //   newFormData.append("format", selectedFormat);
+  //   newFormData.append("categories", selectedCategories.join(","));
+  //   newFormData.append("minPrice", priceRange.min);
+  //   newFormData.append("maxPrice", priceRange.max);
+  //   newFormData.append("wilayas", selectedWilayas.join(","));
+  //   console.log(selectedCategories);
+  //   setFormData(newFormData);
+  // }, [selectedFormat, selectedCategories, priceRange, selectedWilayas]);
+
   useEffect(() => {
-    // Close the filter when the screen size is xl
+    const timeoutId = setTimeout(() => {
+      // Perform API call here based on selected criteria
+      const fetchData = async () => {
+        try {
+          const formData = {
+            format: selectedFormat,
+            categories: selectedCategories.join(","),
+            minPrice: priceRange.min,
+            maxPrice: priceRange.max,
+            wilayas: selectedWilayas.join(","),
+          };
+
+          console.log("Form Data:", formData); // Log the form data
+
+          const response = await fetch("your_backend_endpoint", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+          });
+
+          if (!response.ok) {
+            throw new Error("Failed to fetch filtered products");
+          }
+
+          const data = await response.json();
+          setFilteredProducts(data); // Assuming the response contains filtered products
+        } catch (error) {
+          console.error("Error fetching filtered products:", error);
+        }
+      };
+
+      fetchData();
+    }, 500); // Delay of 500 milliseconds
+
+    return () => clearTimeout(timeoutId); // Cleanup on unmount or re-render
+  }, [selectedFormat, selectedCategories, priceRange, selectedWilayas]);
+
+  //@categories
+  const handleCategoryClick = (index) => {
+    const updatedCategories = [...categories];
+    const category = updatedCategories[index];
+    category.clicked = !category.clicked;
+    if (category.clicked) {
+      setSelectedCategories([...selectedCategories, category.name]);
+    } else {
+      setSelectedCategories(
+        selectedCategories.filter((cat) => cat !== category.name)
+      );
+    }
+    setCategories(updatedCategories);
+  };
+
+  //@Responsiveness
+  useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 1280) {
         setShowFilter(false);
@@ -19,82 +140,26 @@ const Filter = ({ type }) => {
 
     const handleScroll = () => {
       const scrollPosition = window.scrollY;
-      // You can adjust the threshold value based on your design
-      const threshold = 400; // Adjust as needed
-
-      // Check if the user has scrolled past the threshold
+      const threshold = 400;
       setIsFixed(scrollPosition > threshold);
     };
 
-    // Attach event listeners
     window.addEventListener("resize", handleResize);
     window.addEventListener("scroll", handleScroll);
 
-    // Remove the event listeners on component unmount
     return () => {
       window.removeEventListener("resize", handleResize);
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+  //end
 
-  const wilayasList = [
-    { name: "Adrar" },
-    { name: "Chlef" },
-    { name: "Laghouat" },
-    // Add more wilayas as needed
-  ];
-  const initialCategories = [
-    {
-      name: "Layer Cakes",
-      num_search: "2567",
-    },
-    {
-      name: "Layer Cakes",
-      num_search: "2567",
-    },
-    {
-      name: "Layer Cakes",
-      num_search: "2567",
-    },
-    {
-      name: "Layer Cakes",
-      num_search: "2567",
-    },
-  ];
+  //@wilaya
+  const [searchTerm, setSearchTerm] = useState("");
 
-  const handleWilayaClick = (wilaya) => {
-    if (!selectedWilayas.includes(wilaya)) {
-      setSelectedWilayas([...selectedWilayas, wilaya]);
-    }
-  };
-
-  const [categories, setCategories] = useState(initialCategories);
-  const [searchResults, setSearchResults] = useState([]);
-  const [selectedWilayas, setSelectedWilayas] = useState([]);
-
-  const searchInputRef = useRef(null);
-
-  const handleCategoryClick = (index) => {
-    const updatedCategories = [...categories];
-    updatedCategories[index].clicked = !updatedCategories[index].clicked;
-    setCategories(updatedCategories);
-  };
-
-  const toggleSearchInputFocus = () => {
-    searchInputRef.current.focus();
-  };
-
-  const handleSearch = () => {
-    const searchTerm = searchInputRef.current.value.toLowerCase();
-    // Filter wilayas based on the search term
-    const filteredWilayas = wilayasList.filter((wilaya) =>
-      wilaya.name.toLowerCase().includes(searchTerm)
-    );
-    setSearchResults(filteredWilayas);
-  };
-
+  //end
   return (
-    <div className="relative">
+    <div className="relative filter-container">
       <button
         className="xl:hidden fixed left-4 bottom-8   px-4 py-2  z-[11] flex items-center"
         onClick={toggleFilter}
@@ -115,124 +180,41 @@ const Filter = ({ type }) => {
             : "hidden xl:flex xl:bg-transparent xl:border-white xl:border-[5px] "
         }`}
       >
-        <p className="text-center text-[30px] font-sunflower text-[rgb(255,148,148)] font-bold mt-12">
-          FILTER
-        </p>
-        <div className="flex flex-col items-start justify-start px-2 py-8 gap-[20px]">
-          <div
-            className={`${type == "false" ? "hidden" : "flex"} flex-col gap-3`}
-          >
-            <p className="text-black font-sofia text-[22px] text-left">
-              Format :
+        <form>
+          <p className="text-center text-[30px] font-sunflower text-[rgb(255,148,148)] font-bold mt-12">
+            FILTER
+          </p>
+          <div className="flex flex-col items-start justify-start px-2 py-8 gap-[20px]">
+            <FormatSelector
+              type={type}
+              setSelectedFormat={setSelectedFormat}
+              selectedFormat={selectedFormat}
+            />
+            <CategorySelector
+              categories={categories}
+              handleCategoryClick={handleCategoryClick}
+            />
+            <p className="text-black font-sofia text-[22px] text-left mt-2">
+              Price Ranges :
             </p>
-            <div className="flex flex-row gap-[8px]">
-              <input
-                className="relative float-left ml-[1.5rem] mr-1 mt-0.5 h-5 w-5 appearance-none rounded-full border-2 border-solid border-[rgb(255,148,148)] before:pointer-events-none before:absolute before:h-4 before:w-4 before:scale-0 before:rounded-full before:bg-transparent before:opacity-0 before:shadow-[0px_0px_0px_13px_transparent] before:content-[''] after:absolute after:z-[1] after:block after:h-4 after:w-4 after:rounded-full after:content-[''] checked:border-primary checked:before:opacity-[0.16] checked:after:absolute checked:after:left-1/2 checked:after:top-1/2 checked:after:h-[0.625rem] checked:after:w-[0.625rem] checked:after:rounded-full checked:after:border-primary checked:after:bg-primary checked:after:content-[''] checked:after:[transform:translate(-50%,-50%)] hover:cursor-pointer hover:before:opacity-[0.04] hover:before:shadow-[0px_0px_0px_13px_rgba(0,0,0,0.6)] focus:shadow-none focus:outline-none focus:ring-0 focus:before:scale-100 focus:before:opacity-[0.12] focus:before:shadow-[0px_0px_0px_13px_rgba(0,0,0,0.6)] focus:before:transition-[box-shadow_0.2s,transform_0.2s] checked:focus:border-primary checked:focus:before:scale-100 checked:focus:before:shadow-[0px_0px_0px_13px_#3b71ca] checked:focus:before:transition-[box-shadow_0.2s,transform_0.2s] dark:border-[#FF9494] dark:checked:border-primary dark:checked:after:border-primary dark:checked:after:bg-primary  dark:checked:focus:border-primary dark:checked:focus:before:shadow-[0px_0px_0px_13px_#FF9494]"
-                type="radio"
-                id="small business"
-                name="format"
-                value="Small business"
-              />
-              <label>
-                <span className="text-black text-opacity-[70%] font-sunflower text-[18px] text-left">
-                  Small business
-                </span>
-              </label>
-            </div>
-            <div className="flex flex-row gap-[8px] mt-2">
-              <input
-                className="relative float-left ml-[1.5rem] mr-1 mt-0.5 h-5 w-5 appearance-none rounded-full border-2 border-solid border-[rgb(255,148,148)] before:pointer-events-none before:absolute before:h-4 before:w-4 before:scale-0 before:rounded-full before:bg-transparent before:opacity-0 before:shadow-[0px_0px_0px_13px_transparent] before:content-[''] after:absolute after:z-[1] after:block after:h-4 after:w-4 after:rounded-full after:content-[''] checked:border-primary checked:before:opacity-[0.16] checked:after:absolute checked:after:left-1/2 checked:after:top-1/2 checked:after:h-[0.625rem] checked:after:w-[0.625rem] checked:after:rounded-full checked:after:border-primary checked:after:bg-primary checked:after:content-[''] checked:after:[transform:translate(-50%,-50%)] hover:cursor-pointer hover:before:opacity-[0.04] hover:before:shadow-[0px_0px_0px_13px_rgba(0,0,0,0.6)] focus:shadow-none focus:outline-none focus:ring-0 focus:before:scale-100 focus:before:opacity-[0.12] focus:before:shadow-[0px_0px_0px_13px_rgba(0,0,0,0.6)] focus:before:transition-[box-shadow_0.2s,transform_0.2s] checked:focus:border-primary checked:focus:before:scale-100 checked:focus:before:shadow-[0px_0px_0px_13px_#3b71ca] checked:focus:before:transition-[box-shadow_0.2s,transform_0.2s] dark:border-[#FF9494] dark:checked:border-primary dark:checked:after:border-primary dark:checked:after:bg-primary  dark:checked:focus:border-primary dark:checked:focus:before:shadow-[0px_0px_0px_13px_#FF9494]"
-                type="radio"
-                id="items"
-                name="format"
-                value="items/products"
-              />
-              <label>
-                <span className="text-black text-opacity-[70%] font-sunflower text-[18px] text-left">
-                  Items / Products
-                </span>
-              </label>
-            </div>
+            <MultiRangeSlider
+              min={0}
+              max={1000}
+              onChange={({ min, max }) => console.log(max, min)}
+              // onChange={({ min, max }) => setPriceRange({ min, max })}
+            />
+            <WilayaSelector
+              selectedWilayas={selectedWilayas}
+              searchTerm={searchTerm}
+              searchResults={searchResults}
+              wilayasList={wilayasList}
+              setSearchTerm={setSearchTerm}
+              setSearchResults={setSearchResults}
+              setSelectedWilayas={setSelectedWilayas}
+              searchInputRef={searchInputRef}
+            />
           </div>
-
-          <p className="text-black font-sofia text-[22px] text-left">
-            Categories Selected :
-          </p>
-
-          <div>
-            <ul className="list-none pl-2 space-y-1 ">
-              {categories.map((category, index) => (
-                <li
-                  key={index}
-                  className={`text-black font-sunflower text-18px text-left flex gap-8  xl:gap-20 px-2 cursor-pointer`}
-                  onClick={() => handleCategoryClick(index)}
-                >
-                  <span
-                    className={`${
-                      category.clicked ? "text-[#FF9494]" : "opacity-30"
-                    } font-sunflower text-18px `}
-                  >
-                    {category.name}
-                  </span>{" "}
-                  <span className="font-sunflower text-18px opacity-70">
-                    {category.num_search}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <p className="text-black font-sofia text-[22px] text-left mt-2">
-            Price Ranges :
-          </p>
-          <MultiRangeSlider
-            min={0}
-            max={1000}
-            onChange={({ min, max }) =>
-              console.log(`min = ${min}, max = ${max}`)
-            }
-          />
-
-          <p className="text-black font-sofia text-[22px] text-left">
-            Wilaya :
-          </p>
-
-          <div className="flex flex-col pb-[10rem]">
-            <div className="search-input-container">
-              <div className="relative flex flex-row items-start justify-center ">
-                <input
-                  type="search"
-                  list="wilayas"
-                  placeholder="type..."
-                  className="
-                        w-52 h-9 rounded-lg border border-[#FF9494] bg-[#F5EBE0] focus:outline-none px-3 py-2 mb-5 ml-1"
-                  ref={searchInputRef}
-                  onChange={handleSearch}
-                />
-                <button
-                  className=" search-button bg-[#FF9494] rounded-full px-1.5 py-0 mt-1.5 ml-1"
-                  onClick={toggleSearchInputFocus}
-                >
-                  +
-                </button>
-              </div>
-            </div>
-          </div>
-          {selectedWilayas.length > 0 && (
-            <div>
-              <ul className="list-none pl-4 space-y-1">
-                {selectedWilayas.map((wilaya, index) => (
-                  <li
-                    key={index}
-                    className="text-black font-sunflower text-18px text-left space-x-20 px-2 "
-                  >
-                    <span className="font-sunflower text-18px">{wilaya}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </div>
+        </form>
       </div>
     </div>
   );
