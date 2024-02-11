@@ -1,14 +1,19 @@
 import React, { useState } from "react";
 
-function Categories() {
-  const categories = ["All Categories", "Electronics", "Clothing", "Books"];
+function Categories({ clearCategories, selectedCategories, handleFilter }) {
+  const filterOptions = ["Latest", "Sales", "Oldest", "Popular"];
   const [activeButton, setActiveButton] = useState(null);
 
   const handleButtonClick = (index) => {
-    if (activeButton === index) {
-      setActiveButton(null);
+    setActiveButton(index);
+
+    // Check if the button with index 4 is clicked
+    if (index === 4) {
+      // Call the function to clear categories
+      clearCategories();
     } else {
-      setActiveButton(index);
+      // Call the function to handle the filter option
+      handleFilter(filterOptions[index]);
     }
   };
 
@@ -17,7 +22,10 @@ function Categories() {
       <div className="text-[18px]">
         <button
           className={`hover:text-main__pink ${
-            activeButton === 4 ? "text-main__pink" : ""
+            activeButton === 4 ||
+            (selectedCategories.length === 0 && activeButton === null)
+              ? "text-main__pink"
+              : ""
           }`}
           onClick={() => handleButtonClick(4)}
         >
@@ -25,45 +33,25 @@ function Categories() {
         </button>
       </div>
       <div className="w-1/4 hidden xl:flex justify-between text-[18px] ">
-        <button
-          className={`hover:text-main__pink ${
-            activeButton === 0 ? "text-main__pink" : ""
-          }`}
-          onClick={() => handleButtonClick(0)}
-        >
-          Latest
-        </button>
-        <button
-          className={`hover:text-main__pink ${
-            activeButton === 1 ? "text-main__pink" : ""
-          }`}
-          onClick={() => handleButtonClick(1)}
-        >
-          Popular
-        </button>
-        <button
-          className={`hover:text-main__pink ${
-            activeButton === 2 ? "text-main__pink" : ""
-          }`}
-          onClick={() => handleButtonClick(2)}
-        >
-          BestSeller
-        </button>
-        <button
-          className={`hover:text-main__pink ${
-            activeButton === 3 ? "text-main__pink" : ""
-          }`}
-          onClick={() => handleButtonClick(3)}
-        >
-          Sales
-        </button>
+        {filterOptions.map((option, index) => (
+          <button
+            key={index}
+            className={`hover:text-main__pink ${
+              activeButton === index ? "text-main__pink" : ""
+            }`}
+            onClick={() => handleButtonClick(index)}
+          >
+            {option}
+          </button>
+        ))}
       </div>
       <div className="text-[18px] block xl:hidden ">
         <select className="cursor-pointer outline-none">
-          <option value="latest">Latest</option>
-          <option value="popular">Popular</option>
-          <option value="bestseller">BestSeller</option>
-          <option value="sales">Sales</option>
+          {filterOptions.map((option, index) => (
+            <option key={index} value={option.toLowerCase()}>
+              {option}
+            </option>
+          ))}
         </select>
       </div>
     </nav>

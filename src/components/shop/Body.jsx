@@ -5,12 +5,13 @@ import { fetchProducts } from "../Landing/TrendingItems";
 import { useQuery } from "react-query";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import "@splidejs/splide/dist/css/splide.min.css";
-import ItemCard from "../cards/ItemCard";
 import { BACKEND_URL } from "../../config";
 import "../../css/ShopBody.css";
 import SearchIcon from "../../assets/icons/searchIcon";
 import useBusinesses from "../../api/businesses";
 import ShopCard from "../cards/ShopCard";
+import ProductSlider from "./ProductSlider";
+import ShopSlider from "./ShopSlider";
 const Body = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const {
@@ -33,6 +34,18 @@ const Body = () => {
   const [businesses, setBusinesses] = useState([]);
 
   const [selectedFormat, setSelectedFormat] = useState("items/products");
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [categories, setCategories] = useState([]);
+
+  const clearCategories = () => {
+    setSelectedCategories([]);
+    // Reset the color of all categories
+    const updatedCategories = categories.map((category) => ({
+      ...category,
+      clicked: false, // Reset the clicked state
+    }));
+    setCategories(updatedCategories);
+  };
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
@@ -60,6 +73,10 @@ const Body = () => {
           setSelectedFormat={setSelectedFormat}
           selectedFormat={selectedFormat}
           setBusinesses={setBusinesses}
+          selectedCategories={selectedCategories}
+          setSelectedCategories={setSelectedCategories}
+          categories={categories}
+          setCategories={setCategories}
         />
         <div className="w-full lg:pl-0 xl:pl-8">
           <div className="flex justify-center">
@@ -79,7 +96,11 @@ const Body = () => {
               <SearchIcon className="h-5 w-5" />
             </button>
           </div>
-          <Categories searchTerm={searchTerm} />
+          <Categories
+            searchTerm={searchTerm}
+            clearCategories={clearCategories}
+            selectedCategories={selectedCategories}
+          />
 
           {selectedFormat === "items/products" ? (
             <div className="mt-10">
@@ -87,114 +108,14 @@ const Body = () => {
                 Featured Products
               </h1>
               {filteredProducts !== null ? (
-                <Splide
-                  className="mx-auto"
-                  options={{
-                    //   type: "loop",
-                    gap: "1rem",
-                    perPage: 5,
-                    perMove: 1,
-                    autoplay: true,
-                    interval: 2000,
-                    pauseOnHover: true,
-                    speed: 2500,
-                    arrows: false,
-                    pagination: false,
-                    breakpoints: {
-                      640: {
-                        perPage: 2,
-                        autoplay: false,
-                        gap: "0.1rem",
-                      },
-                      1000: {
-                        perPage: 3,
-                        gap: "0.1rem",
-                      },
-                      1424: {
-                        perPage: 4,
-                      },
-                      435: {
-                        perPage: 2.5,
-                        gap: "0.1rem",
-                      },
-                    },
-                  }}
-                >
-                  {filteredProducts.map((product) => (
-                    <SplideSlide
-                      key={product.id}
-                      className="h-[56vh] md:h-[70vh] "
-                    >
-                      <ItemCard
-                        itemUrl={`${BACKEND_URL}storage/${product.images[0].url}`}
-                        sellerUrl={`${BACKEND_URL}storage/${product.business.image}`}
-                        title={product.product_name}
-                        basePrice={product.product_price}
-                        salePrice={product.sale_price}
-                        isOnSale={product.isOnSale}
-                        isLiked={product.isLiked}
-                        seller={product.business.businessname}
-                        productId={product.id}
-                      />
-                    </SplideSlide>
-                  ))}
-                </Splide>
+                <ProductSlider filteredProducts={filteredProducts} />
               ) : (
                 <div>Loading...</div>
               )}
             </div>
           ) : (
             <div>
-              <Splide
-                className="mx-auto"
-                options={{
-                  //   type: "loop",
-                  gap: "1rem",
-                  perPage: 5,
-                  perMove: 1,
-                  autoplay: true,
-                  interval: 2000,
-                  pauseOnHover: true,
-                  speed: 2500,
-                  arrows: false,
-                  pagination: false,
-                  breakpoints: {
-                    640: {
-                      perPage: 2,
-                      autoplay: false,
-                      gap: "0.1rem",
-                    },
-                    1000: {
-                      perPage: 3,
-                      gap: "0.1rem",
-                    },
-                    1424: {
-                      perPage: 4,
-                    },
-                    435: {
-                      perPage: 2.5,
-                      gap: "0.1rem",
-                    },
-                  },
-                }}
-              >
-                {businesses.map((business) => (
-                  <SplideSlide
-                    key={business.id}
-                    className="h-[40vh] md:h-[50vh] "
-                  >
-                    <ShopCard
-                      key={business.id}
-                      imageUrl={`${BACKEND_URL}storage/${business.image}`}
-                      title={business.businessname}
-                      likes={business.likes}
-                      location={business.wilaya.name}
-                      rating={business.rating}
-                      phoneNumber={business.phone}
-                    />
-                  </SplideSlide>
-                ))}
-              </Splide>
+              <ShopSlider businesses={businesses} />
             </div>
           )}
         </div>

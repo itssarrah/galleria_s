@@ -46,9 +46,9 @@ function UserWishlist() {
 
   return (
     <div className="flex items-start w-full">
-      <Filter type="false" />
+      {/* <Filter type="false" /> */}
       <div className="w-screen min-h-screen overflow-x-hidden flex flex-col pt-8">
-        <Categories />
+        {/* <Categories /> */}
         <div className="mt-12 flex flex-wrap gap-10 lg:gap-16 justify-center">
           {likedProducts.map((product) => (
             <ItemCard

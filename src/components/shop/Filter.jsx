@@ -17,6 +17,10 @@ const Filter = ({
   setSelectedFormat,
   selectedFormat,
   setBusinesses,
+  selectedCategories,
+  setSelectedCategories,
+  categories,
+  setCategories,
 }) => {
   const [showFilter, setShowFilter] = useState(false);
   const [isFixed, setIsFixed] = useState(false);
@@ -110,9 +114,9 @@ const Filter = ({
   //@Formdata
   const [formData, setFormData] = useState(new FormData());
   // const [selectedFormat, setSelectedFormat] = useState("items/products");
-  const [selectedCategories, setSelectedCategories] = useState([]);
+
   const [priceRange, setPriceRange] = useState({ min: 0, max: 10000 });
-  const [categories, setCategories] = useState([]);
+
   const [searchResults, setSearchResults] = useState([]);
   const [selectedWilayas, setSelectedWilayas] = useState([]);
   const searchInputRef = useRef(null);
