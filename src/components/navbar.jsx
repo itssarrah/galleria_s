@@ -87,12 +87,12 @@ function Nav() {
   const [userAuthorized, setUserAuthorized] = useState(false);
   const [userProfileImage, setUserProfileImage] = useState(null);
   const [userType, setUserType] = useState(null);
+  const token = localStorage.getItem("authToken");
 
   const { data: userData, isSuccess: isUserDataSuccess } = useQuery(
     "currentUser",
     async () => {
       try {
-        const token = localStorage.getItem("authToken");
         if (!token) {
           setUserAuthorized(false);
           return null; // Return null if user is not authenticated
@@ -116,7 +116,7 @@ function Nav() {
       }
     },
     {
-      enabled: !!localStorage.getItem("authToken"),
+      enabled: !!token,
     }
   );
 

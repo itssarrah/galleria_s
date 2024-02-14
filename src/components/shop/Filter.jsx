@@ -52,7 +52,6 @@ const Filter = ({
   };
 
   useEffect(() => {
-    console.log("hi format is changing RESET", selectedFormat);
     setSelectedCategories([]);
     setSelectedWilayas([]);
     setPriceRange({ min: 0, max: 10000 });
@@ -132,8 +131,6 @@ const Filter = ({
           wilayas: selectedWilayas.join(","),
         };
 
-        console.log("Form Data:", formData); // Log the form data
-
         const response = await fetch(`${BACKEND_URL}api/filter`, {
           method: "POST",
           headers: {
@@ -156,7 +153,6 @@ const Filter = ({
             setFilteredProducts([]); // Set to empty array if data is not an array
           }
         } else if (selectedFormat === "Small business") {
-          console.log(data.data);
           if (Array.isArray(data.data)) {
             setBusinesses(data.data);
           } else {

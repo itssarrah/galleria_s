@@ -28,8 +28,8 @@ export const UserAccountHero = ({
         },
       });
       localStorage.removeItem("authToken");
-      window.location.reload();
       navigate("/login");
+      window.location.reload();
       console.log("Logout successful");
     } catch (error) {
       console.error("Logout failed:", error);

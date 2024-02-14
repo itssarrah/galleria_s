@@ -1,27 +1,45 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Filter from "./Filter";
 import Categories from "./Categories";
 import { fetchProducts } from "../Landing/TrendingItems";
 import { useQuery } from "react-query";
-import { Splide, SplideSlide } from "@splidejs/react-splide";
 import "@splidejs/splide/dist/css/splide.min.css";
-import { BACKEND_URL } from "../../config";
 import "../../css/ShopBody.css";
 import SearchIcon from "../../assets/icons/searchIcon";
 import useBusinesses from "../../api/businesses";
-import ShopCard from "../cards/ShopCard";
 import ProductSlider from "./ProductSlider";
 import ShopSlider from "./ShopSlider";
-const Body = () => {
-  const [searchTerm, setSearchTerm] = useState("");
+import useProductsByCategory from "../../api/fetchProductsByCategory";
+import { ClipLoader } from "react-spinners";
+
+const ProductSliderWrapper = ({ category }) => {
   const {
-    data: products = [],
+    data: products,
     isLoading,
     isError,
-  } = useQuery("products", fetchProducts, {
-    staleTime: 10000,
-    cacheTime: 300000,
-  });
+  } = useProductsByCategory(category.name, 1);
+
+  if (isLoading)
+    return (
+      <div className="flex justify-center items-center h-[40vh] w-full">
+        <ClipLoader color="#DD6969" size={50} />
+      </div>
+    );
+  if (isError) return <div>Error fetching products...</div>;
+
+  return <ProductSlider filteredProducts={products.data.data} />;
+};
+
+const Body = () => {
+  const [searchTerm, setSearchTerm] = useState("");
+  // const {
+  //   data: products = [],
+  //   isLoading,
+  //   isError,
+  // } = useQuery("products", fetchProducts, {
+  //   staleTime: 10000,
+  //   cacheTime: 300000,
+  // });
 
   const {
     data: fetchedBusinesses = [],
@@ -51,12 +69,12 @@ const Body = () => {
     setSearchTerm(event.target.value);
   };
 
-  useEffect(() => {
-    // Check if products is initialized before setting filteredProducts
-    if (Array.isArray(products) && products.length > 0) {
-      setFilteredProducts(products);
-    }
-  }, [products]);
+  // useEffect(() => {
+  //   // Check if products is initialized before setting filteredProducts
+  //   if (Array.isArray(products) && products.length > 0) {
+  //     setFilteredProducts(products);
+  //   }
+  // }, [products]);
 
   useEffect(() => {
     if (Array.isArray(fetchedBusinesses) && fetchedBusinesses.length > 0) {
@@ -64,12 +82,32 @@ const Body = () => {
     }
   }, [fetchedBusinesses]);
 
+  //@lazy loading
+  const [numCategoriesToLoad, setNumCategoriesToLoad] = useState(3);
+  const loader = useRef(null);
+  const handleScroll = () => {
+    // Check if the loader is visible in the viewport
+    const isVisible =
+      loader.current &&
+      loader.current.getBoundingClientRect().top <= window.innerHeight;
+
+    // Load more categories if the loader is visible
+    if (isVisible) {
+      setNumCategoriesToLoad((prevNum) => prevNum + 3); // Increment the number of categories to load
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
     <>
       <div className="w-full flex flex-row">
         <Filter
           setFilteredProducts={setFilteredProducts}
-          products={products}
+          // products={products}
           setSelectedFormat={setSelectedFormat}
           selectedFormat={selectedFormat}
           setBusinesses={setBusinesses}
@@ -104,14 +142,23 @@ const Body = () => {
 
           {selectedFormat === "items/products" ? (
             <div className="mt-10">
-              <h1 className="font-sofia text-lg md:text-3xl pl-8">
+              {categories.slice(0, numCategoriesToLoad).map((category) => (
+                <div key={category.id}>
+                  <h1 className="font-sofia text-lg md:text-3xl pl-8">
+                    {category.name} :
+                  </h1>
+                  <ProductSliderWrapper category={category} />
+                </div>
+              ))}
+              {/* <h1 className="font-sofia text-lg md:text-3xl pl-8">
                 Featured Products
-              </h1>
-              {filteredProducts !== null ? (
+              </h1> */}
+              {/* {filteredProducts !== null ? (
                 <ProductSlider filteredProducts={filteredProducts} />
               ) : (
                 <div>Loading...</div>
-              )}
+              )} */}
+              <div ref={loader}></div>
             </div>
           ) : (
             <div>

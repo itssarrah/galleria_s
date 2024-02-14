@@ -40,7 +40,9 @@ function Login() {
         axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
         try {
-          const userResponse = await axios.get(`${BACKEND_URL}api/current`);
+          const userResponse = await axios.get(
+            `${BACKEND_URL}api/current_user`
+          );
 
           if (userResponse.data.user_type === "user") {
             navigate("/profile", { state: userResponse.data });

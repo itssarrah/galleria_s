@@ -11,7 +11,7 @@ import { ClipLoader } from "react-spinners";
 
 const fetchProducts = async () => {
   const response = await axios.get(`${BACKEND_URL}api/products`);
-  console.log(response);
+
   return response.data.data;
 };
 
