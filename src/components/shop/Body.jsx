@@ -51,6 +51,8 @@ const BusinessSliderWrapper = ({ category }) => {
 
 const Body = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [searchedProducts, setSearchedProducts] = useState([]);
+  const [searchedBusinesses, setSearchedBusinesses] = useState([]);
 
   // Initialize filteredProducts with an empty array
   const [filteredProducts, setFilteredProducts] = useState([]);
@@ -73,8 +75,38 @@ const Body = () => {
     setCategories(updatedCategories);
   };
 
-  const handleSearch = (event) => {
-    setSearchTerm(event.target.value);
+  const handleSearch = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await fetch(`${BACKEND_URL}api/filter/search`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          searchTerm: searchTerm,
+          selectedFormat: selectedFormat,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const data = await response.json();
+      // console.log("Search Results:", data);
+
+      // Set searchedProducts and searchedBusinesses based on the selected format
+      if (selectedFormat === "items/products") {
+        setSearchedProducts(data.data); // Set searched products
+        setSearchedBusinesses([]); // Clear searched businesses
+      } else {
+        setSearchedBusinesses(data.data); // Set searched businesses
+        setSearchedProducts([]); // Clear searched products
+      }
+    } catch (error) {
+      console.error("Error searching:", error.message);
+    }
   };
 
   //@lazy loading
@@ -97,6 +129,16 @@ const Body = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const handleSearchTermChange = (event) => {
+    const searchTerm = event.target.value;
+    setSearchTerm(searchTerm);
+
+    if (searchTerm === "") {
+      setSearchedProducts([]);
+      setSearchedBusinesses([]);
+    }
+  };
+
   return (
     <>
       <div className="w-full flex flex-row">
@@ -115,37 +157,36 @@ const Body = () => {
           setPriceRange={setPriceRange}
         />
         <div className="w-full xl:w-[75%] 2xl:w-[85%] lg:pl-0 xl:pl-2">
-          <div className="flex justify-center">
-            <input
-              type="text"
-              placeholder="Search..."
-              value={searchTerm}
-              onChange={handleSearch}
-              className=" border border-main__pink rounded-full py-3 px-[20px] w-3/4 shadow-md mb-4 outline-none"
-            />
-            <button
-              className="relative  h-5 w-10 rounded-full bg-main__pink text-white flex items-start  cursor-pointer right-12 bottom-1"
-              onClick={() => {
-                setSearchTerm("");
-              }}
-            >
-              <SearchIcon className="h-5 w-5" />
-            </button>
-          </div>
-          <Categories
-            searchTerm={searchTerm}
-            clearCategories={clearCategories}
-            selectedCategories={selectedCategories}
-          />
+          <form onSubmit={handleSearch}>
+            <div className="flex justify-center">
+              <input
+                type="text"
+                placeholder="Search..."
+                value={searchTerm}
+                onChange={handleSearchTermChange}
+                className=" border border-main__pink rounded-full py-3 px-[20px] w-3/4 shadow-md mb-4 outline-none"
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    handleSearch(e);
+                  }
+                }}
+              />
+              <button
+                type="submit"
+                className="relative  h-5 w-10 rounded-full bg-main__pink text-white flex items-start  cursor-pointer right-12 bottom-1"
+              >
+                <SearchIcon className="h-5 w-5" />
+              </button>
+            </div>
+          </form>
 
-          {selectedFormat === "items/products" ? (
-            <div className="mt-10">
-              {selectedCategories.length > 0 ||
-              selectedWilayas.length > 0 ||
-              priceRange.min !== 0 ||
-              priceRange.max !== 10000 ? (
-                <div>
-                  {filteredProducts.map((product) => (
+          {searchTerm &&
+          (searchedProducts.length || searchedBusinesses.length) ? (
+            <div>
+              {selectedFormat === "items/products" ? (
+                <div className="mt-10">
+                  {searchedProducts.map((product) => (
                     <div key={product.id}>
                       <ItemCard
                         itemUrl={`${BACKEND_URL}storage/${product.images[0].url}`}
@@ -162,27 +203,8 @@ const Body = () => {
                   ))}
                 </div>
               ) : (
-                <div>
-                  {categories.slice(0, numCategoriesToLoad).map((category) => (
-                    <div key={category.id}>
-                      <h1 className="font-sofia text-lg md:text-3xl pl-8">
-                        {category.name} :
-                      </h1>
-                      <ProductSliderWrapper category={category} />
-                    </div>
-                  ))}
-                  <div ref={loader}></div>
-                </div>
-              )}
-            </div>
-          ) : (
-            <div className="mt-10">
-              {selectedCategories.length > 0 ||
-              selectedWilayas.length > 0 ||
-              priceRange.min !== 0 ||
-              priceRange.max !== 10000 ? (
-                <div>
-                  {businesses.map((business) => (
+                <div className="mt-10">
+                  {searchedBusinesses.map((business) => (
                     <div key={business.id}>
                       <ShopCard
                         key={business.id}
@@ -196,17 +218,91 @@ const Body = () => {
                     </div>
                   ))}
                 </div>
-              ) : (
-                <div>
-                  {categories.slice(0, numCategoriesToLoad).map((category) => (
-                    <div key={category.id}>
-                      <h1 className="font-sofia text-lg md:text-3xl pl-8">
-                        {category.name} :
-                      </h1>
-                      <BusinessSliderWrapper category={category} />
+              )}
+            </div>
+          ) : (
+            <div>
+              <Categories
+                searchTerm={searchTerm}
+                clearCategories={clearCategories}
+                selectedCategories={selectedCategories}
+              />
+
+              {selectedFormat === "items/products" ? (
+                <div className="mt-10">
+                  {selectedCategories.length > 0 ||
+                  selectedWilayas.length > 0 ||
+                  priceRange.min !== 0 ||
+                  priceRange.max !== 10000 ? (
+                    <div>
+                      {filteredProducts.map((product) => (
+                        <div key={product.id}>
+                          <ItemCard
+                            itemUrl={`${BACKEND_URL}storage/${product.images[0].url}`}
+                            sellerUrl={`${BACKEND_URL}storage/${product.business.image}`}
+                            title={product.product_name}
+                            basePrice={product.product_price}
+                            salePrice={product.sale_price}
+                            isOnSale={product.isOnSale}
+                            isLiked={product.isLiked}
+                            seller={product.business.businessname}
+                            productId={product.id}
+                          />
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                  <div ref={loader}></div>
+                  ) : (
+                    <div>
+                      {categories
+                        .slice(0, numCategoriesToLoad)
+                        .map((category) => (
+                          <div key={category.id}>
+                            <h1 className="font-sofia text-lg md:text-3xl pl-8">
+                              {category.name} :
+                            </h1>
+                            <ProductSliderWrapper category={category} />
+                          </div>
+                        ))}
+                      <div ref={loader}></div>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="mt-10">
+                  {selectedCategories.length > 0 ||
+                  selectedWilayas.length > 0 ||
+                  priceRange.min !== 0 ||
+                  priceRange.max !== 10000 ? (
+                    <div>
+                      {businesses.map((business) => (
+                        <div key={business.id}>
+                          <ShopCard
+                            key={business.id}
+                            imageUrl={`${BACKEND_URL}storage/${business.image}`}
+                            title={business.businessname}
+                            likes={business.likes}
+                            location={business.wilaya.name}
+                            rating={business.rating}
+                            phoneNumber={business.phone}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div>
+                      {categories
+                        .slice(0, numCategoriesToLoad)
+                        .map((category) => (
+                          <div key={category.id}>
+                            <h1 className="font-sofia text-lg md:text-3xl pl-8">
+                              {category.name} :
+                            </h1>
+                            <BusinessSliderWrapper category={category} />
+                          </div>
+                        ))}
+                      <div ref={loader}></div>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
