@@ -27,15 +27,14 @@ html {
   background: transparent; /* Track background color */
 }
 
-.filter-container::-webkit-scrollbar-thumb {
-  background-color: transparent; /* Thumb color */
-  border: none; /* Remove thumb border */
+.filter-container::-webkit-scrollbar {
+  display: none;
 }
 
 /* Hide scrollbar for Chrome, Safari, and Opera */
-::-webkit-scrollbar {
+/* ::-webkit-scrollbar {
   display: none;
-}
+} */
 
 /* Hide scrollbar for IE and Edge */
 

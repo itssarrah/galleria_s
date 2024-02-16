@@ -1,16 +1,17 @@
 import React, { useState, useEffect, useRef } from "react";
 import Filter from "./Filter";
 import Categories from "./Categories";
-import { fetchProducts } from "../Landing/TrendingItems";
-import { useQuery } from "react-query";
 import "@splidejs/splide/dist/css/splide.min.css";
 import "../../css/ShopBody.css";
 import SearchIcon from "../../assets/icons/searchIcon";
-import useBusinesses from "../../api/businesses";
 import ProductSlider from "./ProductSlider";
 import ShopSlider from "./ShopSlider";
 import useProductsByCategory from "../../api/fetchProductsByCategory";
 import { ClipLoader } from "react-spinners";
+import ItemCard from "../cards/ItemCard";
+import ShopCard from "../cards/ShopCard";
+import { BACKEND_URL } from "../../config";
+import useBusinessesByCategory from "../../api/fetchBusinessesByCategory";
 
 const ProductSliderWrapper = ({ category }) => {
   const {
@@ -30,30 +31,37 @@ const ProductSliderWrapper = ({ category }) => {
   return <ProductSlider filteredProducts={products.data.data} />;
 };
 
+const BusinessSliderWrapper = ({ category }) => {
+  const {
+    data: businesses,
+    isLoading,
+    isError,
+  } = useBusinessesByCategory(category.name);
+
+  if (isLoading)
+    return (
+      <div className="flex justify-center items-center h-[40vh] w-full">
+        <ClipLoader color="#DD6969" size={50} />
+      </div>
+    );
+  if (isError) return <div>Error fetching businesses...</div>;
+
+  return <ShopSlider businesses={businesses.data} />;
+};
+
 const Body = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  // const {
-  //   data: products = [],
-  //   isLoading,
-  //   isError,
-  // } = useQuery("products", fetchProducts, {
-  //   staleTime: 10000,
-  //   cacheTime: 300000,
-  // });
-
-  const {
-    data: fetchedBusinesses = [],
-    isLoading: businessIsLoading,
-    isError: businessIsError,
-  } = useBusinesses();
 
   // Initialize filteredProducts with an empty array
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [businesses, setBusinesses] = useState([]);
 
   const [selectedFormat, setSelectedFormat] = useState("items/products");
-  const [selectedCategories, setSelectedCategories] = useState([]);
   const [categories, setCategories] = useState([]);
+
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [selectedWilayas, setSelectedWilayas] = useState([]);
+  const [priceRange, setPriceRange] = useState({ min: 0, max: 10000 });
 
   const clearCategories = () => {
     setSelectedCategories([]);
@@ -68,19 +76,6 @@ const Body = () => {
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
   };
-
-  // useEffect(() => {
-  //   // Check if products is initialized before setting filteredProducts
-  //   if (Array.isArray(products) && products.length > 0) {
-  //     setFilteredProducts(products);
-  //   }
-  // }, [products]);
-
-  useEffect(() => {
-    if (Array.isArray(fetchedBusinesses) && fetchedBusinesses.length > 0) {
-      setBusinesses(fetchedBusinesses);
-    }
-  }, [fetchedBusinesses]);
 
   //@lazy loading
   const [numCategoriesToLoad, setNumCategoriesToLoad] = useState(3);
@@ -107,7 +102,6 @@ const Body = () => {
       <div className="w-full flex flex-row">
         <Filter
           setFilteredProducts={setFilteredProducts}
-          // products={products}
           setSelectedFormat={setSelectedFormat}
           selectedFormat={selectedFormat}
           setBusinesses={setBusinesses}
@@ -115,8 +109,12 @@ const Body = () => {
           setSelectedCategories={setSelectedCategories}
           categories={categories}
           setCategories={setCategories}
+          selectedWilayas={selectedWilayas}
+          setSelectedWilayas={setSelectedWilayas}
+          priceRange={priceRange}
+          setPriceRange={setPriceRange}
         />
-        <div className="w-full lg:pl-0 xl:pl-8">
+        <div className="w-full xl:w-[75%] 2xl:w-[85%] lg:pl-0 xl:pl-2">
           <div className="flex justify-center">
             <input
               type="text"
@@ -142,27 +140,75 @@ const Body = () => {
 
           {selectedFormat === "items/products" ? (
             <div className="mt-10">
-              {categories.slice(0, numCategoriesToLoad).map((category) => (
-                <div key={category.id}>
-                  <h1 className="font-sofia text-lg md:text-3xl pl-8">
-                    {category.name} :
-                  </h1>
-                  <ProductSliderWrapper category={category} />
+              {selectedCategories.length > 0 ||
+              selectedWilayas.length > 0 ||
+              priceRange.min !== 0 ||
+              priceRange.max !== 10000 ? (
+                <div>
+                  {filteredProducts.map((product) => (
+                    <div key={product.id}>
+                      <ItemCard
+                        itemUrl={`${BACKEND_URL}storage/${product.images[0].url}`}
+                        sellerUrl={`${BACKEND_URL}storage/${product.business.image}`}
+                        title={product.product_name}
+                        basePrice={product.product_price}
+                        salePrice={product.sale_price}
+                        isOnSale={product.isOnSale}
+                        isLiked={product.isLiked}
+                        seller={product.business.businessname}
+                        productId={product.id}
+                      />
+                    </div>
+                  ))}
                 </div>
-              ))}
-              {/* <h1 className="font-sofia text-lg md:text-3xl pl-8">
-                Featured Products
-              </h1> */}
-              {/* {filteredProducts !== null ? (
-                <ProductSlider filteredProducts={filteredProducts} />
               ) : (
-                <div>Loading...</div>
-              )} */}
-              <div ref={loader}></div>
+                <div>
+                  {categories.slice(0, numCategoriesToLoad).map((category) => (
+                    <div key={category.id}>
+                      <h1 className="font-sofia text-lg md:text-3xl pl-8">
+                        {category.name} :
+                      </h1>
+                      <ProductSliderWrapper category={category} />
+                    </div>
+                  ))}
+                  <div ref={loader}></div>
+                </div>
+              )}
             </div>
           ) : (
-            <div>
-              <ShopSlider businesses={businesses} />
+            <div className="mt-10">
+              {selectedCategories.length > 0 ||
+              selectedWilayas.length > 0 ||
+              priceRange.min !== 0 ||
+              priceRange.max !== 10000 ? (
+                <div>
+                  {businesses.map((business) => (
+                    <div key={business.id}>
+                      <ShopCard
+                        key={business.id}
+                        imageUrl={`${BACKEND_URL}storage/${business.image}`}
+                        title={business.businessname}
+                        likes={business.likes}
+                        location={business.wilaya.name}
+                        rating={business.rating}
+                        phoneNumber={business.phone}
+                      />
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div>
+                  {categories.slice(0, numCategoriesToLoad).map((category) => (
+                    <div key={category.id}>
+                      <h1 className="font-sofia text-lg md:text-3xl pl-8">
+                        {category.name} :
+                      </h1>
+                      <BusinessSliderWrapper category={category} />
+                    </div>
+                  ))}
+                  <div ref={loader}></div>
+                </div>
+              )}
             </div>
           )}
         </div>

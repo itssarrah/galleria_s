@@ -13,7 +13,6 @@ import useBusinessesWithCategoryCount from "../../api/businessesWithCategoryCoun
 const Filter = ({
   type,
   setFilteredProducts,
-  products,
   setSelectedFormat,
   selectedFormat,
   setBusinesses,
@@ -21,6 +20,10 @@ const Filter = ({
   setSelectedCategories,
   categories,
   setCategories,
+  selectedWilayas,
+  setSelectedWilayas,
+  priceRange,
+  setPriceRange,
 }) => {
   const [showFilter, setShowFilter] = useState(false);
   const [isFixed, setIsFixed] = useState(false);
@@ -111,13 +114,9 @@ const Filter = ({
 
   //end
   //@Formdata
-  const [formData, setFormData] = useState(new FormData());
-  // const [selectedFormat, setSelectedFormat] = useState("items/products");
-
-  const [priceRange, setPriceRange] = useState({ min: 0, max: 10000 });
 
   const [searchResults, setSearchResults] = useState([]);
-  const [selectedWilayas, setSelectedWilayas] = useState([]);
+
   const searchInputRef = useRef(null);
 
   useEffect(() => {
