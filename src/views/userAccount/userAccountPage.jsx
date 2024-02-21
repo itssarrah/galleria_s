@@ -9,6 +9,7 @@ import UserWishlist from "../../components/userAccount/UserWishlist";
 import UserFavoriteBiz from "../../components/userAccount/UserFavoriteBiz";
 import UserFeedback from "../../components/userAccount/UserFeedback";
 import { useNavigate } from "react-router-dom";
+import { ClipLoader } from "react-spinners";
 
 const UserAccountPage = () => {
   const { userId } = useParams();
@@ -55,7 +56,11 @@ const UserAccountPage = () => {
   };
 
   if (loading) {
-    return <p>Loading...</p>;
+    return (
+      <div className="flex justify-center items-center h-screen w-full">
+        <ClipLoader color="#DD6969" size={50} />
+      </div>
+    );
   }
 
   console.log("User Picture URL:", userData.userPictureURL);

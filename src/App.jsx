@@ -42,6 +42,16 @@ function MainContent() {
       <BrowserRouter>
         <Routes>
           <Route element={<AppLayout />}>
+            <Route path="/business/:id" element={<BusinessesProfile />}>
+              <Route index element={<ItemsOnSale />} />
+              <Route path="insights" element={<Insights />} />
+              <Route path="feedback" element={<FeedbackAndReviews />} />
+            </Route>
+            <Route path="/profile" element={<UserAccountPage />}>
+              <Route index element={<UserWishlist />} />
+              <Route path="fav-biz" element={<UserFavoriteBiz />} />
+              <Route path="feedback" element={<UserFeedback />} />
+            </Route>
             <Route index element={<Navigate replace to="home" />} />
 
             <Route path="/home" element={<LandingPage />} />
@@ -49,25 +59,16 @@ function MainContent() {
             <Route path="/product/:productId" element={<ProductPage />} />
             <Route path="/businessprofile" element={<BusinessesProfile />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/businessregistration" element={<Businessauth />} />
+            <Route path="/userregistration" element={<UserAuth />} />
           </Route>
-          <Route path="/businessregistration" element={<Businessauth />} />
-          <Route path="/userregistration" element={<UserAuth />} />
 
           <Route path="/choice" element={<Choice />} />
 
           <Route path="/addproduct" element={<AddProduct />} />
           {/* <Route path="/user/:userId" element={<UserAccountPage />}></Route> */}
           {/* Inside App component */}
-          <Route path="/profile" element={<UserAccountPage />}>
-            <Route index element={<UserWishlist />} />
-            <Route path="fav-biz" element={<UserFavoriteBiz />} />
-            <Route path="feedback" element={<UserFeedback />} />
-          </Route>
-          <Route path="/business/:id" element={<BusinessesProfile />}>
-            <Route index element={<ItemsOnSale />} />
-            <Route path="insights" element={<Insights />} />
-            <Route path="feedback" element={<FeedbackAndReviews />} />
-          </Route>
+
           <Route path={"/chat"} element={<ChatPage />} />
         </Routes>
       </BrowserRouter>

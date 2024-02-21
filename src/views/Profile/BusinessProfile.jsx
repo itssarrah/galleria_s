@@ -9,7 +9,7 @@ import Insights from "../../components/businessProfile/Insights";
 import FeedbackAndReviews from "../../components/businessProfile/FeedbackAndReviews";
 import Footer from "../../components/Footer";
 import { BACKEND_URL } from "../../config";
-
+import { ClipLoader } from "react-spinners";
 //dummy
 import data from "./dummy";
 //logout
@@ -100,7 +100,11 @@ const BusinessProfile = () => {
   };
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return (
+      <div className="flex justify-center items-center h-screen w-full">
+        <ClipLoader color="#DD6969" size={50} />
+      </div>
+    );
   }
 
   console.log("Business:", businessData);

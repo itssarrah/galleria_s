@@ -134,7 +134,10 @@ const Reviews = ({ title = "Layer cake for birthdays", reviews = [] }) => {
                   {t("swipe_more")}
                 </p>
               </div>
-              <button className=" hidden md:block py-2 px-4 bg-[#DD6969] font-jost text-white rounded-xl ">
+              <button
+                className=" hidden md:block py-2 px-4 bg-[#DD6969] font-jost text-white rounded-xl "
+                onClick={showReviewsModal}
+              >
                 + Add Review
               </button>
               <button className="block md:hidden py-2 px-4 bg-[#DD6969] font-jost text-white rounded-xl ">

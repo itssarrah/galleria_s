@@ -1,10 +1,8 @@
 import React from "react";
 import { useQuery } from "react-query";
-import Filter from "../shop/Filter";
-import Categories from "../shop/Categories";
 import { BACKEND_URL } from "../../config";
 import ItemCard from "../cards/ItemCard";
-
+import { ClipLoader } from "react-spinners";
 function UserWishlist() {
   const {
     data: likedProducts = [],
@@ -37,7 +35,11 @@ function UserWishlist() {
   );
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return (
+      <div className="flex justify-center items-center h-screen w-full">
+        <ClipLoader color="#DD6969" size={50} />
+      </div>
+    );
   }
 
   if (isError) {
@@ -59,7 +61,7 @@ function UserWishlist() {
               basePrice={product.product_price}
               salePrice={product.sale_price}
               isOnSale={product.isOnSale}
-              isLiked={product.isLiked}
+              isLiked="True"
               seller={product.business.businessname}
               productId={product.id}
             />

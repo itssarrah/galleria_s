@@ -5,31 +5,13 @@ import "@splidejs/splide/dist/css/splide.min.css";
 import ItemCard from "../cards/ItemCard";
 import "../../css/Landingpage.css";
 import { BACKEND_URL } from "../../config";
-import { useQuery } from "react-query";
-import axios from "axios";
 import { ClipLoader } from "react-spinners";
-
-const fetchProducts = async () => {
-  const response = await axios.get(`${BACKEND_URL}api/products`);
-
-  return response.data.data;
-};
+import useProducts from "../../api/fetchTrendingItems";
 
 const TrendingItems = () => {
   const { t } = useTranslation("homepage");
+  const { data: products = [], isLoading, isError } = useProducts();
 
-  const {
-    data: products = [],
-    isLoading,
-    isError,
-  } = useQuery("products", fetchProducts, {
-    staleTime: 10000,
-    cacheTime: 300000,
-  });
-
-  useEffect(() => {
-    console.log(products);
-  }, [products]);
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-screen w-full">
@@ -43,11 +25,6 @@ const TrendingItems = () => {
   }
   return (
     <>
-      <div className="pb-12 px-10">
-        <h1 className="primary_txt">{t("items_header")}</h1>
-        <h2 className="secondary_txt">{t("items_subheader")}</h2>
-      </div>
-
       <Splide
         className="mx-auto"
         options={{
@@ -99,4 +76,4 @@ const TrendingItems = () => {
   );
 };
 
-export { TrendingItems, fetchProducts };
+export { TrendingItems };

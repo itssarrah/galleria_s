@@ -260,7 +260,15 @@ const LandingPage = () => {
       <h1 className="slogan text-base sm:text-lg md:text-2xl lg:text-4xl pt-8 text-center opacity-60">
         {t("title_coming")}
       </h1>
+      <div className="pb-12 px-10">
+        <h1 className="primary_txt">{t("items_header")}</h1>
+        <h2 className="secondary_txt">{t("items_subheader")}</h2>
+      </div>
       <TrendingItems />
+      <div className="pb-12 px-10 pt-12">
+        <h1 className="primary_txt">{t("shop_header")}</h1>
+        <h2 className="secondary_txt">{t("shop_subheader")}</h2>
+      </div>
       <TrendingShops className="w-full px-10 pt-12 " />
       <Renderfaq />
       <Team />

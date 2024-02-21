@@ -138,9 +138,6 @@ function Login() {
             </div>
           </div>
         </form>
-        <div className=" mt-4 md:mt-24">
-          <Footer />
-        </div>
       </div>
     </>
   );

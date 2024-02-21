@@ -8,6 +8,7 @@ import "./product-page.css";
 import * as data from "./dummy-data";
 import Ratings from "../../components/product/Ratings";
 import Reviews from "../../components/product/Reviews";
+import { ClipLoader } from "react-spinners";
 
 const fetchProduct = async (productId) => {
   const response = await fetch(`${BACKEND_URL}api/product/${productId}`);
@@ -41,7 +42,9 @@ const ProductPage = () => {
   if (isLoading) {
     return (
       <>
-        <h1>Loading..</h1>
+        <div className="flex justify-center items-center h-screen w-full">
+          <ClipLoader color="#DD6969" size={50} />
+        </div>
       </>
     );
   }

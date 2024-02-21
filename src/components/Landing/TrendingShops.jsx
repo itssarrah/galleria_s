@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import ShopCardSlider from "./ShopCardSlider";
 import { useQuery } from "react-query";
 import { BACKEND_URL } from "../../config";
+import { ClipLoader } from "react-spinners";
 
 function TrendingShops(props) {
   const { t } = useTranslation("homepage");
@@ -12,16 +13,19 @@ function TrendingShops(props) {
     isLoading,
     isError,
   } = useQuery("topCategoriesAndBusinesses", async () => {
-    // const response = await fetch(
-    //   `${BACKEND_URL}api/top-businesses-by-category`
-    // );
-    // const data = await response.json();
-    // console.log(data);
-    // return data;
+    const response = await fetch(
+      `${BACKEND_URL}api/top-businesses-by-category`
+    );
+    const data = await response.json();
+    return data;
   });
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex justify-center items-center h-screen w-full">
+        <ClipLoader color="#DD6969" size={50} />
+      </div>
+    );
   }
 
   if (isError || !topCategoriesAndBusinesses) {
@@ -30,14 +34,10 @@ function TrendingShops(props) {
 
   return (
     <div {...props}>
-      <div className="pb-12">
-        <h1 className="primary_txt">{t("shop_header")}</h1>
-        <h2 className="secondary_txt">{t("shop_subheader")}</h2>
-      </div>
       {topCategoriesAndBusinesses.data.map((result) => (
         <div>
           <h1 className="category_name relative text-base sm:text-lg md:text-xl lg:text-2xl pb-4">
-            {t("category_production")} {result.category.en_name}
+            {t("category_production")} {result.en_name}
           </h1>
           <ShopCardSlider businesses={result.businesses} />
         </div>

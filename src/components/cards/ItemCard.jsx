@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { MdFavorite, MdFavoriteBorder } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "react-query";
@@ -12,47 +12,32 @@ const ItemCard = ({
   salePrice = "500.00",
   productId,
   seller = "SweetyPie",
+  isLiked = false,
 }) => {
   const token = localStorage.getItem("authToken");
   const queryClient = useQueryClient();
-
-  const {
-    data: likeStatus,
-    isLoading,
-    isError,
-  } = useQuery(
-    ["likeStatus", productId],
-    () => fetchLikeStatus(productId, token),
-    {
-      enabled: !!token,
-      staleTime: 10000,
-    }
-  );
-
-  const liked = likeStatus?.isLiked || false;
+  const [liked, setLiked] = useState(isLiked);
 
   const { isLoading: isLiking, mutate } = useMutation({
     mutationFn: liked
       ? () => unlikeProduct(productId, token)
       : () => likeProduct(productId, token),
     onSuccess: () => {
+      // Update the like status in the cache
       queryClient.setQueryData(["likeStatus", productId], {
-        isLiked: !liked,
+        liked: !liked,
       });
-    },
-
-    onMutate: () => {
-      queryClient.setQueryData(["likeStatus", productId], {
-        isLiked: !liked,
-      });
-
-      return () => {
-        queryClient.setQueryData(["likeStatus", productId], {
-          isLiked: liked,
-        });
-      };
+      // Update the state using the functional form of setLiked
+      setLiked((prevLiked) => !prevLiked);
+      // Invalidate the products query to fetch the latest data
+      queryClient.invalidateQueries("products");
     },
   });
+
+  useEffect(() => {
+    // Update the state with the initial value from the cache
+    setLiked(isLiked);
+  }, [isLiked]);
 
   const isOnSale = salePrice && parseFloat(salePrice) < parseFloat(basePrice);
   const discountPercentage = isOnSale
@@ -105,7 +90,7 @@ const ItemCard = ({
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                !isLiking && mutate();
+                mutate();
               }}
             >
               {liked ? (
