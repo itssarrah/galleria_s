@@ -16,6 +16,11 @@ const fetchLikeStatus = async (productId, token) => {
 };
 
 const likeProduct = async (productId, token) => {
+  if (!token) {
+    // Redirect user to login page if token is empty
+    window.location.href = "/login";
+    return;
+  }
   const response = await fetch(`${BACKEND_URL}api/save-liked-product`, {
     method: "POST",
     headers: {
@@ -31,6 +36,11 @@ const likeProduct = async (productId, token) => {
 };
 
 const unlikeProduct = async (productId, token) => {
+  if (!token) {
+    // Redirect user to login page if token is empty
+    window.location.href = "/login";
+    return;
+  }
   const response = await fetch(`${BACKEND_URL}api/unlike-product`, {
     method: "POST",
     headers: {
