@@ -113,6 +113,9 @@ function Login() {
                 />
               </div>
               <div className="flex flex-col w-6/12 items-center justify-around gap-1 mx-auto py-8">
+                {errors.general && (
+                  <div className="text-red-500 text-lg">{errors.general}</div>
+                )}
                 <ContributeBtn
                   importance="primary"
                   text={t("log_btn")}

@@ -72,7 +72,11 @@ const ProductPage = () => {
         )}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
           <Ratings ratings={data.ratings} />
-          <Reviews title={data.title} reviews={data.reviews} />
+          <Reviews
+            title={data.title}
+            reviews={data.reviews}
+            productId={productId}
+          />
         </div>
         {/* <ProductsContainer products={data.products} /> */}
       </div>
