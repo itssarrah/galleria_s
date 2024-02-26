@@ -16,7 +16,7 @@ const fetchProduct = async (productId) => {
     throw new Error("Error fetching product data");
   }
   const data = await response.json();
-  console.log("Product Data:", data);
+  // console.log("Product Data:", data);
   return data.data;
 };
 
@@ -71,7 +71,7 @@ const ProductPage = () => {
           />
         )}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
-          <Ratings ratings={data.ratings} />
+          <Ratings ratings={data.ratings} productId={productId} />
           <Reviews
             title={data.title}
             reviews={data.reviews}

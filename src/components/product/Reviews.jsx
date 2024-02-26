@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { useTranslation } from "react-i18next";
 import Stars from "../Stars";
 import AddReviewModal from "./AddReviewModal";
-// css
+import { ClipLoader } from "react-spinners";
+
 import "../../css/product.css";
 import useReviewsByProductId from "../../api/reviewsByProductId";
 import { BACKEND_URL } from "../../config";
@@ -38,7 +39,6 @@ const ReviewCard = ({
       const daysAgo = Math.floor(daysDifference);
       return daysAgo === 1 ? "Yesterday" : `${daysAgo} days ago`;
     } else {
-      // If more than a week, return the full date
       return reviewDate.toLocaleDateString();
     }
   };
@@ -71,16 +71,71 @@ const ReviewCard = ({
 
 const ReviewsModal = ({
   title,
-  reviews,
-  initialMaxReviewsDisplay,
-  maxReviewsDisplay,
-  setMaxReviewsDisplay,
-  closeModal,
+  reviews: initialReviews,
+  productId,
   t = null,
+  showModal,
+  setShowReviews,
 }) => {
-  if (reviews.length === 0) return null;
+  const [page, setPage] = useState(2);
+  const [reviews, setReviews] = useState(initialReviews);
+  const modalRef = useRef(null);
+  const [shouldPaginate, setShouldPaginate] = useState(true);
 
-  const reviewsCount = reviews.length;
+  const closeModal = () => {
+    if (showModal) {
+      setShowReviews(false);
+      setReviews([]);
+      setPage(2);
+      setShouldPaginate(true);
+
+      document.body.classList.remove("modal-open");
+    }
+  };
+
+  const {
+    data: modalReviews,
+    isLoading,
+    isError,
+  } = useReviewsByProductId(productId, page);
+
+  useEffect(() => {
+    if (modalRef.current) {
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (
+            entry.isIntersecting &&
+            !isLoading &&
+            !isError &&
+            shouldPaginate
+          ) {
+            setPage((prevPage) => prevPage + 1);
+          }
+        },
+        {
+          root: null,
+          rootMargin: "0px",
+          threshold: 1,
+        }
+      );
+
+      observer.observe(modalRef.current);
+
+      return () => {
+        observer.disconnect();
+      };
+    }
+  }, [isLoading, isError, shouldPaginate]);
+
+  useEffect(() => {
+    if (modalReviews && !isLoading && !isError) {
+      if (modalReviews.ratings.length === 0) {
+        setShouldPaginate(false);
+      }
+
+      setReviews((prevReviews) => [...prevReviews, ...modalReviews.ratings]);
+    }
+  }, [modalReviews, isLoading, isError]);
 
   return (
     <div className="modal-overlay px-5 md:px-[5rem] lg:px-[8rem] xl:px-[10rem]">
@@ -93,30 +148,29 @@ const ReviewsModal = ({
           <h2 className="product-title">{title}</h2>
           <p className="text-3xl text-black/[.55] font-bold">{t("reviews")}</p>
         </div>
-        <div className="reviews-container">
-          {reviews.slice(0, maxReviewsDisplay).map((review) => (
-            <ReviewCard {...review} className="nicer" showDate />
+        <div className="reviews-container ">
+          {reviews.map((review, index) => (
+            <div key={`${index}`} ref={modalRef} className="h-fit">
+              <ReviewCard
+                key={`ss-rc-${index}`}
+                title={review.title}
+                userPicture={`${BACKEND_URL}storage/${review.image}`}
+                username={review.name}
+                price={review.price}
+                rating={review.stars}
+                description={review.description}
+                date={review.date}
+                showDate={true}
+                className="nicer"
+              />
+            </div>
           ))}
-          {reviewsCount > maxReviewsDisplay && (
-            <Link
-              className="block w-full text-center p-3 link"
-              onClick={() =>
-                setMaxReviewsDisplay((prevMax) =>
-                  Math.min(reviewsCount, prevMax * 2)
-                )
-              }
-            >
-              {t("show_more")}
-            </Link>
+          {isLoading && (
+            <div className="flex justify-center items-center h-[30vh] w-full">
+              <ClipLoader color="#DD6969" size={50} />
+            </div>
           )}
-          {maxReviewsDisplay > initialMaxReviewsDisplay && (
-            <Link
-              className="block w-full text-center p-3 link"
-              onClick={() => setMaxReviewsDisplay(initialMaxReviewsDisplay)}
-            >
-              {t("show_less")}
-            </Link>
-          )}
+          {isError && <p>Error fetching reviews</p>}
         </div>
       </div>
     </div>
@@ -129,39 +183,29 @@ const Reviews = ({
   productId,
 }) => {
   const { t } = useTranslation("product");
-  const initialMaxReviewsDisplay = 8;
+
   const [showReviews, setShowReviews] = useState(false);
-  const [maxReviewsDisplay, setMaxReviewsDisplay] = useState(
-    initialMaxReviewsDisplay
-  );
-  const [showAddReviewModal, setShowAddReviewModal] = useState(false); // State to manage the visibility of the add review modal
+
+  const [showAddReviewModal, setShowAddReviewModal] = useState(false);
+
   const {
     data: reviewsData,
     isLoading,
     isError,
-  } = useReviewsByProductId(productId);
-  const handleAddReview = (reviewData) => {
-    // Implement the logic to add the review
-    console.log("Adding review:", reviewData);
-    // Here, you can send the review data to the backend or update the local state with the new review
-  };
+  } = useReviewsByProductId(productId, 1);
+
   const direction = t("direction");
 
   const showReviewsModal = () => {
     setShowReviews(true);
     document.body.classList.add("modal-open");
   };
-  const hideReviewsModal = () => {
-    setShowReviews(false);
-    setMaxReviewsDisplay(initialMaxReviewsDisplay);
-    document.body.classList.remove("modal-open");
-  };
+
   const showAddReviewModalFn = () => {
     setShowAddReviewModal(true);
     document.body.classList.add("modal-open");
   };
 
-  // Define function to close Add Review modal
   const hideAddReviewModal = () => {
     setShowAddReviewModal(false);
     document.body.classList.remove("modal-open");
@@ -195,6 +239,11 @@ const Reviews = ({
             + Add
           </button>
         </div>
+        {isLoading && (
+          <div className="flex justify-center items-center w-full">
+            <ClipLoader color="#DD6969" size={50} />
+          </div>
+        )}
         {reviewsData &&
         reviewsData.ratings &&
         reviewsData.ratings.length > 0 ? (
@@ -231,22 +280,20 @@ const Reviews = ({
           </div>
         )}
 
-        {showReviews && (
+        {showReviews && reviewsData && (
           <ReviewsModal
             title={title}
-            reviews={reviews}
-            closeModal={hideReviewsModal}
-            initialMaxReviewsDisplay={initialMaxReviewsDisplay}
-            maxReviewsDisplay={maxReviewsDisplay}
-            setMaxReviewsDisplay={setMaxReviewsDisplay}
+            reviews={reviewsData.ratings}
             t={t}
+            productId={productId}
+            showModal={showReviews}
+            setShowReviews={setShowReviews}
           />
         )}
         {showAddReviewModal && (
           <AddReviewModal
             title={title}
-            closeModal={hideAddReviewModal} // Close modal function
-            addReview={handleAddReview}
+            closeModal={hideAddReviewModal}
             productId={productId}
           />
         )}

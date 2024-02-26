@@ -187,18 +187,17 @@
 
 .reviews-container {
   overflow: auto;
-  height: 100%;
+  max-height: 100%;
   padding: 3rem;
 
   /* hiding scrollbar */
-  -ms-overflow-style: none;
+  /* -ms-overflow-style: none;
   scrollbar-width: none;
-  overflow: -moz-scrollbars-none;
+  overflow: -moz-scrollbars-none; */
 }
 
-.reviews-container::-webkit-scrollbar {
+/* .reviews-container::-webkit-scrollbar {
   display: none; /* Safari and Chrome */
-}
 
 /* expansion panel in product details*/
 .expansion-panel {

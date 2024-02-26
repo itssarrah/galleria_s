@@ -3,13 +3,7 @@ import { AiFillCloseCircle, AiOutlineExclamationCircle } from "react-icons/ai";
 import InteractableStartsInput from "../InteractableStartsInput";
 import { BACKEND_URL } from "../../config";
 
-const AddReviewModal = ({
-  title,
-  closeModal,
-  t = null,
-  addReview,
-  productId,
-}) => {
+const AddReviewModal = ({ title, closeModal, t = null, productId }) => {
   const [reviewContent, setReviewContent] = useState("");
   const [reviewTitle, setReviewTitle] = useState(""); // Define reviewTitle state
 
@@ -58,8 +52,6 @@ const AddReviewModal = ({
         throw new Error("Failed to add review");
       }
 
-      // Optionally handle success response
-      console.log("Review added successfully");
       setSuccessMessage("Review added successfully");
       // Clear form inputs
       setReviewTitle("");
@@ -68,6 +60,7 @@ const AddReviewModal = ({
       setTimeout(() => {
         setSuccessMessage("");
         closeModal();
+        window.location.reload();
       }, 1500);
     } catch (error) {
       console.error("Error adding review:", error);

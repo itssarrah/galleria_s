@@ -1,10 +1,10 @@
 import { useQuery } from "react-query";
 import { BACKEND_URL } from "../config";
 
-const fetchReviewsByProductId = async (productId) => {
+const fetchReviewsByProductId = async (productId, page, perPage) => {
   try {
     const response = await fetch(
-      `${BACKEND_URL}api/reviews/product/${productId}`
+      `${BACKEND_URL}api/reviews/product/${productId}?page=${page}&perPage=${perPage}`
     );
 
     if (!response.ok) {
@@ -12,20 +12,20 @@ const fetchReviewsByProductId = async (productId) => {
     }
 
     const data = await response.json();
-    console.log(data);
+    // console.log(data);
     return data;
   } catch (error) {
     throw new Error("Failed to fetch reviews: " + error.message);
   }
 };
 
-const useReviewsByProductId = (productId) => {
+const useReviewsByProductId = (productId, initialPage = 1, perPage = 8) => {
   return useQuery(
-    ["reviews", productId],
-    () => fetchReviewsByProductId(productId),
+    ["reviews", productId, initialPage],
+    () => fetchReviewsByProductId(productId, initialPage, perPage),
     {
-      staleTime: 120000,
-      cacheTime: 300000,
+      staleTime: 1000,
+      cacheTime: 1000,
     }
   );
 };
