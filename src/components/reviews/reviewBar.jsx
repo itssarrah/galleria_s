@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-function ReviewBar() {
+function ReviewBar({ type = "user", onReviewTypeChange, reviewType }) {
   const [activeButton, setActiveButton] = useState(null);
 
   const handleButtonClick = (index) => {
@@ -10,17 +10,36 @@ function ReviewBar() {
       setActiveButton(index);
     }
   };
+
+  const handleSelectChange = (event) => {
+    const newReviewType = event.target.value;
+    onReviewTypeChange(newReviewType);
+  };
+
   return (
-    <nav className="w-full flex flex-row bg-white p-4 justify-between items-center z-[9] mt-8 px-20">
+    <nav className="w-full flex flex-row bg-white px-4 p-4 justify-between items-center z-[9] mt-8 md:px-20 md:gap-0 gap-2">
       <div className="text-[18px]">
-        <button
-          className={`hover:text-main__pink ${
-            activeButton === 7 ? "text-main__pink" : ""
-          }`}
-          onClick={() => handleButtonClick(7)}
-        >
-          All Feedbacks
-        </button>
+        {type == "user" ? (
+          <button
+            className={`hover:text-main__pink ${
+              activeButton === 7 ? "text-main__pink" : ""
+            }`}
+            onClick={() => handleButtonClick(7)}
+          >
+            All Feedbacks
+          </button>
+        ) : (
+          <div className="text-[18px] ">
+            <select
+              className="cursor-pointer outline-none"
+              onChange={handleSelectChange}
+              value={reviewType}
+            >
+              <option value="my_reviews">My Products Reviews</option>
+              <option value="posted_reviews">Posted Reviews</option>
+            </select>
+          </div>
+        )}
       </div>
       <div className="w-1/4 hidden xl:flex justify-between text-[18px] ">
         <button

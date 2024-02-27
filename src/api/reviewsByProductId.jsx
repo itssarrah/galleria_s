@@ -30,4 +30,4 @@ const useReviewsByProductId = (productId, initialPage = 1, perPage = 8) => {
   );
 };
 
-export default useReviewsByProductId;
+export { fetchReviewsByProductId, useReviewsByProductId };

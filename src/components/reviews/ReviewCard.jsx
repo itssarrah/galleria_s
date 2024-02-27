@@ -14,6 +14,7 @@ const textSizes = {
 };
 
 const ReviewCard = ({
+  productId,
   title = "Green Poetry Set 4 argile pieces 1lb",
   image = "/images/argile-pieces.png",
   seller = "PottyPot",
@@ -26,7 +27,9 @@ const ReviewCard = ({
   const [size, setSize] = useState();
   const [showFullText, setShowFullText] = useState(false);
 
-  const direction = t("direction");
+  // const direction = t("direction");
+  const formattedTitle =
+    title.charAt(0).toUpperCase() + title.slice(1).toLowerCase();
 
   const getClosestBreakpoint = () => {
     for (const breakpoint in textSizes)
@@ -41,7 +44,6 @@ const ReviewCard = ({
   useEffect(() => {
     handleResize();
     window.addEventListener("resize", () => {
-      console.log(window.innerWidth);
       handleResize();
     });
     return () => {
@@ -53,12 +55,12 @@ const ReviewCard = ({
     <div
       className="rc
       shadow-md
-      mx-auto
+      m-4
       bg-[#FDDED2] rounded-2xl overflow-hidden 
       flex flex-col
       max-w-full
       sm:max-w-[80%]
-      md:flex-row 
+      md:flex-row
       lg:flex-col 
       xl:flex-row 
       xl:max-w-[100%] "
@@ -75,29 +77,31 @@ const ReviewCard = ({
             xl:w-auto 
             xl:max-w-[40%]"
         >
-          <img
-            src={image}
-            alt="product"
-            className="
+          <a href={`/product/${productId}`}>
+            <img
+              src={image}
+              alt="product"
+              className="
               w-full h-full
               transition-transform
               ease-in-out delay-100
               hover:scale-125 object-cover cursor-pointer"
-          />
+            />
+          </a>
         </div>
       )}
       <div className="flex flex-col p-5 justify-between">
         <div>
-          <h2 className="font-sofia font-bold text-xl">{title}</h2>
+          <h2 className="font-sofia font-bold text-xl">{formattedTitle}</h2>
           <div
             className="flex justify-between my-2 text-black/[.55]"
-            dir={direction}
+            // dir={direction}
           >
             <span>
               {`${t("from")} `} <span className="underline">{seller}</span>
             </span>
             <span className="font-black text-[#7D5C3A] text-md">
-              {parseFloat(price.toFixed(2))} {t("dzd")}
+              {parseFloat(parseFloat(price).toFixed(2))} {t("dzd")}
             </span>
           </div>
         </div>

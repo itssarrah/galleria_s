@@ -209,7 +209,28 @@
   background-color: #fff;
 }
 
+.expansion-panel.review {
+  border-radius: 25px;
+  overflow: hidden;
+  max-height: 250px;
+  transition: all 0.3s ease;
+  margin-bottom: 10px;
+  background-color: #fff;
+}
+
+@media (max-width: 768px) {
+  .expansion-panel.review {
+    max-height: 130px;
+  }
+}
+
 .expansion-panel.expanded {
+  max-height: 100vh;
+  transition: all 0.3s ease;
+}
+
+.expansion-panel.expandedreviews {
+  overflow: scroll;
   max-height: 100vh;
   transition: all 0.3s ease;
 }
@@ -231,6 +252,16 @@
 .arrow {
   border: solid #000;
   border-width: 0 2px 2px 0;
+  display: inline-block;
+  padding: 3px;
+  transition: transform 0.3s;
+}
+
+.arrowreview {
+  border: solid #000;
+  width: 20px;
+  height: 20px;
+  border-width: 0 4px 4px 0;
   display: inline-block;
   padding: 3px;
   transition: transform 0.3s;
