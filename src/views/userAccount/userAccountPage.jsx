@@ -25,7 +25,7 @@ const UserAccountPage = () => {
       const token = localStorage.getItem("authToken");
       if (!token) {
         console.error("Token not found. Redirecting to login page.");
-        navigate("/login");
+        window.location.href = "/login";
         return;
       }
 
@@ -39,7 +39,7 @@ const UserAccountPage = () => {
       setLoading(false);
     } catch (error) {
       console.error("Error fetching user data:", error);
-      navigate(-1);
+      window.location.href = "/login";
     }
   };
 

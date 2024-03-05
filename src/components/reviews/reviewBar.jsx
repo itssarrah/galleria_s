@@ -21,10 +21,12 @@ function ReviewBar({ type = "user", onReviewTypeChange, reviewType }) {
       <div className="text-[18px]">
         {type == "user" ? (
           <button
-            className={`hover:text-main__pink ${
-              activeButton === 7 ? "text-main__pink" : ""
-            }`}
-            onClick={() => handleButtonClick(7)}
+            disabled
+            className={`font-jost text-main__pink`}
+            // className={`hover:text-main__pink  ${
+            //   activeButton === 7 ? "text-main__pink" : ""
+            // }`}
+            // onClick={() => handleButtonClick(7)}
           >
             All Feedbacks
           </button>

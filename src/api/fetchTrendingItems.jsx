@@ -27,7 +27,7 @@ const useProducts = () => {
       }
 
       const data = await response.json(); // Extract data from the response
-      console.log(data.data);
+      // console.log(data.data);
       return data.data; // Return the extracted data
     } catch (error) {
       throw new Error("Failed to fetch products: " + error.message);

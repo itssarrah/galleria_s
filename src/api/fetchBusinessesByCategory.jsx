@@ -28,7 +28,7 @@ const fetchBusinessesByCategory = async (categoryName) => {
     }
 
     const data = await response.json();
-    console.log(data);
+    // console.log(data);
     return data;
   } catch (error) {
     throw new Error("Failed to fetch businesses: " + error.message);
