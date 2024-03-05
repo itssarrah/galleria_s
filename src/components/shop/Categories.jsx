@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 
 function Categories({ clearCategories, selectedCategories, handleFilter }) {
-  const filterOptions = ["Latest", "Sales", "Oldest", "Popular"];
+  const filterOptions = [""];
+  // const filterOptions = ["Latest", "Sales", "Oldest", "Popular"];
   const [activeButton, setActiveButton] = useState(null);
 
   const handleButtonClick = (index) => {
@@ -32,7 +33,7 @@ function Categories({ clearCategories, selectedCategories, handleFilter }) {
           All Categories
         </button>
       </div>
-      <div className="w-1/4 hidden xl:flex justify-between text-[18px] ">
+      {/* <div className="w-1/4 hidden xl:flex justify-between text-[18px] ">
         {filterOptions.map((option, index) => (
           <button
             key={index}
@@ -53,7 +54,7 @@ function Categories({ clearCategories, selectedCategories, handleFilter }) {
             </option>
           ))}
         </select>
-      </div>
+      </div> */}
     </nav>
   );
 }

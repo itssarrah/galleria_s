@@ -31,6 +31,7 @@ const ItemCard = ({
       setLiked((prevLiked) => !prevLiked);
       // Invalidate the products query to fetch the latest data
       queryClient.invalidateQueries("products");
+      queryClient.invalidateQueries("likedProducts");
     },
   });
 
@@ -90,6 +91,7 @@ const ItemCard = ({
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
+
                 mutate();
               }}
             >

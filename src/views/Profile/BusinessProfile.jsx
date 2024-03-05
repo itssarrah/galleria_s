@@ -14,6 +14,8 @@ import { ClipLoader } from "react-spinners";
 import data from "./dummy";
 //logout
 import axios from "axios";
+import UserWishlist from "../../components/userAccount/UserWishlist";
+import Saved from "../../components/businessProfile/Saved";
 
 const fetchBusinessData = async (token) => {
   const response = await fetch(`${BACKEND_URL}api/business/profile`, {
@@ -23,7 +25,13 @@ const fetchBusinessData = async (token) => {
   });
 
   if (!response.ok) {
-    throw new Error("Failed to fetch business data");
+    if (response.status === 401) {
+      // Redirect to login page if unauthorized
+      console.error("Unauthorized. Redirecting to login page.");
+      window.location.href = "/login";
+    } else {
+      throw new Error("Failed to fetch business data");
+    }
   }
 
   return response.json();
@@ -31,7 +39,8 @@ const fetchBusinessData = async (token) => {
 
 const BusinessProfile = () => {
   const { id } = useParams();
-  const tabItems = ["My Products", "Insights", "Feedback & Reviews"];
+  const tabItems = ["My Products", "Insights", "Reviews", "Saved"];
+  // const tabItems = ["My Products", "Insights", "Feedback & Reviews"];
   const [activeTab, setActiveTab] = React.useState("My Products");
 
   const renderTab = (id, activeTab, tabItems) => {
@@ -40,6 +49,8 @@ const BusinessProfile = () => {
         return <Insights data={data[0]} />;
       case tabItems[2]:
         return <FeedbackAndReviews />;
+      case tabItems[3]:
+        return <Saved />;
       default:
         return (
           <div className="px-2 mx-auto">
@@ -120,7 +131,7 @@ const BusinessProfile = () => {
             maxPrice={businessData.business.maxPrice}
           />
           <BusinessProfileStats
-            likes={20000}
+            likes={businessData.business.likes}
             date={new Date(businessData.business.created_at)}
             sales={
               businessData.business.products

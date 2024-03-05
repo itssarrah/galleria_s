@@ -185,9 +185,9 @@ const Body = () => {
           (searchedProducts.length || searchedBusinesses.length) ? (
             <div>
               {selectedFormat === "items/products" ? (
-                <div className="mt-10">
+                <div className="mt-10 flex flex-wrap justify-center items-center">
                   {searchedProducts.map((product) => (
-                    <div key={product.id}>
+                    <div key={product.id} className="m-2">
                       <ItemCard
                         itemUrl={`${BACKEND_URL}storage/${product.images[0].url}`}
                         sellerUrl={`${BACKEND_URL}storage/${product.business.image}`}
@@ -203,9 +203,9 @@ const Body = () => {
                   ))}
                 </div>
               ) : (
-                <div className="mt-10">
+                <div className="mt-10 flex flex-wrap justify-center items-center">
                   {searchedBusinesses.map((business) => (
-                    <div key={business.id}>
+                    <div key={business.id} className="m-2">
                       <ShopCard
                         key={business.id}
                         imageUrl={`${BACKEND_URL}storage/${business.image}`}
@@ -234,9 +234,9 @@ const Body = () => {
                   selectedWilayas.length > 0 ||
                   priceRange.min !== 0 ||
                   priceRange.max !== 10000 ? (
-                    <div>
+                    <div className="flex flex-wrap justify-center items-center">
                       {filteredProducts.map((product) => (
-                        <div key={product.id}>
+                        <div key={product.id} className="m-2">
                           <ItemCard
                             itemUrl={`${BACKEND_URL}storage/${product.images[0].url}`}
                             sellerUrl={`${BACKEND_URL}storage/${product.business.image}`}
@@ -255,8 +255,8 @@ const Body = () => {
                     <div>
                       {categories
                         .slice(0, numCategoriesToLoad)
-                        .map((category) => (
-                          <div key={category.id}>
+                        .map((category, index) => (
+                          <div key={index}>
                             <h1 className="font-sofia text-lg md:text-3xl pl-8">
                               {category.name} :
                             </h1>
@@ -268,14 +268,14 @@ const Body = () => {
                   )}
                 </div>
               ) : (
-                <div className="mt-10">
+                <div className="mt-10 ">
                   {selectedCategories.length > 0 ||
                   selectedWilayas.length > 0 ||
                   priceRange.min !== 0 ||
                   priceRange.max !== 10000 ? (
-                    <div>
+                    <div className="flex flex-wrap justify-center items-center">
                       {businesses.map((business) => (
-                        <div key={business.id}>
+                        <div key={business.id} className="m-2">
                           <ShopCard
                             key={business.id}
                             imageUrl={`${BACKEND_URL}storage/${business.image}`}
@@ -284,6 +284,7 @@ const Body = () => {
                             location={business.wilaya.name}
                             rating={business.rating}
                             phoneNumber={business.phone}
+                            businessId={business.id}
                           />
                         </div>
                       ))}
@@ -292,8 +293,8 @@ const Body = () => {
                     <div>
                       {categories
                         .slice(0, numCategoriesToLoad)
-                        .map((category) => (
-                          <div key={category.id}>
+                        .map((category, index) => (
+                          <div key={index}>
                             <h1 className="font-sofia text-lg md:text-3xl pl-8">
                               {category.name} :
                             </h1>

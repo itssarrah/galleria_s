@@ -15,6 +15,7 @@ function UserFeedback() {
           <div className="grid xl:grid-cols-3 gap-3 md:gap-4 xl:gap-8 md:grid-cols-2 grid-cols-1 px-12 py-8">
             {productRatings.map((product, index) => (
               <ReviewCard
+                key={index}
                 title={product.ratings.rating_title}
                 price={product.price}
                 image={`${BACKEND_URL}storage/${product.image}`}

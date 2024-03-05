@@ -89,15 +89,15 @@ function Nav() {
   const [userType, setUserType] = useState(null);
   const token = localStorage.getItem("authToken");
 
-  const { data: userData, isSuccess: isUserDataSuccess } = useQuery(
-    "currentUser",
-    async () => {
-      try {
-        if (!token) {
-          setUserAuthorized(false);
-          return null; // Return null if user is not authenticated
-        }
+  useEffect(() => {
+    // Only fetch user data if the token exists
+    if (!token) {
+      setUserAuthorized(false);
+      return; // Exit early if no token exists
+    }
 
+    const fetchUserData = async () => {
+      try {
         const response = await fetch(`${BACKEND_URL}api/current_user`, {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -105,32 +105,77 @@ function Nav() {
         });
 
         if (!response.ok) {
-          throw new Error("Error fetching user data");
+          if (response.status === 401) {
+            setUserAuthorized(false);
+            return;
+          } else {
+            throw new Error("Failed to fetch authentication data");
+          }
         }
 
         const data = await response.json();
-        return data;
+        setUserType(data.user_type);
+        setUserAuthorized(true);
+        setUserProfileImage(BACKEND_URL + "storage/" + data.profile_image);
       } catch (error) {
         console.error("Error fetching user data:", error);
-        return null;
+        setUserAuthorized(false);
       }
-    },
-    {
-      enabled: !!token,
-    }
-  );
+    };
 
-  useEffect(() => {
-    if (isUserDataSuccess && userData) {
-      const currentUserType = userData.user_type;
-      setUserType(currentUserType);
-      setUserAuthorized(true);
+    fetchUserData(); // Fetch user data when the component mounts
 
-      const currentUserImage =
-        BACKEND_URL + "storage/" + userData.profile_image;
-      setUserProfileImage(currentUserImage);
-    }
-  }, [isUserDataSuccess, userData]);
+    // No need to fetch user data again unless the token changes
+  }, [token]); // Only re-run the effect if the token changes
+
+  // const { data: userData, isSuccess: isUserDataSuccess } = useQuery(
+  //   "currentUser",
+  //   async () => {
+  //     try {
+  //       if (!token) {
+  //         setUserAuthorized(false);
+  //         return null; // Return null if user is not authenticated
+  //       }
+
+  //       const response = await fetch(`${BACKEND_URL}api/current_user`, {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       });
+
+  //       if (!response.ok) {
+  //         if (response.status === 401) {
+  //           setUserAuthorized(false);
+  //         } else {
+  //           throw new Error("Failed to fetch Authentification data");
+  //         }
+  //       }
+
+  //       const data = await response.json();
+  //       return data;
+  //     } catch (error) {
+  //       console.error("Error fetching user data:", error);
+  //       return null;
+  //     }
+  //   },
+  //   {
+  //     enabled: !!token,
+  //   }
+  // );
+
+  // useEffect(() => {
+  //   if (isUserDataSuccess && userData) {
+  //     const currentUserType = userData.user_type;
+  //     setUserType(currentUserType);
+  //     setUserAuthorized(true);
+
+  //     const currentUserImage =
+  //       BACKEND_URL + "storage/" + userData.profile_image;
+  //     setUserProfileImage(currentUserImage);
+  //   } else {
+  //     setUserAuthorized(false);
+  //   }
+  // }, [isUserDataSuccess, userData]);
 
   return (
     <nav
@@ -160,13 +205,6 @@ function Nav() {
           isOpen ? "top-[79px]" : "top-[-300px] "
         }`}
       >
-        {/* {Links.map((link) => (
-          <li className="text-sm md:text-base lg:text-2xl nav__item pr-8 text-center">
-            <NavLink to={link.link} activeClassName="active-link">
-              {link.name}
-            </NavLink>
-          </li>
-        ))} */}
         {Links.map((link) => (
           <li
             key={link.name} // It's good practice to add a 'key' prop when mapping over elements

@@ -66,6 +66,8 @@ const ShopCardSlider = ({ businesses }) => {
             location={business.wilaya.name}
             rating={business.rating}
             phoneNumber={business.phone}
+            businessId={business.id}
+            isLiked={business.isLiked}
           />
         </SplideSlide>
       ))}

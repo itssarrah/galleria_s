@@ -73,7 +73,7 @@ function Login() {
   return (
     <>
       <div>
-        <form>
+        <form onSubmit={handleLogin}>
           <div className="relative w-[98%] md:bg-white md:h-[25rem] xl:h-[35rem] mx-auto mt-12 md:mt-[8rem] flex items-center flex-col md:flex-row justify-center rounded-2xl">
             <div className="md:absolute w-10/12 md:w-6/12 md:h-[30rem]  xl:h-[45rem] rounded-3xl loginbg md:right-[5rem] flex  flex-col justify-around px-2">
               <div className="flex flex-col items-center pt-12">
@@ -120,6 +120,12 @@ function Login() {
                   importance="primary"
                   text={t("log_btn")}
                   onClick={handleLogin}
+                  type="submit"
+                  onKeyPress={(e) => {
+                    if (e.key === "Enter") {
+                      handleLogin(e);
+                    }
+                  }}
                 />
                 <button className="underline text-blue-900 text-base md:text-lg font-sunflower font-bold ">
                   {t("forgot_pass")}

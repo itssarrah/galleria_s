@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { LandingPage } from "./components/Landingpage.jsx";
 import {
@@ -16,7 +16,13 @@ import UserWishlist from "./components/userAccount/UserWishlist.jsx";
 import UserFeedback from "./components/userAccount/UserFeedback.jsx";
 import UserFavoriteBiz from "./components/userAccount/UserFavoriteBiz.jsx";
 
-import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
+import {
+  BrowserRouter,
+  Route,
+  Routes,
+  Navigate,
+  useLocation,
+} from "react-router-dom";
 
 import "./i18n.js";
 import UserAuth from "./components/auth/userauth.jsx";
@@ -31,6 +37,16 @@ import AppLayout from "./components/ui/AppLayout.jsx";
 
 const queryClient = new QueryClient();
 
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+}
+
 function MainContent() {
   return (
     <div className="App">
@@ -40,6 +56,8 @@ function MainContent() {
       {/* <div className="content"> */}
 
       <BrowserRouter>
+        <ScrollToTop />
+
         <Routes>
           <Route element={<AppLayout />}>
             <Route path="/business/:id" element={<BusinessesProfile />}>

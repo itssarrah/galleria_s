@@ -41,7 +41,7 @@ function ReviewBar({ type = "user", onReviewTypeChange, reviewType }) {
           </div>
         )}
       </div>
-      <div className="w-1/4 hidden xl:flex justify-between text-[18px] ">
+      {/* <div className="w-1/4 hidden xl:flex justify-between text-[18px] ">
         <button
           className={`hover:text-main__pink ${
             activeButton === 0 ? "text-main__pink" : ""
@@ -109,7 +109,7 @@ function ReviewBar({ type = "user", onReviewTypeChange, reviewType }) {
           <option value="two">2</option>
           <option value="one">1</option>
         </select>
-      </div>
+      </div> */}
     </nav>
   );
 }

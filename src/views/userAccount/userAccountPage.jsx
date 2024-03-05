@@ -63,8 +63,6 @@ const UserAccountPage = () => {
     );
   }
 
-  console.log("User Picture URL:", userData.userPictureURL);
-
   return (
     <>
       <div className="md:flex md:justify-center block">

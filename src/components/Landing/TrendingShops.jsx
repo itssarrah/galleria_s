@@ -4,21 +4,16 @@ import ShopCardSlider from "./ShopCardSlider";
 import { useQuery } from "react-query";
 import { BACKEND_URL } from "../../config";
 import { ClipLoader } from "react-spinners";
+import useTrendingShops from "../../api/fetchTrendingShops";
 
 function TrendingShops(props) {
   const { t } = useTranslation("homepage");
 
   const {
-    data: topCategoriesAndBusinesses,
+    data: topCategoriesAndBusinesses = [],
     isLoading,
     isError,
-  } = useQuery("topCategoriesAndBusinesses", async () => {
-    const response = await fetch(
-      `${BACKEND_URL}api/top-businesses-by-category`
-    );
-    const data = await response.json();
-    return data;
-  });
+  } = useTrendingShops();
 
   if (isLoading) {
     return (
@@ -28,20 +23,23 @@ function TrendingShops(props) {
     );
   }
 
-  if (isError || !topCategoriesAndBusinesses) {
-    return <div>Error loading data</div>;
+  if (isError) {
+    return <p>Error fetching products</p>;
   }
 
   return (
     <div {...props}>
-      {topCategoriesAndBusinesses.data.map((result) => (
-        <div>
-          <h1 className="category_name relative text-base sm:text-lg md:text-xl lg:text-2xl pb-4">
-            {t("category_production")} {result.en_name}
-          </h1>
-          <ShopCardSlider businesses={result.businesses} />
-        </div>
-      ))}
+      {topCategoriesAndBusinesses &&
+        !isLoading &&
+        !isError &&
+        topCategoriesAndBusinesses.map((result, i) => (
+          <div key={i}>
+            <h1 className="category_name relative text-base sm:text-lg md:text-xl lg:text-2xl pb-4">
+              {t("category_production")} {result.en_name}
+            </h1>
+            <ShopCardSlider businesses={result.businesses} />
+          </div>
+        ))}
     </div>
   );
 }

@@ -43,10 +43,11 @@ function ShopSlider({ businesses }) {
             key={business.id}
             imageUrl={`${BACKEND_URL}storage/${business.image}`}
             title={business.businessname}
-            likes={business.likes}
+            isLiked={business.isLiked}
             location={business.wilaya.name}
             rating={business.rating}
             phoneNumber={business.phone}
+            businessId={business.id}
           />
         </SplideSlide>
       ))}
