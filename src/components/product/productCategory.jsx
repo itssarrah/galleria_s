@@ -9,7 +9,13 @@ import "../../css/product.css";
 import { BACKEND_URL } from "../../config";
 import axios from "axios";
 
-function ProductCategory({ formData, setFormData, errors, setErrors }) {
+function ProductCategory({
+  formData,
+  setFormData,
+  errors,
+  setErrors,
+  modify = false,
+}) {
   const [isExpanded, setExpanded] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [availableCategories, setAvailableCategories] = useState({
@@ -18,6 +24,13 @@ function ProductCategory({ formData, setFormData, errors, setErrors }) {
 
   const [newCategory, setNewCategory] = useState("");
   const [sizes, setSizes] = useState([]);
+
+  useEffect(() => {
+    // Populate selected categories from formData
+    if (formData.categories.length > 0 && modify === true) {
+      setSelectedCategories(formData.categories);
+    }
+  }, [formData.categories]);
 
   useEffect(() => {
     axios

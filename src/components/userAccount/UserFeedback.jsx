@@ -3,7 +3,7 @@ import ReviewBar from "../reviews/reviewBar";
 import ReviewCard from "../reviews/ReviewCard";
 import useAccountRatings from "../../api/accountRatings";
 import { BACKEND_URL } from "../../config";
-import formatRelativeDate from "../../api/formatDate";
+import formatRelativeDate from "../../api/utils/formatDate";
 import { ClipLoader } from "react-spinners";
 
 function UserFeedback() {

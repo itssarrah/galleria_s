@@ -1,19 +1,68 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import "@splidejs/splide/dist/css/themes/splide-default.min.css";
 import "../../css/product.css";
-
+import { BACKEND_URL } from "../../config";
 import defaultImage from "../../assets/images/authbiz.png";
 
 import { XMarkIcon, ExclamationCircleIcon } from "@heroicons/react/24/solid";
 
-function ImageMultipleInput({ formData, setFormData, setErrors, errors }) {
+function ImageMultipleInput({
+  formData,
+  setFormData,
+  setErrors,
+  errors,
+  modify = false,
+}) {
   const [imageSrcList, setImageSrcList] = useState([]);
+
+  // useEffect(() => {
+  //   if (imageSrcList.length > 0 && modify === true) {
+  //     const newImageSrcList = imageSrcList.map((image) => {
+  //       if (typeof image === "string") {
+  //         // It's a path fetched from the backend
+  //         return { src: `${BACKEND_URL}storage/${image}` };
+  //       } else {
+  //         // console.log("rendering", image);
+  //         return { src: image.src }; // Keep the file object for further processing
+  //       }
+  //     });
+
+  //     // console.log("coucou", imageSrcList);
+  //   }
+  // }, [imageSrcList]]);
+
+  // useEffect(() => {
+  //   // Check if imageSrcList is not empty and modify is true
+  //   if (imageSrcList.length > 0 && modify === true) {
+  //     // Map each image in imageSrcList
+  //     const newImageSrcList = imageSrcList.map((image) => {
+  //       if (typeof image === "string") {
+  //         // It's a path fetched from the backend
+  //         return { src: `${BACKEND_URL}storage/${image}` };
+  //       } else {
+  //         // It's already a file object, keep it as it is
+  //         return { src: image.src };
+  //       }
+  //     });
+  //   }
+  // }, [imageSrcList, setImageSrcList]);
+
+  useEffect(() => {
+    // Populate images from formData
+    if (formData.images.length > 0 && modify === true) {
+      setImageSrcList(
+        formData.images.map((image) => ({
+          src: `${BACKEND_URL}storage/${image.url}`,
+        }))
+      );
+    }
+  }, []);
 
   const handleImageChange = (event) => {
     const files = event.target.files;
 
-    if (files && imageSrcList.length < 5) {
+    if (files && imageSrcList.length < 5 && !modify) {
       const newImages = Array.from(files).map((file) => {
         return new Promise((resolve) => {
           const reader = new FileReader();
@@ -41,17 +90,63 @@ function ImageMultipleInput({ formData, setFormData, setErrors, errors }) {
 
         setErrors((prev) => ({ ...prev, images: undefined }));
       });
+    } else if (files && modify && formData.images.length < 5) {
+      const updatedImageSrcList = [...imageSrcList];
+      const updatedFormDataImages = [...formData.images];
+
+      const newImages = Array.from(files).map((file) => {
+        return new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            // Generate Blob URL
+            resolve({ file, src: URL.createObjectURL(file) });
+          };
+          reader.readAsDataURL(file);
+        });
+      });
+
+      Promise.all(newImages).then((newImageSrcArray) => {
+        const appendedImages = newImageSrcArray.slice(
+          0,
+          5 - updatedImageSrcList.length
+        );
+
+        updatedImageSrcList.push(...appendedImages);
+        updatedFormDataImages.push(
+          ...appendedImages.map((image) => image.file)
+        );
+        // console.log(imageSrcList);
+        setImageSrcList(updatedImageSrcList);
+        setFormData((prev) => ({ ...prev, images: updatedFormDataImages }));
+        setErrors((prev) => ({ ...prev, images: undefined }));
+      });
     }
   };
 
   const handleRemoveImage = (imageSrc) => {
-    const updatedImageSrcList = imageSrcList.filter((src) => src !== imageSrc);
+    if (!modify) {
+      const updatedImageSrcList = imageSrcList.filter(
+        (url) => url !== imageSrc
+      );
 
-    setImageSrcList(updatedImageSrcList);
-    setFormData((prev) => ({
-      ...prev,
-      images: updatedImageSrcList.map((image) => image.file),
-    }));
+      setImageSrcList(updatedImageSrcList);
+      setFormData((prev) => ({
+        ...prev,
+        images: updatedImageSrcList.map((image) => image.file),
+      }));
+    } else {
+      // console.log("image list before removal", imageSrcList);
+      const updatedImageSrcList = imageSrcList.filter(
+        (url) => url !== imageSrc
+      );
+
+      setImageSrcList(updatedImageSrcList);
+      setFormData((prev) => ({
+        ...prev,
+        images: updatedImageSrcList,
+      }));
+      // console.log("formdata images", formData.images);
+    }
   };
 
   const isUploadButtonDisabled = imageSrcList.length >= 5;

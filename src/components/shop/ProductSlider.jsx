@@ -49,6 +49,7 @@ function ProductSlider({ filteredProducts }) {
             isLiked={product.isLiked}
             seller={product.business.businessname}
             productId={product.id}
+            businessId={product.business_id}
           />
         </SplideSlide>
       ))}

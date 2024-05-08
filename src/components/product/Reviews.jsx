@@ -10,7 +10,7 @@ import { ClipLoader } from "react-spinners";
 import "../../css/product.css";
 import { useReviewsByProductId } from "../../api/reviewsByProductId";
 import { BACKEND_URL } from "../../config";
-import formatRelativeDate from "../../api/formatDate";
+import formatRelativeDate from "../../api/utils/formatDate";
 const ReviewCard = ({
   username,
   userPicture,

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 
 import { Link } from "react-router-dom";
@@ -16,6 +16,7 @@ const ProductsContainer = ({
   seller_image,
   browseMore = true,
   editable = false,
+  sellerId,
 }) => {
   const { t } = useTranslation("product");
   const initialMaxProductDisplay = 8;
@@ -53,6 +54,7 @@ const ProductsContainer = ({
                 seller={seller}
                 productId={product.id}
                 editable={editable}
+                businessId={sellerId}
               />
             </div>
           ))}

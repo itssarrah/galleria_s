@@ -34,6 +34,8 @@ import Insights from "./components/businessProfile/Insights.jsx";
 import FeedbackAndReviews from "./components/businessProfile/FeedbackAndReviews.jsx";
 import ChatPage from "./views/chat/ChatPage.jsx";
 import AppLayout from "./components/ui/AppLayout.jsx";
+import BusinessView from "./views/businessView/BusinessView.jsx";
+import ModifyProduct from "./views/product/ModifyProduct.jsx";
 
 const queryClient = new QueryClient();
 
@@ -60,11 +62,11 @@ function MainContent() {
 
         <Routes>
           <Route element={<AppLayout />}>
-            <Route path="/business/:id" element={<BusinessesProfile />}>
+            {/* <Route path="/business/:id" element={<BusinessesProfile />}>
               <Route index element={<ItemsOnSale />} />
               <Route path="insights" element={<Insights />} />
               <Route path="feedback" element={<FeedbackAndReviews />} />
-            </Route>
+            </Route> */}
             <Route path="/profile" element={<UserAccountPage />}>
               <Route index element={<UserWishlist />} />
               <Route path="fav-biz" element={<UserFavoriteBiz />} />
@@ -75,6 +77,10 @@ function MainContent() {
             <Route path="/home" element={<LandingPage />} />
             <Route path="/shop" element={<Shop />} />
             <Route path="/product/:productId" element={<ProductPage />} />
+            <Route
+              path="/viewbusiness/:businessId"
+              element={<BusinessView />}
+            />
             <Route path="/businessprofile" element={<BusinessesProfile />} />
             <Route path="/login" element={<Login />} />
             <Route path="/businessregistration" element={<Businessauth />} />
@@ -84,6 +90,7 @@ function MainContent() {
           <Route path="/choice" element={<Choice />} />
 
           <Route path="/addproduct" element={<AddProduct />} />
+          <Route path="/modifyproduct/:productId" element={<ModifyProduct />} />
           {/* <Route path="/user/:userId" element={<UserAccountPage />}></Route> */}
           {/* Inside App component */}
 

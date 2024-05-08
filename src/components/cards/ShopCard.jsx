@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import "../../css/Landingpage.css";
 import { likeBusiness, unlikeBusiness } from "./BusinessLikingLogic";
 import { useMutation, useQueryClient } from "react-query";
+import { Link } from "react-router-dom";
 
 function ShopCard({
   imageUrl = "https://i.pinimg.com/236x/54/bb/7f/54bb7f2ceeeef406e9ab2ac08ac549d7.jpg",
@@ -43,47 +44,53 @@ function ShopCard({
 
   return (
     <>
-      <div className="cursor-pointer shopcardcontainer w-44 md:w-52 lg:w-56 rounded-b-3xl rounded-t-lg relative">
-        <img className="shopimg rounded-t-lg" src={imageUrl} alt="Shop Image" />
-        <div>
-          <div className="shopinfo rounded-b-3xl flex w-full px-2 justify-between pt-3 items-center">
-            <h1 className="shopname text-sm md:text-base lg:text-lg">
-              {title}
-            </h1>
-            <div
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                setLiked((prevLiked) => !prevLiked);
-                mutate();
-              }}
-            >
-              {liked ? (
-                <MdFavorite className="shopheart text-3xl" />
-              ) : (
-                <MdFavoriteBorder className="shopheart text-3xl " />
-              )}
-              {/* <h1 className="shoplikes text-sm md:text-base lg:text-lg font-bold">
+      <Link to={`/viewbusiness/${businessId}`} className="cursor-pointer">
+        <div className="cursor-pointer shopcardcontainer w-44 md:w-52 lg:w-56 rounded-b-3xl rounded-t-lg relative">
+          <img
+            className="shopimg rounded-t-lg"
+            src={imageUrl}
+            alt="Shop Image"
+          />
+          <div>
+            <div className="shopinfo rounded-b-3xl flex w-full px-2 justify-between pt-3 items-center">
+              <h1 className="shopname text-sm md:text-base lg:text-lg">
+                {title}
+              </h1>
+              <div
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setLiked((prevLiked) => !prevLiked);
+                  mutate();
+                }}
+              >
+                {liked ? (
+                  <MdFavorite className="shopheart text-3xl" />
+                ) : (
+                  <MdFavoriteBorder className="shopheart text-3xl " />
+                )}
+                {/* <h1 className="shoplikes text-sm md:text-base lg:text-lg font-bold">
                 {likes}
               </h1> */}
+              </div>
             </div>
-          </div>
-          <div className="additional-text space-y-2 ">
-            <div className="w-full flex items-center">
-              <MdLocationOn className="shopicon text-3xl" />
-              <h1>{location}</h1>
-            </div>
-            <div className="w-full flex items-center">
-              <MdLocalPhone className="shopicon text-3xl" />
-              <h1>+213-{phoneNumber}</h1>
-            </div>
-            <div className="w-full flex items-center">
-              <MdStar className="shopicon text-3xl" />
-              {rating} out of 5
+            <div className="additional-text space-y-2 ">
+              <div className="w-full flex items-center">
+                <MdLocationOn className="shopicon text-3xl" />
+                <h1>{location}</h1>
+              </div>
+              <div className="w-full flex items-center">
+                <MdLocalPhone className="shopicon text-3xl" />
+                <h1>+213-{phoneNumber}</h1>
+              </div>
+              <div className="w-full flex items-center">
+                <MdStar className="shopicon text-3xl" />
+                {rating} out of 5
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </Link>
     </>
   );
 }

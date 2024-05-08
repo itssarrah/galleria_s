@@ -64,6 +64,7 @@ function UserWishlist() {
               isLiked="True"
               seller={product.business.businessname}
               productId={product.id}
+              businessId={product.business.id}
             />
           ))}
         </div>

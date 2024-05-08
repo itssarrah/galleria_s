@@ -5,6 +5,7 @@ const ItemsOnSale = ({
   editable = false,
   seller,
   seller_image,
+  sellerId,
 }) => (
   <div className="w-full">
     <ProductsContainer
@@ -13,6 +14,7 @@ const ItemsOnSale = ({
       editable={editable}
       seller={seller}
       seller_image={seller_image}
+      sellerId={sellerId}
     />
   </div>
 );

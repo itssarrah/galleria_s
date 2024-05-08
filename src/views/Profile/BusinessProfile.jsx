@@ -16,29 +16,31 @@ import data from "./dummy";
 import axios from "axios";
 import UserWishlist from "../../components/userAccount/UserWishlist";
 import Saved from "../../components/businessProfile/Saved";
+import useBusinessData from "../../api/fetchBusinessData";
 
-const fetchBusinessData = async (token) => {
-  const response = await fetch(`${BACKEND_URL}api/business/profile`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+// const fetchBusinessData = async (token) => {
+//   const response = await fetch(`${BACKEND_URL}api/business/profile`, {
+//     headers: {
+//       Authorization: `Bearer ${token}`,
+//     },
+//   });
 
-  if (!response.ok) {
-    if (response.status === 401) {
-      // Redirect to login page if unauthorized
-      console.error("Unauthorized. Redirecting to login page.");
-      window.location.href = "/login";
-    } else {
-      throw new Error("Failed to fetch business data");
-    }
-  }
+//   if (!response.ok) {
+//     if (response.status === 401) {
+//       // Redirect to login page if unauthorized
+//       console.error("Unauthorized. Redirecting to login page.");
+//       window.location.href = "/login";
+//     } else {
+//       throw new Error("Failed to fetch business data");
+//     }
+//   }
 
-  return response.json();
-};
+//   return response.json();
+// };
 
 const BusinessProfile = () => {
   const { id } = useParams();
+  const businessId = localStorage.getItem("user_id");
   const tabItems = ["My Products", "Insights", "Reviews", "Saved"];
   // const tabItems = ["My Products", "Insights", "Feedback & Reviews"];
   const [activeTab, setActiveTab] = React.useState("My Products");
@@ -48,7 +50,7 @@ const BusinessProfile = () => {
       case tabItems[1]:
         return <Insights data={data[0]} />;
       case tabItems[2]:
-        return <FeedbackAndReviews />;
+        return <FeedbackAndReviews profile={true} />;
       case tabItems[3]:
         return <Saved />;
       default:
@@ -59,6 +61,7 @@ const BusinessProfile = () => {
               editable={true}
               seller={businessData.business.businessname}
               seller_image={businessData.business.image}
+              sellerId={businessId}
             />
           </div>
         );
@@ -68,25 +71,26 @@ const BusinessProfile = () => {
   const handleTabClick = (tab) => setActiveTab(tab);
   // const { id } = useParams();
   const navigate = useNavigate();
+  const token = localStorage.getItem("authToken");
+  const { data: businessData, isLoading } = useBusinessData(token);
 
-  const { data: businessData, isLoading } = useQuery(
-    ["businessData", id],
-    async () => {
-      const token = localStorage.getItem("authToken");
+  // const { data: businessData, isLoading } = useQuery(
+  //   ["businessData", id],
+  //   async () => {
 
-      if (!token) {
-        console.error("Token not found. Redirecting to login page.");
-        navigate("/login");
-        throw new Error("No token");
-      }
+  //     if (!token) {
+  //       console.error("Token not found. Redirecting to login page.");
+  //       navigate("/login");
+  //       throw new Error("No token");
+  //     }
 
-      return fetchBusinessData(token);
-    },
-    {
-      refetchOnWindowFocus: false,
-      staleTime: 60000,
-    }
-  );
+  //     return fetchBusinessData(token);
+  //   },
+  //   {
+  //     refetchOnWindowFocus: false,
+  //     staleTime: 60000,
+  //   }
+  // );
 
   const handleLogout = async () => {
     try {
@@ -98,8 +102,10 @@ const BusinessProfile = () => {
         },
       });
       localStorage.removeItem("authToken");
-      window.location.reload();
-      navigate("/login");
+      localStorage.removeItem("user_type");
+      localStorage.removeItem("user_id");
+      window.location.href = "/login";
+      // navigate("/login");
       console.log("Logout successful");
     } catch (error) {
       console.error("Logout failed:", error);
@@ -126,9 +132,11 @@ const BusinessProfile = () => {
             email={businessData.business.email}
             location={businessData.business.wilaya.name}
             phoneNumber={businessData.business.phone}
-            rating={businessData.business.rating}
+            rating={businessData.business.averageRating}
             minPrice={businessData.business.minPrice}
             maxPrice={businessData.business.maxPrice}
+            category={businessData.business.category.en_name}
+            profile={true}
           />
           <BusinessProfileStats
             likes={businessData.business.likes}

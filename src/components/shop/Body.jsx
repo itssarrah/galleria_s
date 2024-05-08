@@ -112,7 +112,19 @@ const Body = () => {
   //@lazy loading
   const [numCategoriesToLoad, setNumCategoriesToLoad] = useState(3);
   const loader = useRef(null);
-  const handleScroll = () => {
+  const debounce = (func, delay) => {
+    let timeoutId;
+    return (...args) => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+      timeoutId = setTimeout(() => {
+        func.apply(null, args);
+      }, delay);
+    };
+  };
+
+  const handleScroll = debounce(() => {
     // Check if the loader is visible in the viewport
     const isVisible =
       loader.current &&
@@ -122,7 +134,7 @@ const Body = () => {
     if (isVisible) {
       setNumCategoriesToLoad((prevNum) => prevNum + 3); // Increment the number of categories to load
     }
-  };
+  }, 100);
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
@@ -198,6 +210,7 @@ const Body = () => {
                         isLiked={product.isLiked}
                         seller={product.business.businessname}
                         productId={product.id}
+                        businessId={product.business_id}
                       />
                     </div>
                   ))}
@@ -208,6 +221,7 @@ const Body = () => {
                     <div key={business.id} className="m-2">
                       <ShopCard
                         key={business.id}
+                        businessId={business.id}
                         imageUrl={`${BACKEND_URL}storage/${business.image}`}
                         title={business.businessname}
                         likes={business.likes}
@@ -247,6 +261,7 @@ const Body = () => {
                             isLiked={product.isLiked}
                             seller={product.business.businessname}
                             productId={product.id}
+                            businessId={product.business_id}
                           />
                         </div>
                       ))}

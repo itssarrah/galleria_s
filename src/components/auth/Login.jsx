@@ -43,6 +43,8 @@ function Login() {
           const userResponse = await axios.get(
             `${BACKEND_URL}api/current_user`
           );
+          localStorage.setItem("user_type", userResponse.data.user_type);
+          localStorage.setItem("user_id", userResponse.data.user_id);
 
           if (userResponse.data.user_type === "user") {
             navigate("/profile", { state: userResponse.data });

@@ -60,7 +60,9 @@ const fetchAccountProductRatings = async (token, perPage, page) => {
     if (!response.ok) {
       throw new Error("Network response was not ok");
     }
+
     const data = await response.json();
+    console.log(data);
     return data;
   } catch (error) {
     throw new Error("Failed to fetch product ratings: " + error.message);

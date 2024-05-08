@@ -1,14 +1,14 @@
 import React, { useState, useRef, useEffect } from "react";
 import { ClipLoader } from "react-spinners";
 import { BACKEND_URL } from "../../config";
-import formatRelativeDate from "../../api/formatDate";
+import formatRelativeDate from "../../api/utils/formatDate";
 import ReviewBar from "../reviews/reviewBar";
 import ReviewCard from "../reviews/ReviewCard";
 import { useReviewsByProductId } from "../../api/reviewsByProductId";
 import useBusinessProductRatings from "../../api/businessAllProductRatings";
 import useAccountRatings from "../../api/accountRatings";
 
-const FeedbackAndReviews = () => {
+const FeedbackAndReviews = ({ profile = false }) => {
   const token = localStorage.getItem("authToken");
   const [productPage, setProductPage] = useState(1);
   const [expandedPanels, setExpandedPanels] = useState([]);
@@ -17,11 +17,46 @@ const FeedbackAndReviews = () => {
   const productContainerRef = useRef(null);
   const [reviewType, setReviewType] = useState("my_reviews");
 
+  const [reviews, setReviews] = useState([]);
+  const endOfPageRef = useRef(null);
+
   const {
-    data: accountRatings,
-    isLoading: accountLoading,
-    isError: accountError,
-  } = useAccountRatings(token);
+    data: responseData,
+    isLoading,
+    isError,
+    fetchNextPage,
+    hasNextPage,
+  } = useAccountRatings(token, 10, 1);
+
+  useEffect(() => {
+    if (responseData) {
+      const newReviews = responseData.pages.flatMap((page) => page.data);
+      setReviews(newReviews);
+    }
+  }, [responseData]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasNextPage) {
+          fetchNextPage();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (endOfPageRef.current) {
+      observer.observe(endOfPageRef.current);
+    }
+
+    return () => {
+      if (endOfPageRef.current) {
+        observer.unobserve(endOfPageRef.current);
+      }
+    };
+  }, [endOfPageRef, fetchNextPage, hasNextPage]);
+
+  //=========================================================
 
   const {
     data: newProducts,
@@ -42,22 +77,27 @@ const FeedbackAndReviews = () => {
       if (newProducts.length === 0) {
         setLastProductPage(true);
       } else {
-        setProducts((prevProducts) => [...prevProducts, ...newProducts]);
+        // Update products list only if it's the first page
+        if (productPage === 1) {
+          setProducts(newProducts);
+        } else {
+          // Append new products to the existing list
+          setProducts((prevProducts) => [...prevProducts, ...newProducts]);
+        }
       }
     }
-  }, [newProducts]);
-
-  const loadMoreProducts = () => {
-    if (!lastProductPage && !productLoading && !productError) {
-      setProductPage((prevPage) => prevPage + 1);
-    }
-  };
+  }, [newProducts, productPage]);
 
   useEffect(() => {
     if (productContainerRef.current) {
       const observer = new IntersectionObserver(
         ([entry]) => {
-          if (entry.isIntersecting) {
+          if (
+            entry.isIntersecting &&
+            !lastProductPage &&
+            !productLoading &&
+            !productError
+          ) {
             loadMoreProducts();
           }
         },
@@ -74,12 +114,17 @@ const FeedbackAndReviews = () => {
     }
   }, [lastProductPage, productLoading, productError]);
 
+  const loadMoreProducts = () => {
+    setProductPage((prevPage) => prevPage + 1);
+  };
+
   return (
     <>
       <ReviewBar
         type="business"
         onReviewTypeChange={setReviewType}
         reviewType={reviewType}
+        profile={profile}
       />
 
       <div className="mt-12"></div>
@@ -130,30 +175,34 @@ const FeedbackAndReviews = () => {
           )}
         </div>
       )}
-      {reviewType === "posted_reviews" && accountRatings && (
-        <div className="mt-12 flex flex-wrap gap-10 lg:gap-16 justify-center w-full">
-          <div className="grid xl:grid-cols-3 gap-3 md:gap-4 xl:gap-8 md:grid-cols-2 grid-cols-1 px-12 py-8">
-            {accountRatings.map((product, index) => (
-              <ReviewCard
-                key={index}
-                title={product.ratings.rating_title}
-                price={product.price}
-                image={`${BACKEND_URL}storage/${product.image}`}
-                description={product.ratings.rate_txt}
-                date={formatRelativeDate(product.ratings.created_at)}
-                stars={product.ratings.stars}
-                productId={product.id}
-                seller={product.business.name}
-              />
-            ))}
+      {reviewType === "posted_reviews" && profile === true && (
+        <>
+          <div className="mt-12 flex flex-wrap gap-10 lg:gap-16 justify-center w-full">
+            <div className="grid xl:grid-cols-3 gap-3 md:gap-4 xl:gap-8 md:grid-cols-2 grid-cols-1 px-12 py-8">
+              {reviews.map((product, index) => (
+                <ReviewCard
+                  key={index}
+                  title={product.ratings.rating_title}
+                  price={product.price}
+                  image={`${BACKEND_URL}storage/${product.image}`}
+                  description={product.ratings.rate_txt}
+                  date={formatRelativeDate(product.ratings.created_at)}
+                  stars={product.ratings.stars}
+                  productId={product.id}
+                  seller={product.business.name}
+                />
+              ))}
+              <div ref={endOfPageRef}></div>
+            </div>
           </div>
-        </div>
-      )}
 
-      {reviewType === "posted_reviews" && accountLoading && (
-        <div className="flex justify-center items-center h-[30vh] w-full">
-          <ClipLoader color="#DD6969" size={50} />
-        </div>
+          {(isLoading || hasNextPage) && (
+            <div className="flex justify-center items-center h-[30vh] w-full">
+              <ClipLoader color="#DD6969" size={50} />
+            </div>
+          )}
+          {isError && <div>Error fetching data</div>}
+        </>
       )}
     </>
   );

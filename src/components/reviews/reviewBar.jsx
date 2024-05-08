@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-function ReviewBar({ type = "user", onReviewTypeChange, reviewType }) {
+function ReviewBar({ type = "user", onReviewTypeChange, reviewType, profile }) {
   const [activeButton, setActiveButton] = useState(null);
 
   const handleButtonClick = (index) => {
@@ -31,16 +31,32 @@ function ReviewBar({ type = "user", onReviewTypeChange, reviewType }) {
             All Feedbacks
           </button>
         ) : (
-          <div className="text-[18px] ">
-            <select
-              className="cursor-pointer outline-none"
-              onChange={handleSelectChange}
-              value={reviewType}
-            >
-              <option value="my_reviews">My Products Reviews</option>
-              <option value="posted_reviews">Posted Reviews</option>
-            </select>
-          </div>
+          <>
+            {profile === true ? (
+              <div className="text-[18px] ">
+                <select
+                  className="cursor-pointer outline-none"
+                  onChange={handleSelectChange}
+                  value={reviewType}
+                >
+                  <option value="my_reviews">My Products Reviews</option>
+
+                  <option value="posted_reviews">Posted Reviews</option>
+                </select>
+              </div>
+            ) : (
+              <button
+                disabled
+                className={`font-jost text-main__pink`}
+                // className={`hover:text-main__pink  ${
+                //   activeButton === 7 ? "text-main__pink" : ""
+                // }`}
+                // onClick={() => handleButtonClick(7)}
+              >
+                All Feedbacks
+              </button>
+            )}
+          </>
         )}
       </div>
       {/* <div className="w-1/4 hidden xl:flex justify-between text-[18px] ">

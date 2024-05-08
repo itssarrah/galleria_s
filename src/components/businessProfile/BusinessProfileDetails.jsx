@@ -1,6 +1,12 @@
 import AvatarImage from "../AvatarImage";
 import IconList from "../ui/IconList";
-import { MdLocationPin, MdStar, MdPhone, MdOutlineEmail } from "react-icons/md";
+import {
+  MdLocationPin,
+  MdStar,
+  MdPhone,
+  MdOutlineEmail,
+  MdCategory,
+} from "react-icons/md";
 import { BsCurrencyDollar } from "react-icons/bs";
 import { TbPencilMinus } from "react-icons/tb";
 import Elevated from "./Elevated";
@@ -12,16 +18,20 @@ const BusinessProfileDetails = ({
   email,
   location,
   phoneNumber,
-  rating = 4.2,
+  rating,
   minPrice,
   maxPrice,
+  category,
+  profile = false,
 }) => {
   const info = [
     location,
     phoneNumber,
     `${rating} out of 5`,
     `${minPrice}DZD ~ ${maxPrice}DZD`,
+    category,
   ];
+
   return (
     <div className="business-profile-hero">
       <div className="flex flex-col md:flex-row gap-10 w-[90%] justify-center items-center">
@@ -42,16 +52,19 @@ const BusinessProfileDetails = ({
             </Elevated>
           </div>
           <div className="relative mt-4">
-            <button className="text-white font-jost  bg-[#DD6969] absolute top-0 right-0 m-1 flex items-center px-4 py-2 rounded-xl gap-2">
-              <TbPencilMinus />
-              Edit
-            </button>
+            {profile === true && (
+              <button className="text-white font-jost  bg-[#DD6969] absolute top-0 right-0 m-1 flex items-center px-4 py-2 rounded-xl gap-2">
+                <TbPencilMinus />
+                Edit
+              </button>
+            )}
             <div className=" text-xl md:text-2xl font-jost ">
               <IconList items={info} iconClassName="bg-white ">
                 <MdLocationPin className="text-white text-2xl" />
                 <MdPhone className="text-white text-2xl" />
                 <MdStar className="text-white text-2xl" />
                 <BsCurrencyDollar className="text-white text-2xl" />
+                <MdCategory className="text-white text-2xl" />
               </IconList>
             </div>
           </div>

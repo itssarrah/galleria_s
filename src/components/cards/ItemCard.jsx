@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { MdFavorite, MdFavoriteBorder } from "react-icons/md";
+import { MdFavorite, MdFavoriteBorder, MdEdit } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import { fetchLikeStatus, likeProduct, unlikeProduct } from "./LikingLogic";
 
 const ItemCard = ({
-  itemUrl = "/images/carditem.png",
+  itemUrl = itemUrl ? itemUrl : "/images/carditem.png",
   sellerUrl = "/images/cardseller.png",
   title = "Pink Happiness",
   basePrice = "1000.00",
@@ -13,8 +13,13 @@ const ItemCard = ({
   productId,
   seller = "SweetyPie",
   isLiked = false,
+  businessId,
 }) => {
   const token = localStorage.getItem("authToken");
+  const userType = localStorage.getItem("user_type");
+  const loggedUserId = localStorage.getItem("user_id");
+  const renderModifyButton =
+    userType === "business" && businessId == loggedUserId;
   const queryClient = useQueryClient();
   const [liked, setLiked] = useState(isLiked);
 
@@ -39,6 +44,10 @@ const ItemCard = ({
     // Update the state with the initial value from the cache
     setLiked(isLiked);
   }, [isLiked]);
+  // useEffect(() => {
+  //   console.log("biz id of this card : ", businessId);
+  //   console.log("logged user id of this card : ", loggedUserId);
+  // });
 
   const isOnSale = salePrice && parseFloat(salePrice) < parseFloat(basePrice);
   const discountPercentage = isOnSale
@@ -48,7 +57,7 @@ const ItemCard = ({
   return (
     <Link to={`/product/${productId}`} className="cursor-pointer">
       <div className="h-[22rem] md:min-h-[35rem] md:max-h-[35rem] relative w-[8rem] sm:w-44 md:w-56 lg:w-64 ">
-        <div className="cardcontainer min-h-[70%]">
+        <div className="relative cardcontainer min-h-[70%]">
           <img
             src={itemUrl}
             alt="Item"
@@ -64,7 +73,13 @@ const ItemCard = ({
           {isOnSale && (
             <h1 className="absolute cardtxt">-{discountPercentage}%</h1>
           )}
-
+          {renderModifyButton && (
+            <Link to={`/modifyproduct/${productId}`}>
+              <div className="absolute top-0 p-2 rounded-[100%] bg-[#DD6969] cursor-pointer xl:scale-[2] md:scale-[1.5]">
+                <MdEdit className="text-white" />
+              </div>
+            </Link>
+          )}
           <div className="flex  w-full justify-between px-2">
             <div className="w-[85%]">
               <h1 className="item_title  text-sm md:text-base lg:text-lg">
@@ -109,14 +124,16 @@ const ItemCard = ({
             By
           </h1>
           <div className="pb-4">
-            <img
-              alt="seller image"
-              src={sellerUrl}
-              className="w-8 h-8 rounded-full sm:w-10 sm:h-10 md:w-16 lg:w-24 md:h-16 lg:h-24 mx-auto object-cover"
-            />
-            <h1 className="seller_txt text-xs sm:text-sm md:text-base lg:text-lg text-center	">
-              {seller}
-            </h1>
+            <Link to={`/viewbusiness/${businessId}`}>
+              <img
+                alt="seller image"
+                src={sellerUrl}
+                className="w-8 h-8 rounded-full sm:w-10 sm:h-10 md:w-16 lg:w-24 md:h-16 lg:h-24 mx-auto object-cover"
+              />
+              <h1 className="seller_txt text-xs sm:text-sm md:text-base lg:text-lg text-center	">
+                {seller}
+              </h1>
+            </Link>
           </div>
         </div>
       </div>
