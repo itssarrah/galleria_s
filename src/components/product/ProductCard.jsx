@@ -29,6 +29,7 @@ const ProductCard = ({
   location = "default",
   phoneNumber = "+2135 00 00 00 00",
   seller = "SweetyPie",
+  sellerid,
 }) => {
   const { t } = useTranslation("product");
   // const [liked, setLiked] = useState(isLiked);
@@ -102,7 +103,7 @@ const ProductCard = ({
               dir={direction}
             >
               {`${t("from")} `}
-              <Link to={sellerUrl} className="link">
+              <Link to={`businessview/${sellerid}`} className="link">
                 <span>{seller}</span>
               </Link>
             </p>
@@ -150,7 +151,7 @@ const ProductCard = ({
           {description} {"\n"}
           <div className="flex w-[80%] justify-around items-center mt-10">
             <button className="bag_btn py-4 px-6 xl:text-4xl md:text-2xl text-lg">
-              Add To Bag
+              Call
             </button>
             {liked ? (
               <MdFavorite

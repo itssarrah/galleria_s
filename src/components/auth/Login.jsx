@@ -129,9 +129,16 @@ function Login() {
                     }
                   }}
                 />
-                <button className="underline text-blue-900 text-base md:text-lg font-sunflower font-bold ">
+                {/* <button className="underline text-blue-900 text-base md:text-lg font-sunflower font-bold ">
                   {t("forgot_pass")}
-                </button>
+                </button> */}
+
+                <Link
+                  to="/forgot-password"
+                  className="underline text-blue-900 text-base md:text-lg font-sunflower font-bold"
+                >
+                  {t("forgot_pass")}
+                </Link>
               </div>
             </div>
             <div className="md:absolute left-0 top-0 md:px-12 md:py-12 w-full md:w-5/12 flex flex-col justify-around md:h-[26rem] xl:h-[30rem] bg-white mt-4 items-center md:items-start md:mt-0 md:bg-transparent gap-4 md:gap-0 px-4 py-4 rounded-xl">

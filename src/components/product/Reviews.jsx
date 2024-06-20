@@ -181,6 +181,12 @@ const Reviews = ({
   };
 
   const showAddReviewModalFn = () => {
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+      // Redirect to the login page if token is not present
+      window.location.href = "/login";
+      return;
+    }
     setShowAddReviewModal(true);
     document.body.classList.add("modal-open");
   };

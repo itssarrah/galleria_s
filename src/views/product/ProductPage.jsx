@@ -68,6 +68,7 @@ const ProductPage = () => {
             location={product.business.wilaya.name}
             phoneNumber={product.business.phone}
             seller={product.business.businessname}
+            sellerid={product.business.businessid}
           />
         )}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">

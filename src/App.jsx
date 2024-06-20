@@ -36,6 +36,7 @@ import ChatPage from "./views/chat/ChatPage.jsx";
 import AppLayout from "./components/ui/AppLayout.jsx";
 import BusinessView from "./views/businessView/BusinessView.jsx";
 import ModifyProduct from "./views/product/ModifyProduct.jsx";
+import ForgotPassword from "./components/auth/ForgotPassword.jsx";
 
 const queryClient = new QueryClient();
 
@@ -73,6 +74,7 @@ function MainContent() {
               <Route path="feedback" element={<UserFeedback />} />
             </Route>
             <Route index element={<Navigate replace to="home" />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
 
             <Route path="/home" element={<LandingPage />} />
             <Route path="/shop" element={<Shop />} />
