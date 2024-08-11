@@ -2,8 +2,14 @@ import { z } from "zod";
 
 const passwordZod = z
   .union([
-    z.string().min(8, { message: "Password should have atleast 8 characters" }),
-    z.string().length(0, {message: "This field can only be left empty, or of length >= 8"}),
+    z
+      .string()
+      .min(8, { message: "Password should have at least 8 characters" }),
+    z
+      .string()
+      .length(0, {
+        message: "This field can only be left empty, or of length >= 8",
+      }),
   ])
   .optional()
   .transform((e) => (e === "" ? undefined : e));
@@ -12,9 +18,14 @@ const emailZod = z
   .string({ required_error: "Email is Required" })
   .email({ message: "Invalid Email Address" });
 
+const userNameZod = z
+  .string({ required_error: "User Name is Required" })
+  .min(1, { message: "User Name cannot be empty" });
+
 const editPersonalInfoSchema = z
   .object({
     userEmail: emailZod,
+    userName: userNameZod,
     oldPassword: passwordZod,
     newPassword: passwordZod,
     confirmNewPassword: passwordZod,

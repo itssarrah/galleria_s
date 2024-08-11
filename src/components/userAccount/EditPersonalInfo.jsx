@@ -13,20 +13,23 @@ import Overlay from "../ui/Overlay";
 import Modal from "../ui/Modal";
 import Button from "../ui/Button";
 import editPersonalInfoSchema from "../../schemas/editPersonalInfoSchema";
+import { BACKEND_URL } from "../../config";
+import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const EditPersonalInfo = ({ userName, userEmail, closeModal = () => {} }) => {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(editPersonalInfoSchema),
+    defaultValues: {
+      userEmail,
+      userName,
+    },
   });
-
-  const handleFormSubmit = (formData) => {
-    alert("submitting...");
-    console.log(formData);
-  };
 
   const [visibilityStates, setVisibilityStates] = useState({
     oldPassword: false,
@@ -34,18 +37,70 @@ const EditPersonalInfo = ({ userName, userEmail, closeModal = () => {} }) => {
     confirmNewPassword: false,
   });
 
+  const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState(""); // "success" or "error"
+  const { t } = useTranslation("auth");
+  const handleFormSubmit = async (formData) => {
+    const { newPassword, confirmNewPassword } = formData;
+
+    if (newPassword !== confirmNewPassword) {
+      setMessageType("error");
+      setMessage("New password and confirm new password do not match.");
+      return;
+    }
+
+    try {
+      console.log("Submitting form data:", formData);
+      const token = localStorage.getItem("authToken");
+      const response = await fetch(`${BACKEND_URL}api/update-profile`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setMessageType("success");
+        setMessage("Profile updated successfully!");
+
+        // Hide success message after 5 seconds
+        setTimeout(() => {
+          setMessage("");
+        }, 5000);
+      } else {
+        const errorData = await response.json();
+        console.error("Error response:", errorData);
+
+        const detailedErrorMessage = Object.entries(errorData.errors || {})
+          .map(([key, value]) => `${key}: ${value.join(", ")}`)
+          .join("; ");
+
+        setMessageType("error");
+        setMessage(`Error: ${errorData.message}. ${detailedErrorMessage}`);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      setMessageType("error");
+      setMessage(`Error: ${error.message}`);
+    }
+  };
+
   const toggleVisibilityState = (name) => {
-    setVisibilityStates({
-      ...visibilityStates,
-      [name]: !visibilityStates[name],
-    });
+    setVisibilityStates((prevState) => ({
+      ...prevState,
+      [name]: !prevState[name],
+    }));
   };
 
   return (
     <Overlay>
       <Modal closeModal={closeModal}>
         <form onSubmit={handleSubmit(handleFormSubmit)} className="px-5">
-          <h1 className="absolute top-0 left-0 pt-7 pl-5 font-black">
+          <h1 className="absolute top-0 left-0 pt-7 pl-10 font-sofia text-3xl">
             Edit Personal Information
           </h1>
           <fieldset className="mb-5 p-5">
@@ -53,7 +108,6 @@ const EditPersonalInfo = ({ userName, userEmail, closeModal = () => {} }) => {
               <h6>Email: </h6>
               <InputWrapper icon={<MdMail />} errors={errors.userEmail}>
                 <input
-                  defaultValue={userEmail}
                   placeholder="Email"
                   className="px-5 py-3 outline-none w-full"
                   {...register("userEmail")}
@@ -62,8 +116,7 @@ const EditPersonalInfo = ({ userName, userEmail, closeModal = () => {} }) => {
               <h6>User Name: </h6>
               <InputWrapper icon={<MdAccountCircle />} errors={errors.userName}>
                 <input
-                  defaultValue={userName}
-                  placeholder="User Name :"
+                  placeholder="User Name"
                   className="px-5 py-3 outline-none w-full"
                   {...register("userName")}
                 />
@@ -88,7 +141,6 @@ const EditPersonalInfo = ({ userName, userEmail, closeModal = () => {} }) => {
                   placeholder="Old Password"
                   className="px-5 py-3 outline-none w-full"
                   type={visibilityStates.oldPassword ? "text" : "password"}
-                  defaultValue=""
                   {...register("oldPassword")}
                 />
               </InputWrapper>
@@ -108,7 +160,6 @@ const EditPersonalInfo = ({ userName, userEmail, closeModal = () => {} }) => {
                   placeholder="New Password"
                   className="px-5 py-3 outline-none w-full"
                   type={visibilityStates.newPassword ? "text" : "password"}
-                  defaultValue=""
                   {...register("newPassword")}
                 />
               </InputWrapper>
@@ -124,20 +175,31 @@ const EditPersonalInfo = ({ userName, userEmail, closeModal = () => {} }) => {
                 errors={errors.confirmNewPassword}
               >
                 <input
-                  placeholder="New Password"
+                  placeholder="Confirm New Password"
                   className="px-5 py-3 outline-none w-full"
                   type={
                     visibilityStates.confirmNewPassword ? "text" : "password"
                   }
-                  defaultValue=""
                   {...register("confirmNewPassword")}
                 />
               </InputWrapper>
             </div>
+            <Link
+              to="/forgot-password"
+              className="underline text-blue-900 text-base md:text-lg font-sunflower font-bold"
+            >
+              {t("forgot_pass")}
+            </Link>
           </fieldset>
-          {/* <button className="user-btns py-2 px-5 rounded-full w-fit m-auto shadow-xl ">
-            Submit
-          </button> */}
+          {message && (
+            <p
+              className={
+                messageType === "success" ? "text-green-500" : "text-red-500"
+              }
+            >
+              {message}
+            </p>
+          )}
           <div className="w-fit mx-auto">
             <Button text="Submit" />
           </div>

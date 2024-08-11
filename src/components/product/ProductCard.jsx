@@ -14,6 +14,7 @@ import { useQuery, useMutation, useQueryClient } from "react-query";
 import "../../css/product.css";
 
 import { MdFavorite, MdFavoriteBorder } from "react-icons/md";
+import ContactModal from "./ContactModal"; // Import the ContactModal
 
 const ProductCard = ({
   productId,
@@ -30,6 +31,7 @@ const ProductCard = ({
   phoneNumber = "+2135 00 00 00 00",
   seller = "SweetyPie",
   sellerid,
+  instagramLink,
 }) => {
   const { t } = useTranslation("product");
   // const [liked, setLiked] = useState(isLiked);
@@ -81,6 +83,8 @@ const ProductCard = ({
     },
   });
 
+  const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
+
   return (
     <div className="product-card grid grid-cols-1 gap-5 md:grid-cols-2">
       <div>
@@ -103,7 +107,7 @@ const ProductCard = ({
               dir={direction}
             >
               {`${t("from")} `}
-              <Link to={`businessview/${sellerid}`} className="link">
+              <Link to={`/viewbusiness/${sellerid}`} className="link">
                 <span>{seller}</span>
               </Link>
             </p>
@@ -150,8 +154,11 @@ const ProductCard = ({
         <p className="pt-6 px-[1rem] text-md md:text-lg lg:text-xl xl:text-2xl font-jost">
           {description} {"\n"}
           <div className="flex w-[80%] justify-around items-center mt-10">
-            <button className="bag_btn py-4 px-6 xl:text-4xl md:text-2xl text-lg">
-              Call
+            <button
+              className="bag_btn py-4 px-6 xl:text-4xl md:text-2xl text-lg"
+              onClick={() => setIsModalOpen(true)} // Open the modal
+            >
+              Contact {seller}
             </button>
             {liked ? (
               <MdFavorite
@@ -175,6 +182,13 @@ const ProductCard = ({
           </div>
         </p>
       </div>
+      <ContactModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)} // Close the modal
+        phoneNumber={phoneNumber}
+        instagramLink={instagramLink}
+        seller={seller}
+      />
     </div>
   );
 };

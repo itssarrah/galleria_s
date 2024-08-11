@@ -72,8 +72,10 @@ const UserAuth = () => {
     phone: "",
   });
   const [selectedIds, setSelectedIds] = useState([]);
+  const [isFinishDisabled, setIsFinishDisabled] = useState(true);
   const handleSelectedIdsChange = (newSelectedIds) => {
     setSelectedIds(newSelectedIds);
+    setIsFinishDisabled(newSelectedIds.length === 0);
   };
 
   function containsOnlyLettersAndSpaces(str) {
@@ -229,7 +231,9 @@ const UserAuth = () => {
         actualFormData
       );
 
-      if (response.data.message === "Registration successful") {
+      // console.log(response);
+
+      if (response.status === 200) {
         setIsRegistered(true);
       }
     } catch (error) {
@@ -257,14 +261,14 @@ const UserAuth = () => {
       <h1 className="auth_header mt-2 mx-auto pb-4 text-base md:text-2xl lg:text-4xl">
         {t("normalauth_title")}
       </h1>
-      {currentStep === 2 && (
+      {currentStep === 2 && !isRegistered && (
         <h1 className="subheader mt-2 mx-auto pb-4 text-base md:text-xl lg:text-2xl">
           {t("normalauth_subtitle")}
         </h1>
       )}
       <form>
-        {currentStep === 1 && (
-          <div className="flex w-full  flex-col md:flex-row justify-center md:gap-[10rem] gap-0 mt-6">
+        {currentStep === 1 && !isRegistered && (
+          <div className="flex w-full flex-col md:flex-row justify-center md:gap-[10rem] gap-0 mt-6">
             <div className="image_input scale-1 md:scale-[1.5] md:mt-[15rem] mt-0">
               <ImageInputOutput
                 formData={formData}
@@ -294,12 +298,26 @@ const UserAuth = () => {
             </div>
           </div>
         )}
-        {currentStep === 2 && (
+        {currentStep === 2 && !isRegistered && (
           <InterestSelection onSelectedIdsChange={handleSelectedIdsChange} />
         )}
         {isLoading && <div>Loading...</div>}
-        {isRegistered && <div>Registration successful!</div>}
-        {currentStep === 1 && (
+        {isRegistered && (
+          <div className="flex flex-col items-center congrats pt-28">
+            <h1 className="auth_header text-lg md:text-4xl text-center">
+              Registration successful!
+            </h1>
+            <h1 className="input_label w-11/12 text-center text-xl md:text-5xl xl:text-6xl  pt-8">
+              An email has been sent to verify your account. Please check your
+              inbox.
+            </h1>
+            <p className="text-base font-[400] lg:text-xl w-11/12 pt-6 md:pt-12 text-center">
+              Please check the <strong>SPAM</strong> in your mail you will find
+              us there !
+            </p>
+          </div>
+        )}
+        {currentStep === 1 && !isRegistered && (
           <div className="flex w-3/12 items-center justify-around gap-1 mx-auto py-8">
             <ContributeBtn
               importance="primary"
@@ -309,13 +327,14 @@ const UserAuth = () => {
             />
           </div>
         )}
-        {currentStep === 2 && (
+        {currentStep === 2 && !isRegistered && (
           <div className="flex w-3/12 items-center justify-around gap-1 mx-auto py-8">
             <ContributeBtn
               importance="primary"
               text={t("finish_btn")}
               onClick={() => submitFormData(selectedIds)}
-              disabled={isNextDisabled}
+              // disabled={isNextDisabled}
+              disabled={isFinishDisabled}
             />
           </div>
         )}

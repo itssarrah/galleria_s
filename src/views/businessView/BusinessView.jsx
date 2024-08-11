@@ -57,6 +57,7 @@ const BusinessView = () => {
           <BusinessProfileDetails
             imageURL={`${BACKEND_URL}storage/${businessData.business.image}`}
             userName={businessData.business.fullname}
+            businessname={businessData.business.businessname}
             email={businessData.business.email}
             location={businessData.business.wilaya.name}
             phoneNumber={businessData.business.phone}
@@ -64,6 +65,8 @@ const BusinessView = () => {
             minPrice={businessData.business.minPrice}
             maxPrice={businessData.business.maxPrice}
             category={businessData.business.category.en_name}
+            instagramLink={businessData.business.instagram_link}
+            desc={businessData.business.businessdesc}
           />
           <BusinessProfileStats
             likes={businessData.business.likes}

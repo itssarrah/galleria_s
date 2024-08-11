@@ -3,6 +3,7 @@ import { useQuery } from "react-query";
 import { BACKEND_URL } from "../../config";
 import ItemCard from "../cards/ItemCard";
 import { ClipLoader } from "react-spinners";
+import empty from "../../assets/images/empty.png";
 function UserWishlist() {
   const {
     data: likedProducts = [],
@@ -51,22 +52,37 @@ function UserWishlist() {
       {/* <Filter type="false" /> */}
       <div className="w-screen min-h-screen overflow-x-hidden flex flex-col pt-8">
         {/* <Categories /> */}
-        <div className="mt-12 flex flex-wrap gap-10 lg:gap-16 justify-center">
-          {likedProducts.map((product) => (
-            <ItemCard
-              key={product.id} // Make sure to include a unique key for each mapped item
-              itemUrl={`${BACKEND_URL}storage/${product.images[0].url}`}
-              sellerUrl={`${BACKEND_URL}storage/${product.business.image}`}
-              title={product.product_name}
-              basePrice={product.product_price}
-              salePrice={product.sale_price}
-              isOnSale={product.isOnSale}
-              isLiked="True"
-              seller={product.business.businessname}
-              productId={product.id}
-              businessId={product.business.id}
-            />
-          ))}
+        <div className="w-screen min-h-screen overflow-x-hidden flex flex-col pt-8">
+          {likedProducts.length === 0 ? (
+            <div className="flex flex-col justify-center items-center ">
+              <img
+                src={empty}
+                className="w-[20rem] md:w-[40rem] pt-10"
+                alt="No items found"
+              />
+              <h6 className="text-jost text-gray-500 md:text-2xl text-lg pt-10 ">
+                No liked items for now .
+              </h6>
+            </div>
+          ) : (
+            <div className="mt-12 flex flex-wrap gap-10 lg:gap-16 justify-center">
+              {likedProducts.map((product) => (
+                <ItemCard
+                  key={product.id} // Make sure to include a unique key for each mapped item
+                  itemUrl={`${BACKEND_URL}storage/${product.images[0].url}`}
+                  sellerUrl={`${BACKEND_URL}storage/${product.business.image}`}
+                  title={product.product_name}
+                  basePrice={product.product_price}
+                  salePrice={product.sale_price}
+                  isOnSale={product.isOnSale}
+                  isLiked="True"
+                  seller={product.business.businessname}
+                  productId={product.id}
+                  businessId={product.business.id}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -10,6 +10,7 @@ import { BACKEND_URL } from "../../config";
 import { AccountInformation } from "./AccountInfo";
 import { PersonalInfo } from "./PersonalInfo";
 import { Businessinfo } from "./BusinessInfo";
+import { useNavigate } from "react-router-dom";
 
 import {
   PlusIcon,
@@ -357,6 +358,7 @@ const Businessauth = () => {
       );
     }
   };
+
   return (
     <>
       <h1 className="auth_header mx-auto pb-4 text-base md:text-2xl lg:text-4xl">
@@ -415,14 +417,20 @@ const Businessauth = () => {
                 />
               </h1>
               <h1 className="input_label w-11/12 text-center text-xl md:text-5xl xl:text-6xl  pt-8">
-                <Trans
+                {/* <Trans
                   i18nKey="auth:sucess_header"
                   components={{
                     pinktxt: <span className="heart" />,
                   }}
                   values={{ order: order }}
-                />
+                /> */}
+                We have sent you an <strong>email</strong> please verify your
+                account !
               </h1>
+              <p className="text-base font-[400] lg:text-xl w-11/12 pt-6 md:pt-12 text-center">
+                Please check the <strong>SPAM</strong> in your mail you will
+                find us there !
+              </p>
               <p className="text-base lg:text-xl font-[400] w-11/12 pt-6 md:pt-12 text-center">
                 <span className="heart font-bold">
                   <Trans
@@ -433,14 +441,21 @@ const Businessauth = () => {
                   />
                 </span>
               </p>
-              <p className="text-base lg:text-xl font-[400] w-11/12 pt-6  text-center">
+              {/* <p className="text-base lg:text-xl font-[400] w-11/12 pt-6  text-center">
                 <Trans
                   i18nKey="auth:success_desc"
                   components={{
                     pinkbold: <span className="heart font-bold" />,
                   }}
                 />
-              </p>
+              </p> */}
+              {/* 
+              <div className="pt-6 md:pt-12">
+                <p className="text-lg font-bold">
+                  We have sent you an <strong>email</strong> please verify your
+                  account !
+                </p>
+              </div> */}
 
               <div className=" pt-6 md:pt-12">
                 <h1 className="flex auth_header text-base md:text-3xl">

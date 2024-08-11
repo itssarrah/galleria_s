@@ -12,6 +12,7 @@ import ItemCard from "../cards/ItemCard";
 import ShopCard from "../cards/ShopCard";
 import { BACKEND_URL } from "../../config";
 import useBusinessesByCategory from "../../api/fetchBusinessesByCategory";
+import notFoundImage from "../../assets/images/empty.png";
 
 const ProductSliderWrapper = ({ category }) => {
   const {
@@ -51,6 +52,7 @@ const BusinessSliderWrapper = ({ category }) => {
 
 const Body = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [searchOccured, setsearchOccured] = useState(false);
   const [searchedProducts, setSearchedProducts] = useState([]);
   const [searchedBusinesses, setSearchedBusinesses] = useState([]);
 
@@ -77,6 +79,7 @@ const Body = () => {
 
   const handleSearch = async (event) => {
     event.preventDefault();
+
     try {
       const response = await fetch(`${BACKEND_URL}api/filter/search`, {
         method: "POST",
@@ -94,15 +97,17 @@ const Body = () => {
       }
 
       const data = await response.json();
-      // console.log("Search Results:", data);
+      console.log("Search Results:", data);
 
       // Set searchedProducts and searchedBusinesses based on the selected format
       if (selectedFormat === "items/products") {
         setSearchedProducts(data.data); // Set searched products
         setSearchedBusinesses([]); // Clear searched businesses
+        setsearchOccured(true);
       } else {
         setSearchedBusinesses(data.data); // Set searched businesses
         setSearchedProducts([]); // Clear searched products
+        setsearchOccured(true);
       }
     } catch (error) {
       console.error("Error searching:", error.message);
@@ -146,6 +151,7 @@ const Body = () => {
     setSearchTerm(searchTerm);
 
     if (searchTerm === "") {
+      setsearchOccured(false);
       setSearchedProducts([]);
       setSearchedBusinesses([]);
     }
@@ -186,51 +192,80 @@ const Body = () => {
               />
               <button
                 type="submit"
-                className="relative  h-5 w-10 rounded-full bg-main__pink text-white flex items-start  cursor-pointer right-12 bottom-1"
+                className="relative h-5 w-10 rounded-full bg-main__pink text-white flex items-start  cursor-pointer right-12 bottom-1"
               >
                 <SearchIcon className="h-5 w-5" />
               </button>
             </div>
           </form>
 
-          {searchTerm &&
-          (searchedProducts.length || searchedBusinesses.length) ? (
+          {searchTerm && searchOccured ? (
             <div>
               {selectedFormat === "items/products" ? (
                 <div className="mt-10 flex flex-wrap justify-center items-center">
-                  {searchedProducts.map((product) => (
-                    <div key={product.id} className="m-2">
-                      <ItemCard
-                        itemUrl={`${BACKEND_URL}storage/${product.images[0].url}`}
-                        sellerUrl={`${BACKEND_URL}storage/${product.business.image}`}
-                        title={product.product_name}
-                        basePrice={product.product_price}
-                        salePrice={product.sale_price}
-                        isOnSale={product.isOnSale}
-                        isLiked={product.isLiked}
-                        seller={product.business.businessname}
-                        productId={product.id}
-                        businessId={product.business_id}
-                      />
-                    </div>
-                  ))}
+                  {searchedProducts.length > 0 ? (
+                    searchedProducts.map((product) => (
+                      <div key={product.id} className="m-2">
+                        <ItemCard
+                          itemUrl={`${BACKEND_URL}storage/${product.images[0].url}`}
+                          sellerUrl={`${BACKEND_URL}storage/${product.business.image}`}
+                          title={product.product_name}
+                          basePrice={product.product_price}
+                          salePrice={product.sale_price}
+                          isOnSale={product.isOnSale}
+                          isLiked={product.isLiked}
+                          seller={product.business.businessname}
+                          productId={product.id}
+                          businessId={product.business_id}
+                        />
+                      </div>
+                    ))
+                  ) : (
+                    <>
+                      <div className="flex items-center justify-center w-full md:h-[50vh]">
+                        <img
+                          src={notFoundImage}
+                          alt="No results found"
+                          className="w-[15rem] md:w-[40rem]  mx-auto"
+                        />
+                      </div>
+                      <h6 className="mt-4 text-gray-500">
+                        No products match the search.
+                      </h6>
+                    </>
+                  )}
                 </div>
               ) : (
                 <div className="mt-10 flex flex-wrap justify-center items-center">
-                  {searchedBusinesses.map((business) => (
-                    <div key={business.id} className="m-2">
-                      <ShopCard
-                        key={business.id}
-                        businessId={business.id}
-                        imageUrl={`${BACKEND_URL}storage/${business.image}`}
-                        title={business.businessname}
-                        likes={business.likes}
-                        location={business.wilaya.name}
-                        rating={business.rating}
-                        phoneNumber={business.phone}
-                      />
-                    </div>
-                  ))}
+                  {searchedBusinesses.length > 0 ? (
+                    searchedBusinesses.map((business) => (
+                      <div key={business.id} className="m-2">
+                        <ShopCard
+                          key={business.id}
+                          businessId={business.id}
+                          imageUrl={`${BACKEND_URL}storage/${business.image}`}
+                          title={business.businessname}
+                          likes={business.likes}
+                          location={business.wilaya.name}
+                          rating={business.rating}
+                          phoneNumber={business.phone}
+                        />
+                      </div>
+                    ))
+                  ) : (
+                    <>
+                      <div className="flex items-center justify-center w-full h-[50vh]">
+                        <img
+                          src={notFoundImage}
+                          alt="No results found"
+                          className="w-[15rem] md:w-[40rem]  mx-auto"
+                        />
+                      </div>
+                      <h6 className="mt-4 text-gray-500">
+                        No products match the search.
+                      </h6>
+                    </>
+                  )}
                 </div>
               )}
             </div>
@@ -249,22 +284,38 @@ const Body = () => {
                   priceRange.min !== 0 ||
                   priceRange.max !== 10000 ? (
                     <div className="flex flex-wrap justify-center items-center">
-                      {filteredProducts.map((product) => (
-                        <div key={product.id} className="m-2">
-                          <ItemCard
-                            itemUrl={`${BACKEND_URL}storage/${product.images[0].url}`}
-                            sellerUrl={`${BACKEND_URL}storage/${product.business.image}`}
-                            title={product.product_name}
-                            basePrice={product.product_price}
-                            salePrice={product.sale_price}
-                            isOnSale={product.isOnSale}
-                            isLiked={product.isLiked}
-                            seller={product.business.businessname}
-                            productId={product.id}
-                            businessId={product.business_id}
-                          />
-                        </div>
-                      ))}
+                      {filteredProducts.length > 0 ? (
+                        filteredProducts.map((product) => (
+                          <div key={product.id} className="m-2">
+                            <ItemCard
+                              itemUrl={`${BACKEND_URL}storage/${product.images[0].url}`}
+                              sellerUrl={`${BACKEND_URL}storage/${product.business.image}`}
+                              title={product.product_name}
+                              basePrice={product.product_price}
+                              salePrice={product.sale_price}
+                              isOnSale={product.isOnSale}
+                              isLiked={product.isLiked}
+                              seller={product.business.businessname}
+                              productId={product.id}
+                              businessId={product.business_id}
+                            />
+                          </div>
+                        ))
+                      ) : (
+                        <>
+                          <div className="flex items-center justify-center w-full h-[50vh]">
+                            <img
+                              src={notFoundImage}
+                              alt="No products found"
+                              className="w-[15rem] md:w-[40rem]  mx-auto"
+                            />
+                          </div>
+                          <h6 className="mt-4 text-gray-500">
+                            No products found in this Category (click ALL
+                            CATEGORIES).
+                          </h6>
+                        </>
+                      )}
                     </div>
                   ) : (
                     <div>
@@ -289,20 +340,36 @@ const Body = () => {
                   priceRange.min !== 0 ||
                   priceRange.max !== 10000 ? (
                     <div className="flex flex-wrap justify-center items-center">
-                      {businesses.map((business) => (
-                        <div key={business.id} className="m-2">
-                          <ShopCard
-                            key={business.id}
-                            imageUrl={`${BACKEND_URL}storage/${business.image}`}
-                            title={business.businessname}
-                            likes={business.likes}
-                            location={business.wilaya.name}
-                            rating={business.rating}
-                            phoneNumber={business.phone}
-                            businessId={business.id}
-                          />
-                        </div>
-                      ))}
+                      {businesses.length > 0 ? (
+                        businesses.map((business) => (
+                          <div key={business.id} className="m-2">
+                            <ShopCard
+                              key={business.id}
+                              imageUrl={`${BACKEND_URL}storage/${business.image}`}
+                              title={business.businessname}
+                              likes={business.likes}
+                              location={business.wilaya.name}
+                              rating={business.rating}
+                              phoneNumber={business.phone}
+                              businessId={business.id}
+                            />
+                          </div>
+                        ))
+                      ) : (
+                        <>
+                          <div className="flex items-center justify-center w-full h-[50vh]">
+                            <img
+                              src={notFoundImage}
+                              alt="No businesses found"
+                              className="w-[15rem] md:w-[40rem]  mx-auto"
+                            />
+                          </div>
+                          <h6 className="mt-4 text-gray-500">
+                            No businesses found in this Category (click ALL
+                            CATEGORIES).
+                          </h6>
+                        </>
+                      )}
                     </div>
                   ) : (
                     <div>

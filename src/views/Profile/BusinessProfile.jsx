@@ -41,17 +41,15 @@ import useBusinessData from "../../api/fetchBusinessData";
 const BusinessProfile = () => {
   const { id } = useParams();
   const businessId = localStorage.getItem("user_id");
-  const tabItems = ["My Products", "Insights", "Reviews", "Saved"];
+  const tabItems = ["My Products", "Reviews", "Saved"];
   // const tabItems = ["My Products", "Insights", "Feedback & Reviews"];
   const [activeTab, setActiveTab] = React.useState("My Products");
 
   const renderTab = (id, activeTab, tabItems) => {
     switch (activeTab) {
       case tabItems[1]:
-        return <Insights data={data[0]} />;
-      case tabItems[2]:
         return <FeedbackAndReviews profile={true} />;
-      case tabItems[3]:
+      case tabItems[2]:
         return <Saved />;
       default:
         return (
@@ -129,6 +127,7 @@ const BusinessProfile = () => {
           <BusinessProfileDetails
             imageURL={`${BACKEND_URL}storage/${businessData.business.image}`}
             userName={businessData.business.fullname}
+            businessname={businessData.business.businessname}
             email={businessData.business.email}
             location={businessData.business.wilaya.name}
             phoneNumber={businessData.business.phone}
@@ -137,6 +136,8 @@ const BusinessProfile = () => {
             maxPrice={businessData.business.maxPrice}
             category={businessData.business.category.en_name}
             profile={true}
+            instagramLink={businessData.business.instagram_link}
+            desc={businessData.business.businessdesc}
           />
           <BusinessProfileStats
             likes={businessData.business.likes}

@@ -8,6 +8,7 @@ import EditPersonalInfo from "./EditPersonalInfo";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { BACKEND_URL } from "../../config";
+
 export const UserAccountHero = ({
   userId,
   userPictureURL,
@@ -15,9 +16,13 @@ export const UserAccountHero = ({
   userEmail,
 }) => {
   const [showModal, setShowModal] = useState(false);
+  const [userPicture, setUserPicture] = useState(userPictureURL);
+  const [successMessage, setSuccessMessage] = useState("");
+  const navigate = useNavigate();
+
   const openModal = () => setShowModal(true);
   const closeModal = () => setShowModal(false);
-  const navigate = useNavigate();
+
   const handleLogout = async () => {
     try {
       const token = localStorage.getItem("authToken");
@@ -38,14 +43,61 @@ export const UserAccountHero = ({
     }
   };
 
+  const handleImageChange = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+      const token = localStorage.getItem("authToken");
+
+      const response = await axios.post(
+        `${BACKEND_URL}api/update-profile-picture`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.data.image_url) {
+        const url = `${BACKEND_URL}storage/${response.data.image_url}`;
+        setUserPicture(url);
+        setSuccessMessage("Profile picture updated successfully!");
+
+        // Hide success message after 5 seconds
+        setTimeout(() => {
+          setSuccessMessage("");
+        }, 5000);
+      }
+    } catch (error) {
+      console.error("Image upload failed:", error);
+    }
+  };
+
   return (
-    <div className="flex flex-col w-auto gap-5 p-10 md:flex-row md:text-xl items-center  ">
+    <div className="flex flex-col w-auto gap-5 p-10 md:flex-row md:text-xl items-center">
       <div className="flex flex-col justify-center gap-2">
         <AvatarImage
-          imageURL={userPictureURL}
+          imageURL={userPicture}
           className="w-[10rem] md:w-[12rem] m-auto shadow-md"
         />
-        <Button text="edit" className="user-btns rounded-full px-5" />
+        <Button
+          text="edit"
+          className="user-btns rounded-full px-5"
+          onClick={() => document.getElementById("imageUpload").click()}
+        />
+        <input
+          type="file"
+          id="imageUpload"
+          style={{ display: "none" }}
+          accept="image/*"
+          onChange={handleImageChange}
+        />
       </div>
 
       <div className="px-8 md:px-12 pt-5 flex flex-col justify-between h-full">
@@ -84,12 +136,19 @@ export const UserAccountHero = ({
           Log out
         </button>
       </div>
+
       {showModal && (
         <EditPersonalInfo
           userName={userName}
           userEmail={userEmail}
           closeModal={closeModal}
         />
+      )}
+
+      {successMessage && (
+        <div className="fixed bottom-5 right-5 bg-green-500 text-white p-3 rounded z-[999999]">
+          {successMessage}
+        </div>
       )}
     </div>
   );

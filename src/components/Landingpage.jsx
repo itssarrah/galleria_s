@@ -18,10 +18,6 @@ import TrendingShops from "./Landing/TrendingShops";
 const Hero = () => {
   const { t } = useTranslation("homepage");
   const { i18n } = useTranslation();
-  console.log(
-    "HEY SARRA THISIS THE TEXT UR LOOKIN FOR AND THIS IS THE INITIAL LANGUAGE :",
-    i18n.language
-  );
 
   return (
     <div

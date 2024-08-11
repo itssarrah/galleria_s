@@ -6,7 +6,6 @@ import { ContributeBtn } from "../../components/navbar";
 import { BACKEND_URL } from "../../config";
 import axios from "axios";
 import { EyeIcon, EnvelopeIcon } from "@heroicons/react/24/solid";
-import Footer from "../../components/Footer";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 function Login() {

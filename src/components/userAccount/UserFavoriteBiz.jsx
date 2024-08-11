@@ -3,6 +3,7 @@ import { useQuery } from "react-query";
 import { ClipLoader } from "react-spinners";
 import { BACKEND_URL } from "../../config";
 import ShopCard from "../cards/ShopCard";
+import empty from "../../assets/images/empty.png";
 
 function UserFavoriteBiz() {
   const {
@@ -51,12 +52,21 @@ function UserFavoriteBiz() {
   return (
     <>
       <div className="flex items-start w-full h-full ">
-        {/* <Filter type="false" /> */}
-        <div className="w-fit  overflow-y-hidden flex flex-col  pt-8 ">
-          {/* <Categories /> */}
-          <div className="mt-12 px-6 flex flex-wrap gap-10 lg:gap-16 justify-center">
-            {likedBusinesses &&
-              likedBusinesses.map((business, index) => (
+        <div className="w-fit overflow-y-hidden flex flex-col pt-8 ">
+          {likedBusinesses.length === 0 ? (
+            <div className="w-[95vw] flex flex-col justify-center items-center">
+              <img
+                src={empty}
+                className="w-[20rem] md:w-[40rem] pt-10 "
+                alt="No items found"
+              />
+              <h6 className="text-jost text-gray-500 md:text-2xl text-lg pt-10 ">
+                No liked Businesses for now .
+              </h6>
+            </div>
+          ) : (
+            <div className="w-fit mt-12 px-6 flex flex-wrap gap-10 lg:gap-16 justify-center">
+              {likedBusinesses.map((business) => (
                 <ShopCard
                   key={business.businessId}
                   imageUrl={`${BACKEND_URL}storage/${business.image}`}
@@ -68,7 +78,8 @@ function UserFavoriteBiz() {
                   businessId={business.businessId}
                 />
               ))}
-          </div>
+            </div>
+          )}
         </div>
       </div>
     </>

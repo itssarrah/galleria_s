@@ -35,7 +35,7 @@ function ForgotPassword() {
 
       if (response.data.message === "Reset instructions sent successfully") {
         setSuccessMessage(
-          "Reset instructions sent successfully. Please check your inbox."
+          "Reset instructions sent successfully. Please check your inbox. (check SPAM as well)"
         );
         setErrorMessage("");
       }

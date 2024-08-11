@@ -15,7 +15,9 @@ import UserAccountPage from "./views/userAccount/userAccountPage.jsx";
 import UserWishlist from "./components/userAccount/UserWishlist.jsx";
 import UserFeedback from "./components/userAccount/UserFeedback.jsx";
 import UserFavoriteBiz from "./components/userAccount/UserFavoriteBiz.jsx";
-
+import EmailVerification from "./components/auth/EmailVerification.jsx";
+import UpdateBusinessProfile from "./components/businessProfile/UpdateBusinessProfile.jsx";
+import VerifyUpdatedEmail from "./components/auth/VerifyUpdatedEmail.jsx";
 import {
   BrowserRouter,
   Route,
@@ -37,7 +39,8 @@ import AppLayout from "./components/ui/AppLayout.jsx";
 import BusinessView from "./views/businessView/BusinessView.jsx";
 import ModifyProduct from "./views/product/ModifyProduct.jsx";
 import ForgotPassword from "./components/auth/ForgotPassword.jsx";
-
+import { ToastContainer } from "react-toastify";
+import "./css/toastStyles.css";
 const queryClient = new QueryClient();
 
 function ScrollToTop() {
@@ -53,6 +56,7 @@ function ScrollToTop() {
 function MainContent() {
   return (
     <div className="App">
+      <ToastContainer />
       <BackgroundAsset position="top-left" />
       <BackgroundAssetTwo position="top-right" />
 
@@ -87,9 +91,14 @@ function MainContent() {
             <Route path="/login" element={<Login />} />
             <Route path="/businessregistration" element={<Businessauth />} />
             <Route path="/userregistration" element={<UserAuth />} />
+            <Route
+              path="/update-business-profile"
+              element={<UpdateBusinessProfile />}
+            />
           </Route>
 
           <Route path="/choice" element={<Choice />} />
+          <Route path="/verify-email/:token" element={<EmailVerification />} />
 
           <Route path="/addproduct" element={<AddProduct />} />
           <Route path="/modifyproduct/:productId" element={<ModifyProduct />} />
@@ -97,6 +106,11 @@ function MainContent() {
           {/* Inside App component */}
 
           <Route path={"/chat"} element={<ChatPage />} />
+
+          <Route
+            path="/verify-updated-email/:token"
+            element={<VerifyUpdatedEmail />}
+          />
         </Routes>
       </BrowserRouter>
       {/* </div> */}

@@ -16,7 +16,7 @@ const fetchProduct = async (productId) => {
     throw new Error("Error fetching product data");
   }
   const data = await response.json();
-  // console.log("Product Data:", data);
+  console.log("Product Data:", data);
   return data.data;
 };
 
@@ -68,7 +68,8 @@ const ProductPage = () => {
             location={product.business.wilaya.name}
             phoneNumber={product.business.phone}
             seller={product.business.businessname}
-            sellerid={product.business.businessid}
+            sellerid={product.business.id}
+            instagramLink={product.business.instagram_link}
           />
         )}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">

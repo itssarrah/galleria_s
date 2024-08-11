@@ -6,7 +6,7 @@
   @apply flex flex-col items-center
   py-5
   md:py-20
-  bg-business w-full h-[40rem] bg-cover bg-no-repeat bg-center my-10;
+  bg-business w-full h-[45rem] bg-cover bg-no-repeat bg-center my-10;
 }
 
 .business-profile-stats {

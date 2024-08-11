@@ -1,0 +1,16 @@
+/* toastStyles.css */
+.Toastify__toast--info {
+  background: #ffffff; /* Background color */
+}
+
+.Toastify__toast--info .Toastify__toast-body {
+  background: #ffffff; /* Progress bar color */
+}
+
+.Toastify__toast-icon svg {
+  color: #dd6969 !important; /* Icon color */
+}
+
+.Toastify__toast--info .Toastify__progress-bar {
+  background: #dd6969; /* Progress bar color */
+}
