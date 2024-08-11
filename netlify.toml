@@ -10,3 +10,8 @@
   from = "/old-path/*"
   to = "/new-path/:splat"
   status = 301
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
