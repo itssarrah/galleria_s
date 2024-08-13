@@ -1,9 +1,17 @@
 [build]
-  command = "npm run build"
+  base = "."
   publish = "dist"
+  command = "npm run build"
+
+[functions]
+  directory = "netlify/functions"
+
+[[redirects]]
+  from = "/old-path/*"
+  to = "/new-path/:splat"
+  status = 301
 
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
-  force = true
