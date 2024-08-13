@@ -18,26 +18,6 @@ import UserWishlist from "../../components/userAccount/UserWishlist";
 import Saved from "../../components/businessProfile/Saved";
 import useBusinessData from "../../api/fetchBusinessData";
 
-// const fetchBusinessData = async (token) => {
-//   const response = await fetch(`${BACKEND_URL}api/business/profile`, {
-//     headers: {
-//       Authorization: `Bearer ${token}`,
-//     },
-//   });
-
-//   if (!response.ok) {
-//     if (response.status === 401) {
-//       // Redirect to login page if unauthorized
-//       console.error("Unauthorized. Redirecting to login page.");
-//       window.location.href = "/login";
-//     } else {
-//       throw new Error("Failed to fetch business data");
-//     }
-//   }
-
-//   return response.json();
-// };
-
 const BusinessProfile = () => {
   const { id } = useParams();
   const businessId = localStorage.getItem("user_id");
@@ -45,6 +25,9 @@ const BusinessProfile = () => {
   // const tabItems = ["My Products", "Insights", "Feedback & Reviews"];
   const [activeTab, setActiveTab] = React.useState("My Products");
 
+  const handleAddProductClick = () => {
+    navigate("/addproduct");
+  };
   const renderTab = (id, activeTab, tabItems) => {
     switch (activeTab) {
       case tabItems[1]:
@@ -53,15 +36,25 @@ const BusinessProfile = () => {
         return <Saved />;
       default:
         return (
-          <div className="px-2 mx-auto">
-            <ItemsOnSale
-              products={businessData.business.products}
-              editable={true}
-              seller={businessData.business.businessname}
-              seller_image={businessData.business.image}
-              sellerId={businessId}
-            />
-          </div>
+          <>
+            <div className="px-2 mx-auto mb-10 ">
+              <div className="md:absolute  md:right-[10rem] mx-auto md:mx-0 w-fit">
+                <button
+                  onClick={handleAddProductClick}
+                  className="bg-[#FF9494] text-white px-6 py-3 rounded-lg font-jost md:text-3xl text-lg"
+                >
+                  Add Product
+                </button>
+              </div>
+              <ItemsOnSale
+                products={businessData.business.products}
+                editable={true}
+                seller={businessData.business.businessname}
+                seller_image={businessData.business.image}
+                sellerId={businessId}
+              />
+            </div>
+          </>
         );
     }
   };
@@ -71,24 +64,6 @@ const BusinessProfile = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem("authToken");
   const { data: businessData, isLoading } = useBusinessData(token);
-
-  // const { data: businessData, isLoading } = useQuery(
-  //   ["businessData", id],
-  //   async () => {
-
-  //     if (!token) {
-  //       console.error("Token not found. Redirecting to login page.");
-  //       navigate("/login");
-  //       throw new Error("No token");
-  //     }
-
-  //     return fetchBusinessData(token);
-  //   },
-  //   {
-  //     refetchOnWindowFocus: false,
-  //     staleTime: 60000,
-  //   }
-  // );
 
   const handleLogout = async () => {
     try {
@@ -138,6 +113,7 @@ const BusinessProfile = () => {
             profile={true}
             instagramLink={businessData.business.instagram_link}
             desc={businessData.business.businessdesc}
+            emailConfirmed={businessData.business.email_verified}
           />
           <BusinessProfileStats
             likes={businessData.business.likes}

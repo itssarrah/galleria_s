@@ -11,6 +11,8 @@ import { AccountInformation } from "./AccountInfo";
 import { PersonalInfo } from "./PersonalInfo";
 import { Businessinfo } from "./BusinessInfo";
 import { useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import {
   PlusIcon,
@@ -63,10 +65,6 @@ const Businessauth = () => {
       actualFormData.append("image", fileInput.files[0]);
     }
 
-    for (let [key, value] of actualFormData.entries()) {
-      console.log(key, value);
-    }
-
     try {
       setIsLoading(true);
       const response = await axios.post(
@@ -81,14 +79,14 @@ const Businessauth = () => {
       if (response.data.message === "Registration successful") {
         setOrder(response.data.order);
       } else {
-        console.log(response.data.message);
+        // console.log(response.data.message);
       }
     } catch (error) {
       console.error("There was an error sending the data", error);
       if (error.response) {
-        console.error("Data:", error.response.data);
-        console.error("Status:", error.response.status);
-        console.error("Headers:", error.response.headers);
+        // console.error("Data:", error.response.data);
+        // console.error("Status:", error.response.status);
+        // console.error("Headers:", error.response.headers);
       } else {
         console.error("Error Message:", error.message);
       }
@@ -97,38 +95,13 @@ const Businessauth = () => {
     }
   };
 
-  const validateFormStepOne = async () => {
+  const validateFormStepOne = () => {
     let errorList = {};
 
     // Email Format Verification
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
     if (!emailRegex.test(formData.email)) {
       errorList.email = t("mail_error");
-    }
-
-    try {
-      const response = await axios.get(
-        `${BACKEND_URL}api/check-email?email=${formData.email}`
-      );
-
-      if (response.data.exists) {
-        errorList.email = t("email_already_exists_error");
-      }
-    } catch (error) {
-      console.error("Error checking email:", error);
-      errorList.email = t("error_checking_email");
-    }
-    try {
-      const response = await axios.get(
-        `${BACKEND_URL}api/check-phone?phone=${formData.phone}`
-      );
-
-      if (response.data.exists) {
-        errorList.phone = t("phone_already_exists_error");
-      }
-    } catch (error) {
-      console.error("Error checking email:", error);
-      errorList.phone = t("error_checking_email");
     }
 
     // Password Verification
@@ -224,6 +197,10 @@ const Businessauth = () => {
       errors.price = t("price_pos_error");
     }
 
+    if (maxPrice > 999999) {
+      errors.price = t("price_out_of_bound");
+    }
+
     if (parseInt(formData.minPrice) >= parseInt(formData.maxPrice)) {
       errors.price = t("price_error");
     }
@@ -271,13 +248,50 @@ const Businessauth = () => {
     if (formData.maxPrice === "") {
       errors.maxPriceEmpty = t("empty_error");
     }
+
+    if (Object.keys(errors).length === 1 && errors.file === t("upload_error")) {
+      toast.error(t("upload_error"), {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
     setErrors(errors);
     return errors; // Return the errors object
   };
+
+  const checkEmailExists = async (email) => {
+    try {
+      const response = await axios.get(
+        `${BACKEND_URL}api/check-email?email=${email}`
+      );
+      return response.data.exists;
+    } catch (error) {
+      console.error("Error checking email:", error);
+      throw new Error(t("error_checking_email"));
+    }
+  };
+
+  const checkPhoneExists = async (phone) => {
+    try {
+      const response = await axios.get(
+        `${BACKEND_URL}api/check-phone?phone=${phone}`
+      );
+      return response.data.exists;
+    } catch (error) {
+      console.error("Error checking phone:", error);
+      throw new Error(t("error_checking_phone"));
+    }
+  };
+
   useEffect(() => {
     async function runValidations() {
       if (formStep === 0) {
-        const errorsStepOne = await validateFormStepOne();
+        const errorsStepOne = validateFormStepOne();
         setIsNextDisabled(Object.keys(errorsStepOne).length !== 0);
       } else if (formStep === 1) {
         const errorsStepTwo = validateFormStepTwo();
@@ -291,8 +305,42 @@ const Businessauth = () => {
     runValidations();
   }, [formData, formStep]); // Rerun whenever formData or formStep changes
 
-  const completeFormStep = () => {
+  const completeFormStep = async () => {
     if (isLoading || isNextDisabled) return;
+
+    // Only check email and phone existence via API calls if on the first form step
+    if (formStep === 0) {
+      try {
+        // Validate the form without API calls
+        const errorList = validateFormStepOne();
+
+        // If there are errors, don't proceed
+        if (Object.keys(errorList).length > 0) {
+          setIsNextDisabled(true);
+          return;
+        }
+        const emailExists = await checkEmailExists(formData.email);
+        const phoneExists = await checkPhoneExists(formData.phone);
+
+        if (emailExists) {
+          errorList.email = t("email_already_exists_error");
+        }
+        if (phoneExists) {
+          errorList.phone = t("phone_already_exists_error");
+        }
+
+        if (Object.keys(errorList).length > 0) {
+          setErrors(errorList);
+          setIsNextDisabled(true);
+          return;
+        }
+      } catch (error) {
+        console.error("Validation error:", error.message);
+        setErrors((prev) => ({ ...prev, api: error.message }));
+        setIsNextDisabled(true);
+        return;
+      }
+    }
 
     // If no errors, move to the next step or handle submission
     if (formStep === 0) {
@@ -308,9 +356,6 @@ const Businessauth = () => {
   const backFormStep = () => {
     setFormStep((cur) => cur - 1);
   };
-  useEffect(() => {
-    window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
-  }, [formStep]);
 
   const renderButton = () => {
     if (formStep > 2) {
@@ -485,6 +530,7 @@ const Businessauth = () => {
           </div>
         </div>
       </form>
+      <ToastContainer />
     </>
   );
 };

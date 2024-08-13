@@ -12,6 +12,9 @@ import { useNavigate } from "react-router-dom";
 
 import { useTranslation, Trans } from "react-i18next";
 import validateForm from "../../api/utils/productFormValidation";
+import { ClipLoader } from "react-spinners";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function AddProduct() {
   const { t } = useTranslation("auth");
@@ -105,16 +108,25 @@ function AddProduct() {
         },
       });
 
-      console.log("Product submitted successfully:", response.data);
+      toast.success("Product registered successfully!");
       setIsFormSubmitted(true);
+      setTimeout(() => {
+        navigate("/businessprofile");
+      }, 5000);
     } catch (error) {
       console.error("Error submitting product:", error);
+      toast.error("Error submitting product.");
     }
   };
 
   if (loading) {
-    // You can render a loading state while waiting for the user type
-    return <div>Loading...</div>;
+    return (
+      <>
+        <div className="flex justify-center items-center h-screen w-full">
+          <ClipLoader color="#DD6969" size={50} />
+        </div>
+      </>
+    );
   }
 
   if (error) {
@@ -166,11 +178,8 @@ function AddProduct() {
             disabled={isFinishDisabled}
           />
         </div>
-        {isFormSubmitted && (
-          <div className="success-message text-green">
-            Product registered successfully!
-          </div>
-        )}
+
+        <ToastContainer />
       </form>
     </>
   );

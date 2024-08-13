@@ -29,6 +29,7 @@ const BusinessProfileDetails = ({
   category,
   profile = false,
   instagramLink,
+  emailConfirmed,
 }) => {
   const info = [
     location,
@@ -40,19 +41,42 @@ const BusinessProfileDetails = ({
   const navigate = useNavigate();
 
   const [showInstagramReminder, setShowInstagramReminder] = useState(false);
-
+  const [showEmailReminder, setShowEmailReminder] = useState(false);
   useEffect(() => {
     if (profile && !instagramLink) {
       setShowInstagramReminder(true);
     }
   }, [profile, instagramLink]);
 
+  useEffect(() => {
+    if (profile && !emailConfirmed) {
+      setShowEmailReminder(true);
+    }
+  }, [profile, emailConfirmed]);
+
   const handleUpdateProfileClick = () => {
     navigate("/update-business-profile#external");
+  };
+  const handleOpenGmail = () => {
+    window.open("https://mail.google.com/", "_blank");
   };
 
   return (
     <>
+      {showEmailReminder && (
+        <div className="bg-red-500 text-white p-2 rounded flex items-center justify-around gap-2 font-jost mb-5 ">
+          <p>
+            Please confirm your email <strong>{email}</strong> or your account
+            will be <strong>deleted</strong>.
+          </p>
+          <button
+            onClick={handleOpenGmail}
+            className="bg-white text-red-500 px-4 py-2 rounded-lg font-jost"
+          >
+            Open Gmail
+          </button>
+        </div>
+      )}
       {showInstagramReminder && (
         <div className="bg-yellow-300 text-black p-2 rounded flex items-center justify-around gap-2 font-jost">
           <p>
