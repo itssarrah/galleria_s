@@ -267,7 +267,7 @@ const LandingPage = () => {
       </div>
       <TrendingShops className="w-full px-10 pt-12 " />
       <Renderfaq />
-      <Team />
+      {/* <Team /> */}
     </>
   );
 };
