@@ -35,7 +35,7 @@ function AddProduct() {
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
 
   const [isFinishDisabled, setIsFinishDisabled] = useState(true);
-
+  const [isSubmitting, setIsSubmitting] = useState(false);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -80,8 +80,10 @@ function AddProduct() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isSubmitting) return;
     console.log("Starting form submission...");
-    console.log("you are about to send: ", formData);
+    setIsSubmitting(true);
+    // console.log("you are about to send: ", formData);
 
     try {
       const form = new FormData();
@@ -116,6 +118,7 @@ function AddProduct() {
     } catch (error) {
       console.error("Error submitting product:", error);
       toast.error("Error submitting product.");
+      setIsSubmitting(false);
     }
   };
 
@@ -175,7 +178,7 @@ function AddProduct() {
             importance="primary"
             text="Finish"
             onClick={handleSubmit}
-            disabled={isFinishDisabled}
+            disabled={isFinishDisabled || isSubmitting}
           />
         </div>
 
