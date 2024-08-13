@@ -83,38 +83,13 @@ const UserAuth = () => {
     return pattern.test(str);
   }
 
-  const validateForm = async () => {
+  const validateForm = () => {
     let errorList = {};
 
     // Email Format Verification
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
     if (!emailRegex.test(formData.email)) {
       errorList.email = t("mail_error");
-    }
-
-    try {
-      const response = await axios.get(
-        `${BACKEND_URL}api/check-email?email=${formData.email}`
-      );
-
-      if (response.data.exists) {
-        errorList.email = t("email_already_exists_error");
-      }
-    } catch (error) {
-      console.error("Error checking email:", error);
-      errorList.email = t("error_checking_email");
-    }
-    try {
-      const response = await axios.get(
-        `${BACKEND_URL}api/check-phone?phone=${formData.phone}`
-      );
-
-      if (response.data.exists) {
-        errorList.phone = t("phone_already_exists_error");
-      }
-    } catch (error) {
-      console.error("Error checking email:", error);
-      errorList.phone = t("error_checking_email");
     }
 
     // Password Verification
@@ -171,33 +146,37 @@ const UserAuth = () => {
       errorList.phone = t("empty_error");
     }
 
-    // const fileInput = document.getElementById("fileInput");
-    // const file = fileInput.files[0];
-
-    // // Change to errorList
-    // if (file) {
-    //   const acceptedImageTypes = [
-    //     "image/gif",
-    //     "image/jpeg",
-    //     "image/png",
-    //     "image/jpg",
-    //   ];
-    //   if (!acceptedImageTypes.includes(file.type)) {
-    //     errorList.file = t("upload_type_error");
-    //   }
-
-    //   if (file.size > 5 * 1024 * 1024) {
-    //     errorList.file = t("upload_size_error");
-    //   }
-    // }
-
     setErrors(errorList);
     return errorList;
   };
 
+  const checkEmailExists = async (email) => {
+    try {
+      const response = await axios.get(
+        `${BACKEND_URL}api/check-email?email=${email}`
+      );
+      return response.data.exists;
+    } catch (error) {
+      console.error("Error checking email:", error);
+      throw new Error("Error checking email");
+    }
+  };
+
+  const checkPhoneExists = async (phone) => {
+    try {
+      const response = await axios.get(
+        `${BACKEND_URL}api/check-phone?phone=${phone}`
+      );
+      return response.data.exists;
+    } catch (error) {
+      console.error("Error checking phone:", error);
+      throw new Error("Error checking phone");
+    }
+  };
+
   useEffect(() => {
     async function runValidations() {
-      const errors = await validateForm();
+      const errors = validateForm();
       setIsNextDisabled(Object.keys(errors).length !== 0);
     }
 
@@ -207,11 +186,6 @@ const UserAuth = () => {
 
   const submitFormData = async () => {
     const actualFormData = new FormData();
-
-    for (let key in formData) {
-      console.log(`Key: ${key}, Value: ${formData[key]}`);
-      actualFormData.append(key, formData[key]);
-    }
 
     actualFormData.set("password_confirmation", formData.confirmPassword);
 
@@ -252,8 +226,56 @@ const UserAuth = () => {
   };
 
   const [currentStep, setCurrentStep] = useState(1);
-  const handleNext = () => {
-    setCurrentStep(currentStep + 1);
+  // const handleNext = () => {
+  //   setCurrentStep(currentStep + 1);
+  // };
+
+  const handleNext = async () => {
+    if (currentStep === 1) {
+      // Validate form data first
+      const errors = validateForm();
+      setErrors(errors);
+
+      // If there are validation errors, prevent moving to the next step
+      if (Object.keys(errors).length > 0) {
+        setIsNextDisabled(true);
+        return;
+      }
+
+      // Perform email and phone checks
+      try {
+        const emailExists = await checkEmailExists(formData.email);
+        const phoneExists = await checkPhoneExists(formData.phone);
+
+        if (emailExists) {
+          setErrors((prevErrors) => ({
+            ...prevErrors,
+            email: t("email_already_exists_error"),
+          }));
+          setIsNextDisabled(true);
+          return;
+        }
+
+        if (phoneExists) {
+          setErrors((prevErrors) => ({
+            ...prevErrors,
+            phone: t("phone_already_exists_error"),
+          }));
+          setIsNextDisabled(true);
+          return;
+        }
+
+        // If no errors, proceed to next step
+        setCurrentStep(currentStep + 1);
+        setIsNextDisabled(false);
+      } catch (error) {
+        console.error("Error checking email or phone:", error);
+        setIsNextDisabled(true);
+      }
+    } else {
+      // For other steps, just move to the next step
+      setCurrentStep(currentStep + 1);
+    }
   };
 
   return (
